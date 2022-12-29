@@ -4,7 +4,7 @@
 
 User::User() {
 	std::cout << "user created\n";
-	_client_address = new sockaddr_un();
+	_client_address = new sockaddr_in();
 	_client_address_size = new socklen_t();
 }
 
@@ -18,7 +18,7 @@ int					User::getSocketDesc() {
 	return _client_socket;
 }
 
-struct sockaddr_un*	User::getAddressPtr() {
+struct sockaddr_in*	User::getAddressPtr() {
 	return _client_address;
 }
 
