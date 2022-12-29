@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 13:45:58 by jiychoi           #+#    #+#             */
-/*   Updated: 2022/12/29 18:42:38 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/30 02:35:15 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
 	try {
 		server.serverOn();
 	} catch (std::exception &e) {
-		std::cout << "ircserv: " << e.what() << "\n";
+		std::cout << "ircserv: Error: " << e.what() << "\n";
 		return (1);
 	}
 }
