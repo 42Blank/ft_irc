@@ -6,7 +6,7 @@
 #    By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/28 13:47:07 by jiychoi           #+#    #+#              #
-#    Updated: 2022/12/29 17:23:43 by jiychoi          ###   ########.fr        #
+#    Updated: 2022/12/29 17:36:36 by jiychoi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ CRLF		=	\n$(LF)
 all : $(TARGET)
 
 $(TARGET) : $(OBJS)
-	@printf "$(LF)📞$(TARGET)\n"
+	@printf "$(LF)📞ft_irc\n"
 	@$(CXX) $(OBJS) $(CXXFLAGS) -o $(TARGET)
 
 %.o : %.cpp
