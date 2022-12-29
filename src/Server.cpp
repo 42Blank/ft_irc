@@ -6,12 +6,11 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2022/12/30 03:51:36 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/30 04:26:06 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../includes/Server.hpp"
-# include "../includes/Error.hpp"
 
 Server::Server() {}
 
@@ -37,7 +36,7 @@ Server::~Server() {
 void	Server::serverOn(void) {
 	if (listen(_server_socket, 5) < 0)	// 연결요청 대기상태
 		throw Error::SocketOpenException();
-	connectWithClient();
+	receiveClientMessage();
 }
 
 void	Server::serverOff(void) {
@@ -47,24 +46,22 @@ void	Server::serverOff(void) {
 	close(_server_socket);
 }
 
-void	Server::connectWithClient() {
-	int			client_socket;
-
+void	Server::receiveClientMessage() {
 	while (1) {
 		try {
-			User* user = new User();
-			client_socket = accept(_server_socket, (struct sockaddr*)user->getAddressPtr(), user->getAddressSizePtr());
+			User	user;
+			int		client_socket = accept(_server_socket, (struct sockaddr*)user.getAddressPtr(), user.getAddressSizePtr());
 			if (client_socket < 0) {
-				delete user;
+				// delete user;
 				throw Error::SocketOpenException();
 			}
-			user->setSocketDesc(client_socket);
+			user.setSocketDesc(client_socket);
 			// std::cout << "Client connected: " << i + 1 << "\n";
 
-			std::string fullMsg = concatMessage(user->getSocketDesc());
-			parseUserData(user, fullMsg);
+			std::string fullMsg = concatMessage(user.getSocketDesc());
+			parseMessageStream(&user, fullMsg);
 
-		_user_vector.push_back(user); // 유저 검증 성공했을 때만 push back (실패하면 메모리 해제해야함)
+		// _user_vector.push_back(user); // 유저 검증 성공했을 때만 push back (실패하면 메모리 해제해야함)
 		std::cout << "Message: " << fullMsg << "\n";
 		// close(user->getSocketDesc());
 		} catch (std::exception &e) {
@@ -87,10 +84,18 @@ std::string	Server::concatMessage(int client_socket) {
 	return fullMsg;
 }
 
-void		Server::parseUserData(User* user, const std::string& fullMsg) {
-	std::vector<std::string>	commands = ft_split(fullMsg, '\n');
-	size_t pos = fullMsg.find("NICK");
-	std::cout << "NICK position: [" << pos << "]\n";
-	std::cout << "NICK: [" << fullMsg.at(pos) << "\\n";
-	std::cout << "User [" << user << "]\n";
+void		Server::parseMessageStream(User* user, const std::string& fullMsg) {
+	std::vector<std::string>			commands = ft_split(fullMsg, '\n');
+	std::vector<std::string>::iterator	cmdIter;
+	(void)user;
+
+	for (cmdIter = commands.begin(); cmdIter != commands.end(); cmdIter++) {
+		std::vector<std::string>			parameters = ft_split(*cmdIter, ' ');
+
+		std::cout << *parameters.begin() << "\n";
+		if (*parameters.begin() == CMD_NICK) commandNICK(parameters);
+		else if (*parameters.begin() == CMD_USER) commandUser(parameters);
+	}
+
+	std::cout << "\nMessage: " << fullMsg << "\n";
 }

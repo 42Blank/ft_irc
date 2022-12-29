@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2022/12/30 03:51:41 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/30 04:27:24 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include "irc.hpp"
 # include "User.hpp"
+# include "Error.hpp"
+# include "Command.hpp"
 
 # define BUF_SIZE 1024
 
@@ -25,9 +27,9 @@ class Server {
 		std::vector<User *>	_user_vector;
 		char				_message[BUF_SIZE];
 
-		void		connectWithClient();
+		void		receiveClientMessage();
 		std::string	concatMessage(int client_socket);
-		void		parseUserData(User* user, const std::string& fullMsg);
+		void		parseMessageStream(User* user, const std::string& fullMsg);
 
 
 	public:
