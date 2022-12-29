@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2022/12/30 04:48:29 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/30 05:10:11 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,28 +44,23 @@ void	Server::serverOff(void) {
 	for (iter = _user_vector.begin(); iter != _user_vector.end(); iter++)
 		delete (*iter);
 	close(_server_socket);
+	exit(0);
 }
 
 void	Server::receiveClientMessage() {
+	User	user;
+
 	while (1) {
 		try {
-			User	user;
 			int		client_socket = accept(_server_socket, (struct sockaddr*)user.getAddressPtr(), user.getAddressSizePtr());
-			if (client_socket < 0) {
-				// delete user;
+			if (client_socket < 0)
 				throw Error::SocketOpenException();
-			}
 			user.setSocketDesc(client_socket);
-			// std::cout << "Client connected: " << i + 1 << "\n";
-
 			std::string fullMsg = concatMessage(user.getSocketDesc());
 			parseMessageStream(&user, fullMsg);
-
-		// _user_vector.push_back(user); // 유저 검증 성공했을 때만 push back (실패하면 메모리 해제해야함)
-		// std::cout << "Message: " << fullMsg << "\n";
-		// close(user->getSocketDesc());
 		} catch (std::exception &e) {
 			std::cout << e.what() << "\n";
+			close(user.getSocketDesc());
 			continue;
 		}
 	}
@@ -83,23 +78,20 @@ std::string	Server::concatMessage(int client_socket) {
 	}
 	ft_replaceStr(fullMsg, "\r", " ");
 
-	return fullMsg.substr(0, fullMsg.length() - 2);
+	return fullMsg;
 }
 
 void		Server::parseMessageStream(User* user, const std::string& fullMsg) {
 	std::vector<std::string>			commands = ft_split(fullMsg, '\n');
 	std::vector<std::string>::iterator	cmdIter;
-	(void)user;
 
 	std::cout << fullMsg << "\n\n";
 
 	for (cmdIter = commands.begin(); cmdIter != commands.end(); cmdIter++) {
-		std::vector<std::string>			parameters = ft_split(*cmdIter, ' ');
+		std::vector<std::string>	parameters = ft_split(*cmdIter, ' ');
 
 		std::cout << *parameters.begin() << "\n";
-		if (*parameters.begin() == CMD_NICK) commandNICK(parameters);
-		else if (*parameters.begin() == CMD_USER) commandUser(parameters);
+		if (*parameters.begin() == CMD_NICK) commandNICK(user, parameters);
+		else if (*parameters.begin() == CMD_USER) commandUser(user, parameters, _user_vector);
 	}
-
-	std::cout << "\nMessage: " << fullMsg << "\n";
 }

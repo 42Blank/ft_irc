@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:59:21 by jiychoi           #+#    #+#             */
-/*   Updated: 2022/12/30 04:32:39 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/30 04:58:18 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,12 @@
 # define COMMAND_HPP
 
 # include "irc.hpp"
+# include "User.hpp"
 
 # define CMD_NICK "NICK"
 # define CMD_USER "USER"
 
-void	commandNICK(std::vector<std::string>& parameters);
-void	commandUser(std::vector<std::string>& parameters);
+void	commandNICK(User* user, std::vector<std::string>& parameters);
+void	commandUser(User* user, std::vector<std::string>& parameters, std::vector<User*>& user_vector);
 
 #endif
