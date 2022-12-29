@@ -5,13 +5,12 @@
 User::User() {
 	std::cout << "user created\n";
 	_client_address = new sockaddr_in();
-	_client_address_size = new socklen_t();
+	_client_address_size = sizeof(_client_address);
 }
 
 User::~User() {
 	std::cout << "user deleted\n";
 	delete _client_address;
-	delete _client_address_size;
 }
 
 int					User::getSocketDesc() {
@@ -23,7 +22,7 @@ struct sockaddr_in*	User::getAddressPtr() {
 }
 
 socklen_t*			User::getAddressSizePtr() {
-	return _client_address_size;
+	return &_client_address_size;
 }
 
 std::string			User::getNickname() {
