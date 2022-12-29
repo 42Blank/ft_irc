@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 19:30:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2022/12/29 19:33:32 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/30 02:59:36 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,19 @@
 # define ERROR_HPP
 
 #include <exception>
+#include <string>
 
 class Error {
 	public:
-		class NoNicknameException: public std::exception {
+		class SocketOpenException: public std::exception {
+			public:
+				const char* what() const throw();
+		};
+		class ParseMessageException: public std::exception {
+			public:
+				const char* what() const throw();
+		};
+		class AuthorizeException: public std::exception {
 			public:
 				const char* what() const throw();
 		};
