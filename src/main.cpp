@@ -10,8 +10,19 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/dummy.hpp"
+#include "../includes/Server.hpp"
+#include <iostream>
 
-int main(void) {
+int main(int ac, char **av) {
 	std::cout << "hello world!\n";
+
+
+	if (ac != 3)
+	{
+		printf("Usage : %s <port> <password>\n", av[0]);
+		exit(1);	
+	}
+
+	Server server =  Server(av[1]);
+	server.serverOn();
 }
