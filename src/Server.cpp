@@ -3,7 +3,6 @@
 Server::Server() {}
 
 Server::Server(char *port) {
-
 	this->serv_sock = socket(PF_INET, SOCK_STREAM, 0);	// 소켓 생성
 	if (this->serv_sock == -1)
 		errorHandling("socket() error");
@@ -18,38 +17,53 @@ Server::Server(char *port) {
 }
 
 Server::~Server() {
-
-	close(this->serv_sock);
+	std::cout << "destructor called\n";
+	this->serverOff();
 }
 
 void	Server::serverOn(void) {
+	int client_socket;
+	std::string fullMsg;
 
-	if (listen(this->serv_sock, 5) == -1)	// 연결요청 대기상태 
+	if (listen(this->serv_sock, 5) == -1)	// 연결요청 대기상태
 		errorHandling("listen() error");
 
-	this->cli_adr_sz = sizeof(this->cli_adr);
-
 	for (int i = 0; i < 5; i++) {
-		this->cli_sock = accept(this->serv_sock, (struct sockaddr*)&this->cli_adr, &this->cli_adr_sz);	// 연결 허용
-		if (this->cli_sock == -1)
+		fullMsg = "";
+		User* user = new User();
+		client_socket = accept(this->serv_sock, (struct sockaddr*)user->getAddressPtr(), user->getAddressSizePtr());
+		if (client_socket < 0) {
+			delete user;
 			errorHandling("accept() error");
-		else
-			std::cout << "Connected client " << i + 1 << '\n';
-		while ((this->str_len = recv(this->cli_sock, this->msg, BUF_SIZE, 0)) != 0) {	// 데이터 송수신
-			if (this->str_len == -1)
-				continue;
-			this->msg[this->str_len] = 0;
-			// puts(this->msg);
-			std::cout << this->msg << '\n';
-			// write(cli_sock, msg, str_len);
 		}
-		close(this->cli_sock);
+		user->setSocketDesc(client_socket);
+		std::cout << "Client connected: " << i + 1 << "\n";
+		while ((this->str_len = recv(user->getSocketDesc(), this->msg, BUF_SIZE, 0)) != 0) {
+			if (this->str_len == -1) continue;
+			this->msg[this->str_len] = 0;
+			fullMsg += this->msg;
+			if (fullMsg.substr(fullMsg.length() - 2) == "\r\n") break;
+		}
+
+		fullMsg.find("NICK");
+
+		this->user_vector.push_back(user); // 유저 검증 성공했을 때만 push back (실패하면 메모리 해제해야함)
+		std::cout << "Message: " << fullMsg << "\n";
+		// close(user->getSocketDesc());
 	}
 }
 
 void	Server::errorHandling(std::string msg) {
 
-	std::cout << msg << '\n';
-	close(this->serv_sock);
+	std::cout << "ircserv: " << msg << '\n';
+	serverOff();
 	exit(1);
 }
+
+void	Server::serverOff(void) {
+	std::vector<User *>::iterator	iter;
+	for (iter = this->user_vector.begin(); iter != this->user_vector.end(); iter++)
+		delete (*iter);
+	close(this->serv_sock);
+}
+

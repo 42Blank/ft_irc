@@ -9,21 +9,19 @@
 # include <sys/socket.h>
 # include <vector>
 
+# include "User.hpp"
+
 # define BUF_SIZE 1024
 
 class Server {
 private:
 	int		serv_sock;
-	int		cli_sock; //User class로 이동
 	char	msg[BUF_SIZE];
 	int		str_len;
-	
+
 	struct sockaddr_in	serv_adr;
-	struct sockaddr_in	cli_adr; //User class로 이동
-	socklen_t	cli_adr_sz; //User class로 이동
-	
-	std::vector<int>	v;	// User class 담는 vector
-	// std::vector<User>	v;	// User class 담는 vector
+
+	std::vector<User *>	user_vector;
 
 	void	socketCreate(void);
 	void	errorHandling(std::string msg);
@@ -35,6 +33,7 @@ public:
 	~Server();
 
 	void	serverOn(void);
+	void	serverOff(void);
 
 };
 
