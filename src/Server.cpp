@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2022/12/30 04:26:06 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/30 04:48:29 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	Server::receiveClientMessage() {
 			parseMessageStream(&user, fullMsg);
 
 		// _user_vector.push_back(user); // 유저 검증 성공했을 때만 push back (실패하면 메모리 해제해야함)
-		std::cout << "Message: " << fullMsg << "\n";
+		// std::cout << "Message: " << fullMsg << "\n";
 		// close(user->getSocketDesc());
 		} catch (std::exception &e) {
 			std::cout << e.what() << "\n";
@@ -81,13 +81,17 @@ std::string	Server::concatMessage(int client_socket) {
 		fullMsg += _message;
 		if (fullMsg.length() >= 2 && fullMsg.substr(fullMsg.length() - 2) == "\r\n") break;
 	}
-	return fullMsg;
+	ft_replaceStr(fullMsg, "\r", " ");
+
+	return fullMsg.substr(0, fullMsg.length() - 2);
 }
 
 void		Server::parseMessageStream(User* user, const std::string& fullMsg) {
 	std::vector<std::string>			commands = ft_split(fullMsg, '\n');
 	std::vector<std::string>::iterator	cmdIter;
 	(void)user;
+
+	std::cout << fullMsg << "\n\n";
 
 	for (cmdIter = commands.begin(); cmdIter != commands.end(); cmdIter++) {
 		std::vector<std::string>			parameters = ft_split(*cmdIter, ' ');
