@@ -6,13 +6,13 @@
 #    By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/28 13:47:07 by jiychoi           #+#    #+#              #
-#    Updated: 2022/12/30 02:25:35 by jiychoi          ###   ########.fr        #
+#    Updated: 2022/12/30 03:51:59 by jiychoi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CXX			=	c++
 CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98
-SRCS		=	src/main.cpp src/Server.cpp src/User.cpp src/Error.cpp
+SRCS		=	src/main.cpp src/Server.cpp src/User.cpp src/Error.cpp src/utils.cpp
 OBJS		=	$(SRCS:.cpp=.o)
 TARGET		=	ircserv
 
