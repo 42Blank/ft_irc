@@ -6,21 +6,14 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2022/12/30 03:18:44 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/30 03:51:41 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
-# include <iostream>
-# include <cstdlib>
-# include <unistd.h>
-# include <cstring>
-# include <arpa/inet.h>
-# include <sys/socket.h>
-# include <vector>
-
+# include "irc.hpp"
 # include "User.hpp"
 
 # define BUF_SIZE 1024

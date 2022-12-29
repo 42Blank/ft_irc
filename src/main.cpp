@@ -6,12 +6,11 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 13:45:58 by jiychoi           #+#    #+#             */
-/*   Updated: 2022/12/30 02:35:15 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/30 03:49:49 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Server.hpp"
-#include <iostream>
+# include "../includes/Server.hpp"
 
 int main(int argc, char *argv[]) {
 	if (argc != 3)

@@ -6,15 +6,14 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 19:30:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2022/12/30 02:59:36 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/30 03:49:10 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ERROR_HPP
 # define ERROR_HPP
 
-#include <exception>
-#include <string>
+# include "irc.hpp"
 
 class Error {
 	public:

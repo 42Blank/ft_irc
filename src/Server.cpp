@@ -6,12 +6,12 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2022/12/30 03:19:25 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/30 03:51:36 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Server.hpp"
-#include "../includes/Error.hpp"
+# include "../includes/Server.hpp"
+# include "../includes/Error.hpp"
 
 Server::Server() {}
 
@@ -88,6 +88,7 @@ std::string	Server::concatMessage(int client_socket) {
 }
 
 void		Server::parseUserData(User* user, const std::string& fullMsg) {
+	std::vector<std::string>	commands = ft_split(fullMsg, '\n');
 	size_t pos = fullMsg.find("NICK");
 	std::cout << "NICK position: [" << pos << "]\n";
 	std::cout << "NICK: [" << fullMsg.at(pos) << "\\n";
