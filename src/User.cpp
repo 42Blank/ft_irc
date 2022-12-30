@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:50:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2022/12/30 23:11:31 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/31 00:35:52 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,31 +15,48 @@
 User::User() {
 	std::cout << "user created\n";
 	_clientAddress = new sockaddr_in();
-	_clientAddressSize = sizeof(_clientAddress);
+	_clientAddressSize = new socklen_t(sizeof(_clientAddress));
 }
 
 User::~User() {
 	std::cout << "user deleted\n";
 	delete _clientAddress;
+	delete _clientAddressSize;
 }
 
-int					User::getSocketDesc() {
+User::User(const User& instance) {
+	*this = instance;
+}
+
+User&	User::operator=(const User& instance) {
+	std::cout << "copy constructor user called\n";
+	std::cout << "copied user: " << instance.getNickname() << "\n";
+
+	_clientSocket = instance.getSocketDesc();
+	_clientAddress = new sockaddr_in(*instance.getAddressPtr());
+	_clientAddressSize = new socklen_t(*instance.getAddressSizePtr());
+	_nickname = instance.getNickname();
+	_username = instance.getUsername();
+	return *this;
+}
+
+int	User::getSocketDesc() const {
 	return _clientSocket;
 }
 
-struct sockaddr_in*	User::getAddressPtr() {
+struct sockaddr_in*	User::getAddressPtr() const {
 	return _clientAddress;
 }
 
-socklen_t*			User::getAddressSizePtr() {
-	return &_clientAddressSize;
+socklen_t*			User::getAddressSizePtr() const {
+	return _clientAddressSize;
 }
 
-std::string			User::getNickname() {
+std::string			User::getNickname() const {
 	return _nickname;
 }
 
-std::string			User::getUsername() {
+std::string			User::getUsername() const {
 	return _username;
 }
 
@@ -53,4 +70,9 @@ void				User::setUsername(std::string username) {
 
 void				User::setSocketDesc(int clientSocket) {
 	_clientSocket = clientSocket;
+}
+
+std::ostream& operator<<(std::ostream& out, const User& instance) {
+	out << "User: [" << instance.getNickname() << "] (" << instance.getUsername() << ")";
+	return out;
 }
