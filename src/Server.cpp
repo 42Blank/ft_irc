@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.cpp                                         :+:      :+:    :+:   */
+/*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2022/12/30 05:10:11 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/30 20:59:21 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,10 @@ Server::~Server() {
 void	Server::serverOn(void) {
 	if (listen(_server_socket, 5) < 0)	// 연결요청 대기상태
 		throw Error::SocketOpenException();
-	receiveClientMessage();
+	while (1) {
+		this->receiveClientMessage();
+		std::cout << "infinite loop\n";
+	}
 }
 
 void	Server::serverOff(void) {
@@ -48,9 +51,8 @@ void	Server::serverOff(void) {
 }
 
 void	Server::receiveClientMessage() {
-	User	user;
-
-	while (1) {
+	User user;
+	// while (1) {
 		try {
 			int		client_socket = accept(_server_socket, (struct sockaddr*)user.getAddressPtr(), user.getAddressSizePtr());
 			if (client_socket < 0)
@@ -58,12 +60,14 @@ void	Server::receiveClientMessage() {
 			user.setSocketDesc(client_socket);
 			std::string fullMsg = concatMessage(user.getSocketDesc());
 			parseMessageStream(&user, fullMsg);
+			this->testUser();
 		} catch (std::exception &e) {
 			std::cout << e.what() << "\n";
 			close(user.getSocketDesc());
-			continue;
-		}
+			// continue;
+		// }
 	}
+	std::cout << "user memory : " << &user << '\n';
 }
 
 std::string	Server::concatMessage(int client_socket) {
