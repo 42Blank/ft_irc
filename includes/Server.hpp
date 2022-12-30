@@ -17,6 +17,8 @@
 # include "User.hpp"
 # include "Error.hpp"
 # include "Command.hpp"
+# include <sys/select.h>
+# include <sys/time.h>
 
 # define BUF_SIZE 1024
 
@@ -26,11 +28,15 @@ class Server {
 		struct sockaddr_in	_server_address;
 		std::vector<User *>	_user_vector;
 		char				_message[BUF_SIZE];
+		struct timeval		_timeout;
+		fd_set				_reads;
 
 		void		receiveClientMessage();
 		std::string	concatMessage(int client_socket);
 		void		parseMessageStream(User* user, const std::string& fullMsg);
 
+		void		sendToClientMessage(User *user);
+		void		socketMultiPlex();
 
 	public:
 		Server();
