@@ -6,20 +6,19 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:50:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2022/12/31 00:35:52 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/31 00:54:40 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/User.hpp"
 
-User::User() {
-	std::cout << "user created\n";
+User::User(void) {
 	_clientAddress = new sockaddr_in();
 	_clientAddressSize = new socklen_t(sizeof(_clientAddress));
 }
 
-User::~User() {
-	std::cout << "user deleted\n";
+User::~User(void) {
+	std::cout << "deleted user: " << _nickname << "\n";
 	delete _clientAddress;
 	delete _clientAddressSize;
 }
@@ -29,7 +28,6 @@ User::User(const User& instance) {
 }
 
 User&	User::operator=(const User& instance) {
-	std::cout << "copy constructor user called\n";
 	std::cout << "copied user: " << instance.getNickname() << "\n";
 
 	_clientSocket = instance.getSocketDesc();

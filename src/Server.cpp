@@ -6,13 +6,13 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2022/12/30 23:12:54 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/31 00:53:42 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../includes/Server.hpp"
 
-Server::Server() {}
+Server::Server(void) {}
 
 Server::Server(char *port) {
 	_serverSocket = socket(PF_INET, SOCK_STREAM, 0);	// 소켓 생성
@@ -28,7 +28,7 @@ Server::Server(char *port) {
 		throw Error::SocketOpenException();
 }
 
-Server::~Server() {
+Server::~Server(void) {
 	std::cout << "destructor called\n";
 	serverOff();
 }
@@ -38,7 +38,7 @@ void	Server::serverOn(void) {
 		throw Error::SocketOpenException();
 	while (1) {
 		this->receiveClientMessage();
-		std::cout << "infinite loop\n";
+		testUser();
 	}
 }
 
@@ -47,24 +47,21 @@ void	Server::serverOff(void) {
 	exit(0);
 }
 
-void	Server::receiveClientMessage() {
+void	Server::receiveClientMessage(void) {
 	User user;
-	// while (1) {
-		try {
-			int		clientSocket = accept(_serverSocket, (struct sockaddr*)user.getAddressPtr(), user.getAddressSizePtr());
-			if (clientSocket < 0)
-				throw Error::SocketOpenException();
-			user.setSocketDesc(clientSocket);
-			std::string fullMsg = concatMessage(user.getSocketDesc());
-			parseMessageStream(&user, fullMsg);
-			this->testUser();
-		} catch (std::exception &e) {
-			std::cout << e.what() << "\n";
-			close(user.getSocketDesc());
-			// continue;
-		// }
+
+	try {
+		int	clientSocket = accept(_serverSocket, (struct sockaddr*)user.getAddressPtr(), user.getAddressSizePtr());
+		if (clientSocket < 0)
+			throw Error::SocketOpenException();
+		user.setSocketDesc(clientSocket);
+		std::string fullMsg = concatMessage(user.getSocketDesc());
+		parseMessageStream(&user, fullMsg);
+		this->testUser();
+	} catch (std::exception &e) {
+		std::cout << e.what() << "\n";
+		close(user.getSocketDesc());
 	}
-	std::cout << "user memory : " << &user << '\n';
 }
 
 std::string	Server::concatMessage(int clientSocket) {
@@ -86,13 +83,12 @@ void		Server::parseMessageStream(User* user, const std::string& fullMsg) {
 	std::vector<std::string>			commands = ft_split(fullMsg, '\n');
 	std::vector<std::string>::iterator	cmdIter;
 
-	std::cout << fullMsg << "\n\n";
+	std::cout << "\n======Message======\n" << fullMsg << "\n";
 
 	for (cmdIter = commands.begin(); cmdIter != commands.end(); cmdIter++) {
 		std::vector<std::string>	parameters = ft_split(*cmdIter, ' ');
 
-		std::cout << *parameters.begin() << "\n";
-		if (*parameters.begin() == CMD_NICK) commandNICK(user, parameters);
+		if (*parameters.begin() == CMD_NICK) commandNICK(user, parameters, _user_vector);
 		else if (*parameters.begin() == CMD_USER) commandUser(user, parameters, _user_vector);
 	}
 }
