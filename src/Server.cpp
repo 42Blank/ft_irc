@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Server.cpp                                         :+:      :+:    :+:   */
+/*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2022/12/30 20:59:21 by jasong           ###   ########.fr       */
+/*   Updated: 2022/12/30 23:12:54 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 Server::Server() {}
 
 Server::Server(char *port) {
-	_server_socket = socket(PF_INET, SOCK_STREAM, 0);	// 소켓 생성
-	if (_server_socket < 0)
+	_serverSocket = socket(PF_INET, SOCK_STREAM, 0);	// 소켓 생성
+	if (_serverSocket < 0)
 		throw Error::SocketOpenException();
 
-	memset(&_server_address, 0, sizeof(_server_address));	// 구조체 변수의 모든 멤버를 0으로 초기화
-	_server_address.sin_family = AF_INET;			// 주소 체계 지정, AF_INET : IPv4 인터넷 프로토콜에 적용
-	_server_address.sin_addr.s_addr = htonl(INADDR_ANY);	// IP 주소
-	_server_address.sin_port = htons(atoi(port));	// port 번호 초기화
+	memset(&_serverAddress, 0, sizeof(_serverAddress));	// 구조체 변수의 모든 멤버를 0으로 초기화
+	_serverAddress.sin_family = AF_INET;			// 주소 체계 지정, AF_INET : IPv4 인터넷 프로토콜에 적용
+	_serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);	// IP 주소
+	_serverAddress.sin_port = htons(atoi(port));	// port 번호 초기화
 
-	if (bind(_server_socket, (struct sockaddr *)&_server_address, sizeof(_server_address)) < 0)	// 소켓 주소 할당
+	if (bind(_serverSocket, (struct sockaddr *)&_serverAddress, sizeof(_serverAddress)) < 0)	// 소켓 주소 할당
 		throw Error::SocketOpenException();
 }
 
@@ -34,7 +34,7 @@ Server::~Server() {
 }
 
 void	Server::serverOn(void) {
-	if (listen(_server_socket, 5) < 0)	// 연결요청 대기상태
+	if (listen(_serverSocket, 5) < 0)	// 연결요청 대기상태
 		throw Error::SocketOpenException();
 	while (1) {
 		this->receiveClientMessage();
@@ -43,10 +43,7 @@ void	Server::serverOn(void) {
 }
 
 void	Server::serverOff(void) {
-	std::vector<User *>::iterator	iter;
-	for (iter = _user_vector.begin(); iter != _user_vector.end(); iter++)
-		delete (*iter);
-	close(_server_socket);
+	close(_serverSocket);
 	exit(0);
 }
 
@@ -54,10 +51,10 @@ void	Server::receiveClientMessage() {
 	User user;
 	// while (1) {
 		try {
-			int		client_socket = accept(_server_socket, (struct sockaddr*)user.getAddressPtr(), user.getAddressSizePtr());
-			if (client_socket < 0)
+			int		clientSocket = accept(_serverSocket, (struct sockaddr*)user.getAddressPtr(), user.getAddressSizePtr());
+			if (clientSocket < 0)
 				throw Error::SocketOpenException();
-			user.setSocketDesc(client_socket);
+			user.setSocketDesc(clientSocket);
 			std::string fullMsg = concatMessage(user.getSocketDesc());
 			parseMessageStream(&user, fullMsg);
 			this->testUser();
@@ -70,11 +67,11 @@ void	Server::receiveClientMessage() {
 	std::cout << "user memory : " << &user << '\n';
 }
 
-std::string	Server::concatMessage(int client_socket) {
+std::string	Server::concatMessage(int clientSocket) {
 	int		message_length;
 	std::string	fullMsg = "";
 
-	while ((message_length = recv(client_socket, _message, BUF_SIZE, 0)) != 0) {
+	while ((message_length = recv(clientSocket, _message, BUF_SIZE, 0)) != 0) {
 		if (message_length < 0) continue;
 		_message[message_length] = 0;
 		fullMsg += _message;

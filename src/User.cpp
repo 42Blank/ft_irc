@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:50:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2022/12/30 03:50:35 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/30 23:11:31 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,25 @@
 
 User::User() {
 	std::cout << "user created\n";
-	_client_address = new sockaddr_in();
-	_client_address_size = sizeof(_client_address);
+	_clientAddress = new sockaddr_in();
+	_clientAddressSize = sizeof(_clientAddress);
 }
 
 User::~User() {
 	std::cout << "user deleted\n";
-	delete _client_address;
+	delete _clientAddress;
 }
 
 int					User::getSocketDesc() {
-	return _client_socket;
+	return _clientSocket;
 }
 
 struct sockaddr_in*	User::getAddressPtr() {
-	return _client_address;
+	return _clientAddress;
 }
 
 socklen_t*			User::getAddressSizePtr() {
-	return &_client_address_size;
+	return &_clientAddressSize;
 }
 
 std::string			User::getNickname() {
@@ -51,6 +51,6 @@ void				User::setUsername(std::string username) {
 	_username = username;
 }
 
-void				User::setSocketDesc(int client_socket) {
-	_client_socket = client_socket;
+void				User::setSocketDesc(int clientSocket) {
+	_clientSocket = clientSocket;
 }

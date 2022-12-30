@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Server.hpp                                         :+:      :+:    :+:   */
+/*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2022/12/30 19:58:44 by jasong           ###   ########.fr       */
+/*   Updated: 2022/12/30 23:12:29 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@
 
 class Server {
 	private:
-		int					_server_socket;
-		struct sockaddr_in	_server_address;
-		std::vector<User *>	_user_vector;
+		int					_serverSocket;
+		struct sockaddr_in	_serverAddress;
+		std::vector<User>	_user_vector;
 		char				_message[BUF_SIZE];
 
 		void		receiveClientMessage();
-		std::string	concatMessage(int client_socket);
+		std::string	concatMessage(int clientSocket);
 		void		parseMessageStream(User* user, const std::string& fullMsg);
 
 
