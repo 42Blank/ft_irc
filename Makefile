@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+         #
+#    By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/28 13:47:07 by jiychoi           #+#    #+#              #
-#    Updated: 2022/12/30 04:33:49 by jiychoi          ###   ########.fr        #
+#    Updated: 2022/12/30 19:48:19 by jasong           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ CXX			=	c++
 CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98
 SRCS		=	src/main.cpp \
 				src/Server.cpp src/User.cpp src/Command.cpp \
-				src/Error.cpp src/utils.cpp
+				src/Error.cpp src/utils.cpp src/Verify.cpp
 OBJS		=	$(SRCS:.cpp=.o)
 TARGET		=	ircserv
 
