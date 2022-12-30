@@ -1,15 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dummy.hpp                                          :+:      :+:    :+:   */
+/*   Command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/28 13:44:22 by jiychoi           #+#    #+#             */
-/*   Updated: 2022/12/28 13:45:52 by jiychoi          ###   ########.fr       */
+/*   Created: 2022/12/30 03:59:21 by jiychoi           #+#    #+#             */
+/*   Updated: 2022/12/30 04:58:18 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
+#ifndef COMMAND_HPP
+# define COMMAND_HPP
 
-// 깃에 올리려고 만든 파일
+# include "irc.hpp"
+# include "User.hpp"
+
+# define CMD_NICK "NICK"
+# define CMD_USER "USER"
+
+void	commandNICK(User* user, std::vector<std::string>& parameters);
+void	commandUser(User* user, std::vector<std::string>& parameters, std::vector<User*>& user_vector);
+
+#endif

@@ -1,55 +1,97 @@
-#include "../includes/Server.hpp"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   server.cpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
+/*   Updated: 2022/12/30 05:10:11 by jiychoi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+# include "../includes/Server.hpp"
 
 Server::Server() {}
 
 Server::Server(char *port) {
+	_server_socket = socket(PF_INET, SOCK_STREAM, 0);	// 소켓 생성
+	if (_server_socket < 0)
+		throw Error::SocketOpenException();
 
-	this->serv_sock = socket(PF_INET, SOCK_STREAM, 0);	// 소켓 생성
-	if (this->serv_sock == -1)
-		errorHandling("socket() error");
+	memset(&_server_address, 0, sizeof(_server_address));	// 구조체 변수의 모든 멤버를 0으로 초기화
+	_server_address.sin_family = AF_INET;			// 주소 체계 지정, AF_INET : IPv4 인터넷 프로토콜에 적용
+	_server_address.sin_addr.s_addr = htonl(INADDR_ANY);	// IP 주소
+	_server_address.sin_port = htons(atoi(port));	// port 번호 초기화
 
-	memset(&this->serv_adr, 0, sizeof(this->serv_adr));	// 구조체 변수의 모든 멤버를 0으로 초기화
-	this->serv_adr.sin_family = AF_INET;			// 주소 체계 지정, AF_INET : IPv4 인터넷 프로토콜에 적용
-	this->serv_adr.sin_addr.s_addr = htonl(INADDR_ANY);	// IP 주소
-	this->serv_adr.sin_port = htons(atoi(port));	// port 번호 초기화
-
-	if (bind(serv_sock, (struct sockaddr *)&this->serv_adr, sizeof(this->serv_adr)) == -1)	// 소켓 주소 할당
-		errorHandling("bind() error");
+	if (bind(_server_socket, (struct sockaddr *)&_server_address, sizeof(_server_address)) < 0)	// 소켓 주소 할당
+		throw Error::SocketOpenException();
 }
 
 Server::~Server() {
-
-	close(this->serv_sock);
+	std::cout << "destructor called\n";
+	serverOff();
 }
 
 void	Server::serverOn(void) {
+	if (listen(_server_socket, 5) < 0)	// 연결요청 대기상태
+		throw Error::SocketOpenException();
+	receiveClientMessage();
+}
 
-	if (listen(this->serv_sock, 5) == -1)	// 연결요청 대기상태 
-		errorHandling("listen() error");
+void	Server::serverOff(void) {
+	std::vector<User *>::iterator	iter;
+	for (iter = _user_vector.begin(); iter != _user_vector.end(); iter++)
+		delete (*iter);
+	close(_server_socket);
+	exit(0);
+}
 
-	this->cli_adr_sz = sizeof(this->cli_adr);
+void	Server::receiveClientMessage() {
+	User	user;
 
-	for (int i = 0; i < 5; i++) {
-		this->cli_sock = accept(this->serv_sock, (struct sockaddr*)&this->cli_adr, &this->cli_adr_sz);	// 연결 허용
-		if (this->cli_sock == -1)
-			errorHandling("accept() error");
-		else
-			std::cout << "Connected client " << i + 1 << '\n';
-		while ((this->str_len = recv(this->cli_sock, this->msg, BUF_SIZE, 0)) != 0) {	// 데이터 송수신
-			if (this->str_len == -1)
-				continue;
-			this->msg[this->str_len] = 0;
-			// puts(this->msg);
-			std::cout << this->msg << '\n';
-			// write(cli_sock, msg, str_len);
+	while (1) {
+		try {
+			int		client_socket = accept(_server_socket, (struct sockaddr*)user.getAddressPtr(), user.getAddressSizePtr());
+			if (client_socket < 0)
+				throw Error::SocketOpenException();
+			user.setSocketDesc(client_socket);
+			std::string fullMsg = concatMessage(user.getSocketDesc());
+			parseMessageStream(&user, fullMsg);
+		} catch (std::exception &e) {
+			std::cout << e.what() << "\n";
+			close(user.getSocketDesc());
+			continue;
 		}
-		close(this->cli_sock);
 	}
 }
 
-void	Server::errorHandling(std::string msg) {
+std::string	Server::concatMessage(int client_socket) {
+	int		message_length;
+	std::string	fullMsg = "";
 
-	std::cout << msg << '\n';
-	close(this->serv_sock);
-	exit(1);
+	while ((message_length = recv(client_socket, _message, BUF_SIZE, 0)) != 0) {
+		if (message_length < 0) continue;
+		_message[message_length] = 0;
+		fullMsg += _message;
+		if (fullMsg.length() >= 2 && fullMsg.substr(fullMsg.length() - 2) == "\r\n") break;
+	}
+	ft_replaceStr(fullMsg, "\r", " ");
+
+	return fullMsg;
+}
+
+void		Server::parseMessageStream(User* user, const std::string& fullMsg) {
+	std::vector<std::string>			commands = ft_split(fullMsg, '\n');
+	std::vector<std::string>::iterator	cmdIter;
+
+	std::cout << fullMsg << "\n\n";
+
+	for (cmdIter = commands.begin(); cmdIter != commands.end(); cmdIter++) {
+		std::vector<std::string>	parameters = ft_split(*cmdIter, ' ');
+
+		std::cout << *parameters.begin() << "\n";
+		if (*parameters.begin() == CMD_NICK) commandNICK(user, parameters);
+		else if (*parameters.begin() == CMD_USER) commandUser(user, parameters, _user_vector);
+	}
 }
