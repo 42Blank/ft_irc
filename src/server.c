@@ -16,13 +16,13 @@ void	error_handling (char *msg) {
 int main (int ac, char **av) {
 
 	int		serv_sock;
-	/* serv_sock -> 문지기 
-		클라이언트의 연결요청을 대기실로 안내하거나(연결요청 대기 큐) 연결한다. 
+	/* serv_sock -> 문지기
+		클라이언트의 연결요청을 대기실로 안내하거나(연결요청 대기 큐) 연결한다.
 	*/
 	int		cli_sock;
 	/* cli_sock -> 클라이언트와 데이터를 주고 받는 소켓
-		serv_sock은 연결요청과 그 대기실을 관리해야 하기 때문에 클라이언트와 데이터를 주고 받을 소켓을 하나 더 만들어야 한다. 
-		이 소켓은 직접 socket으로 할당할 필요는 없고 accept 함수의 결과로 할당되게 된다. 
+		serv_sock은 연결요청과 그 대기실을 관리해야 하기 때문에 클라이언트와 데이터를 주고 받을 소켓을 하나 더 만들어야 한다.
+		이 소켓은 직접 socket으로 할당할 필요는 없고 accept 함수의 결과로 할당되게 된다.
 	*/
 	char	msg[BUF_SIZE];
 	int 	str_len, i;
@@ -34,7 +34,7 @@ int main (int ac, char **av) {
 	if (ac != 2)
 	{
 		printf("Usage : %s <port>\n", av[0]);
-		exit(1);	
+		exit(1);
 	}
 
 	serv_sock = socket(PF_INET, SOCK_STREAM, 0);	// 소켓 생성
@@ -49,15 +49,15 @@ int main (int ac, char **av) {
 
 	if (bind(serv_sock, (struct sockaddr *)&serv_adr, sizeof(serv_adr)) == -1)	// 소켓 주소 할당
 		error_handling("bind() error");
-	
+
 	if (listen(serv_sock, 5) == -1)	// 연결요청 대기상태
 	/*
-		serv_sock : 연결 요청 대기 상태에 두고자 하는 소켓의 패일 디스크립터 전달, 
-					이 디스크립터의 소켓이 서버 소켓(리스닝 소켓)이 된다. 
-		5 : 연결요청 대기 큐의 크기를 지정하는 파라미터, 클라이언트의 연결 요청을 5개까지 대기시킬 수 있다. 
+		serv_sock : 연결 요청 대기 상태에 두고자 하는 소켓의 패일 디스크립터 전달,
+					이 디스크립터의 소켓이 서버 소켓(리스닝 소켓)이 된다.
+		5 : 연결요청 대기 큐의 크기를 지정하는 파라미터, 클라이언트의 연결 요청을 5개까지 대기시킬 수 있다.
 	*/
 		error_handling("listen() error");
-	
+
 	cli_adr_sz = sizeof(cli_adr);
 
 	for (i = 0; i < 5; i++) {
@@ -65,8 +65,8 @@ int main (int ac, char **av) {
 		/*
 			serv_sock : 서버(문지기) 소켓의 파일 디스크립터
 			&cli_adr : 연결 요청한 클라이언트의 주소 정보를 담을 수 있는 변수의 주소 값
-						이 변수에 클라이언트의 주소 정보가 채워진다. 
-			&cli_adr_sz : 두번째 매개변수의 크기를 바이트 단위로 전달한다. 
+						이 변수에 클라이언트의 주소 정보가 채워진다.
+			&cli_adr_sz : 두번째 매개변수의 크기를 바이트 단위로 전달한다.
 		*/
 		if (cli_sock == -1)
 			error_handling("accept() error");
