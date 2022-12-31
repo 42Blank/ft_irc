@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 19:31:32 by jiychoi           #+#    #+#             */
-/*   Updated: 2022/12/30 03:50:09 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/31 16:19:14 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,4 +22,8 @@ const char*	Error::ParseMessageException::what() const throw() {
 
 const char*	Error::AuthorizeException::what() const throw() {
 	return "Authorization Failed";
+}
+
+const char*	Error::SendMessageException::what() const throw() {
+	return "Failed to send message to client";
 }
