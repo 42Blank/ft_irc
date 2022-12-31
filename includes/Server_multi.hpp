@@ -28,15 +28,17 @@
 
 class Server {
 	private:
-		int					_port;
-		std::string			_password;
-		int					_serverSocket;
-		struct sockaddr_in	_serverAddress;
-		std::vector<User>	_user_vector;
-		time_t				_created_time;
-		char				_message[BUF_SIZE];
-		struct timeval		_timeout;
-		fd_set				_reads;
+		int							_port;
+		std::string					_password;
+		int							_serverSocket;
+		struct sockaddr_in			_serverAddress;
+		std::vector<User>			_user_vector;
+		time_t						_created_time;
+		char						_message[BUF_SIZE];
+		struct timeval				_timeout;
+		fd_set						_reads;
+
+		std::vector<struct pollfd>	_fdList;
 
 		void		sendClientMessage(User* user, std::string str);
 		void		receiveClientMessage(struct pollfd *fd_list, int result, int fd_count);
