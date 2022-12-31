@@ -1,2 +1,2 @@
 # ft_irc
-아얄시
+팀 산지직송 (san & jiychoi & jasong) 의 ft_irc

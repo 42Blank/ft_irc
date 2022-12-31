@@ -6,31 +6,31 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 04:09:31 by jiychoi           #+#    #+#             */
-/*   Updated: 2022/12/31 00:41:57 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/31 15:07:55 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Command.hpp"
+#include "../includes/Server.hpp"
 
-void	commandNICK(User* user, std::vector<std::string>& parameters, std::vector<User>& user_vector) {
+void	Server::commandNICK(User* user, std::vector<std::string>& parameters) {
 	std::vector<User>::iterator	iter;
 	const std::string nickname = *(parameters.end() - 1);
 	user->setNickname(nickname);
 
-	for (iter = user_vector.begin(); iter < user_vector.end(); iter++) {
+	for (iter = _user_vector.begin(); iter < _user_vector.end(); iter++) {
 		if ((*iter).getNickname() == nickname)
 			throw Error::AuthorizeException();
 	}
 }
 
-void	commandUser(User* user, std::vector<std::string>& parameters, std::vector<User>& user_vector) {
+void	Server::commandUser(User* user, std::vector<std::string>& parameters) {
 	std::vector<User>::iterator	iter;
 	const std::string username = *(parameters.end() - 1);
 	user->setUsername(username);
 
-	for (iter = user_vector.begin(); iter < user_vector.end(); iter++) {
-		if ((*iter).getNickname() == username)
+	for (iter = _user_vector.begin(); iter < _user_vector.end(); iter++) {
+		if ((*iter).getUsername() == username)
 			throw Error::AuthorizeException();
 	}
-	user_vector.push_back(*user);
+	_user_vector.push_back(*user);
 }
