@@ -4,8 +4,10 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
+#include <poll.h>
 
 #define BUF_SIZE 1024
+#define MAX_POLL 100
 
 void	error_handling (char *msg) {
 	fputs(msg, stderr);
@@ -25,17 +27,14 @@ int main (int ac, char **av) {
 		이 소켓은 직접 socket으로 할당할 필요는 없고 accept 함수의 결과로 할당되게 된다.
 	*/
 	char	msg[BUF_SIZE];
-	int 	str_len, i;
+
+	// int 	str_len, i;//
 
 	struct sockaddr_in	serv_adr; // 인터넷 주소 정보를 저장할 변수
 	struct sockaddr_in	cli_adr;
 	socklen_t cli_adr_sz;
 
-	if (ac != 2)
-	{
-		printf("Usage : %s <port>\n", av[0]);
-		exit(1);
-	}
+	int fd_count = 0; //
 
 	serv_sock = socket(PF_INET, SOCK_STREAM, 0);	// 소켓 생성
 	if (serv_sock == -1) {
@@ -58,29 +57,60 @@ int main (int ac, char **av) {
 	*/
 		error_handling("listen() error");
 
+	// pollfd 배열 구조체 생성
+	struct pollfd fd_list[MAX_POLL];
+
+	// server socket에대한 이벤트 등록
+	fd_list[0].fd = serv_sock; // 0번째 배열에는 listen을 지정
+	fd_list[0].events = POLLIN; // 읽도록 만든다.
+	fd_list[0].revents = 0; // 처음에는 0으로 초기화 한다(아직 아무 일도 일어나지 않았으니)
+	fd_count++;
+
+	int i;
+	for (i = 1; i < MAX_POLL; i++)
+		fd_list[i].fd = -1;
+
 	cli_adr_sz = sizeof(cli_adr);
 
-	for (i = 0; i < 5; i++) {
-		cli_sock = accept(serv_sock, (struct sockaddr*)&cli_adr, &cli_adr_sz);	// 연결 허용
-		/*
-			serv_sock : 서버(문지기) 소켓의 파일 디스크립터
-			&cli_adr : 연결 요청한 클라이언트의 주소 정보를 담을 수 있는 변수의 주소 값
-						이 변수에 클라이언트의 주소 정보가 채워진다.
-			&cli_adr_sz : 두번째 매개변수의 크기를 바이트 단위로 전달한다.
-		*/
-		if (cli_sock == -1)
-			error_handling("accept() error");
-		else
-			printf("Connected client %d \n", i + 1);
-		while ((str_len = recv(cli_sock, msg, BUF_SIZE, 0)) != 0) {	// 데이터 송수신
-			if (str_len == -1)
-				continue;
-			msg[str_len] = 0;
-			puts(msg);
-			// write(cli_sock, msg, str_len);
+
+	while (1) {
+		int result = poll(fd_list, fd_count, -1);
+
+		if (result > 0) {
+			if (fd_list[0].revents == POLLIN) {
+				cli_sock = accept(serv_sock, (struct sockaddr *) &cli_adr, &cli_adr_sz);
+				printf("클라이언트가 접속됨:\n");
+				printf("IP: %s PORT: %d\n", inet_ntoa(cli_adr.sin_addr), ntohs(cli_adr.sin_port));
+				fd_list[fd_count].fd = cli_sock;
+				fd_list[fd_count].events = POLLIN;
+				fd_count++;
+			} else {
+				int str_len;
+				for (i = 1; i < fd_count; i++) {
+					switch (fd_list[i].revents) {
+						case 0:
+							break;
+						case POLLIN: // echo
+							str_len = read(fd_list[i].fd, msg, BUF_SIZE);
+							printf("%d bytes read\n", str_len);
+
+							msg[str_len] = 0;
+							fputs(msg, stdout);
+							fflush(stdout);
+							// client 로 echo 응답
+							write(fd_list[i].fd, msg, strlen(msg));
+						default: // 슬롯 초기화
+							close(fd_list[i].fd);
+							fd_list[i].fd = -1;
+							fd_list[i].revents = 0;
+					}
+				}
+			}
+		} else {
+			error_handling("failed poll()");
+			return -1;
 		}
-		close(cli_sock);
 	}
-	close(serv_sock);	// 연결 종료
+	close (serv_sock);
 	return 0;
 }
