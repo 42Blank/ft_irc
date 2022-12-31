@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2022/12/31 15:09:07 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/31 15:41:31 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 
 # define BUF_SIZE 1024
 
+# define CMD_PASS "PASS"
 # define CMD_NICK "NICK"
 # define CMD_USER "USER"
 

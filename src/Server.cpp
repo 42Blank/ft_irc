@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2022/12/31 15:08:16 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/31 16:04:23 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,8 @@ Server::~Server(void) {
 void	Server::serverOn(void) {
 	if (listen(_serverSocket, 5) < 0)	// 연결요청 대기상태
 		throw Error::SocketOpenException();
-	while (1) {
+	while (1)
 		this->receiveClientMessage();
-		testUser();
-	}
 }
 
 void	Server::serverOff(void) {
