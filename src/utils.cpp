@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:41:37 by jiychoi           #+#    #+#             */
-/*   Updated: 2022/12/30 04:48:23 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/31 15:52:55 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,18 @@ void	ft_replaceStr(std::string& str, std::string src, std::string des) {
 		str.erase(pos, 1);
 		str.insert(pos, des);
 	}
+}
+
+bool	ft_isValidNickname(const std::string& str) {
+	int length = str.length();
+
+	for (int i = 0; i < length; i++) {
+		for (int j = 0; j < 9; j++)
+			if (str[i] == NICK_AVAILABLE_CHAR[j]) break;
+		if (i == 0 && isalpha(str[i])) continue;
+		else if (isalnum(str[i])) continue;
+		std::cout << "Error character: [" << str[i] << "]\n";
+		return false;
+	}
+	return true;
 }
