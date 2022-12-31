@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 04:09:31 by jiychoi           #+#    #+#             */
-/*   Updated: 2022/12/31 17:40:41 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/31 17:47:15 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,6 @@ void	Server::commandUser(User* user, std::vector<std::string>& parameters) {
 		":127.0.0.1 003 " + user->getNickname() + " :\033[1;32mThis server was created " + ctime(&_created_time) + "\e[0m"
 	);
 	sendClientMessage(user,
-		":127.0.0.1 004 " + user->getNickname() + " :\033[1;32m" + SERVER_NAME + "0.1\e[0m"
+		":127.0.0.1 004 " + user->getNickname() + " :\033[1;32m" + SERVER_NAME + " 0.1\e[0m"
 	);
 }
