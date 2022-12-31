@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.hpp                                         :+:      :+:    :+:   */
+/*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2022/12/31 17:26:36 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/31 21:23:57 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,23 +27,24 @@
 
 class Server {
 	private:
-		int					_port;
-		std::string			_password;
-		int					_serverSocket;
-		struct sockaddr_in	_serverAddress;
-		std::vector<User>	_user_vector;
-		time_t				_created_time;
-		char				_message[BUF_SIZE];
+		int							_port;
+		std::string					_password;
+		int							_serverSocket;
+		struct sockaddr_in			_serverAddress;
+		std::vector<User>			_user_vector;
+		time_t						_created_time;
+		char						_message[BUF_SIZE];
+		std::vector<struct pollfd>	_poll_fds;
 
-		void		sendClientMessage(User* user, std::string str);
+		void		sendClientMessage(User& user, std::string str);
 		void		receiveClientMessage();
 		std::string	concatMessage(int clientSocket);
-		void		parseMessageStream(User* user, const std::string& fullMsg);
+		void		parseMessageStream(User& user, const std::string& fullMsg);
 
-		void		commandCAP(User* user, std::vector<std::string>& parameters);
-		void		commandPASS(User* user, std::vector<std::string>& parameters);
-		void		commandNICK(User* user, std::vector<std::string>& parameters);
-		void		commandUser(User* user, std::vector<std::string>& parameters);
+		void		commandCAP(User& user, std::vector<std::string>& parameters);
+		void		commandPASS(User& user, std::vector<std::string>& parameters);
+		void		commandNICK(User& user, std::vector<std::string>& parameters);
+		void		commandUser(User& user, std::vector<std::string>& parameters);
 
 	public:
 		Server(char *port);// 비번 추가 해야 함.

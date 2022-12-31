@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   irc.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 13:44:22 by jiychoi           #+#    #+#             */
-/*   Updated: 2022/12/31 17:25:39 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/31 19:02:38 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 
 # include <sys/socket.h>
 # include <sys/types.h>
+# include <sys/poll.h>
 # include <sys/stat.h>
 # include <arpa/inet.h>
 # include <netinet/in.h>
