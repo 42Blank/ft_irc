@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2022/12/31 16:04:23 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/31 16:19:37 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,11 @@ void	Server::serverOn(void) {
 void	Server::serverOff(void) {
 	close(_serverSocket);
 	exit(0);
+}
+
+void	Server::sendClientMessage(User* user, std::string str) {
+	if (send(user->getSocketDesc(), str.c_str, str.length(), 0) == -1)
+		throw Error::SendMessageException();
 }
 
 void	Server::receiveClientMessage(void) {

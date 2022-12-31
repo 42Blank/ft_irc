@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2022/12/31 15:41:31 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/31 16:17:27 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 
 # define BUF_SIZE 1024
 
+# define CMD_CAP "CAP"
 # define CMD_PASS "PASS"
 # define CMD_NICK "NICK"
 # define CMD_USER "USER"
@@ -32,10 +33,13 @@ class Server {
 		std::vector<User>	_user_vector;
 		char				_message[BUF_SIZE];
 
+		void		sendClientMessage(User* user, std::string str);
 		void		receiveClientMessage();
 		std::string	concatMessage(int clientSocket);
 		void		parseMessageStream(User* user, const std::string& fullMsg);
 
+		void		commandCAP(std::vector<std::string>& parameters);
+		void		commandPASS(User* user, std::vector<std::string>& parameters);
 		void		commandNICK(User* user, std::vector<std::string>& parameters);
 		void		commandUser(User* user, std::vector<std::string>& parameters);
 
