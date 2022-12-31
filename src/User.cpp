@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:50:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2022/12/31 00:54:40 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/31 17:33:06 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,27 +46,35 @@ struct sockaddr_in*	User::getAddressPtr() const {
 	return _clientAddress;
 }
 
-socklen_t*			User::getAddressSizePtr() const {
+socklen_t*	User::getAddressSizePtr() const {
 	return _clientAddressSize;
 }
 
-std::string			User::getNickname() const {
+std::string	User::getNickname() const {
 	return _nickname;
 }
 
-std::string			User::getUsername() const {
+std::string	User::getUsername() const {
 	return _username;
 }
 
-void				User::setNickname(std::string nickname) {
+std::string User::getHostname() const {
+	return _hostname;
+}
+
+void	User::setNickname(std::string nickname) {
 	_nickname = nickname;
 }
 
-void				User::setUsername(std::string username) {
+void	User::setUsername(std::string username) {
 	_username = username;
 }
 
-void				User::setSocketDesc(int clientSocket) {
+void	User::setHostname(std::string hostname) {
+	_hostname = hostname;
+}
+
+void	User::setSocketDesc(int clientSocket) {
 	_clientSocket = clientSocket;
 }
 

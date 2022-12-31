@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2022/12/31 17:20:13 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/31 17:25:54 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ Server::Server(char *port) {
 	_serverAddress.sin_family = AF_INET;			// 주소 체계 지정, AF_INET : IPv4 인터넷 프로토콜에 적용
 	_serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);	// IP 주소
 	_serverAddress.sin_port = htons(_port);	// port 번호 초기화
+	_created_time = time(NULL);
 
 	if (bind(_serverSocket, (struct sockaddr *)&_serverAddress, sizeof(_serverAddress)) < 0)	// 소켓 주소 할당
 		throw Error::SocketOpenException();

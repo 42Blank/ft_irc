@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 13:44:22 by jiychoi           #+#    #+#             */
-/*   Updated: 2022/12/31 15:52:24 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/31 17:25:39 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,11 @@
 # include <iostream>
 # include <cstring>
 # include <cctype>
+# include <ctime>
+# include <cstdlib>
 # include <string>
 # include <vector>
 # include <sstream>
-# include <cstdlib>
 # include <unistd.h>
 # include <exception>
 

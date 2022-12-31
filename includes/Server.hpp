@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2022/12/31 16:21:40 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/31 17:26:36 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include "Error.hpp"
 
 # define BUF_SIZE 1024
+# define SERVER_NAME "San-Ji-jik-Song_IRCServ"
 
 # define CMD_CAP "CAP"
 # define CMD_PASS "PASS"
@@ -31,6 +32,7 @@ class Server {
 		int					_serverSocket;
 		struct sockaddr_in	_serverAddress;
 		std::vector<User>	_user_vector;
+		time_t				_created_time;
 		char				_message[BUF_SIZE];
 
 		void		sendClientMessage(User* user, std::string str);
