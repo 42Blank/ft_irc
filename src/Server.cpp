@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2022/12/31 16:19:37 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/31 16:23:10 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	Server::serverOff(void) {
 }
 
 void	Server::sendClientMessage(User* user, std::string str) {
-	if (send(user->getSocketDesc(), str.c_str, str.length(), 0) == -1)
+	if (send(user->getSocketDesc(), str.c_str(), str.length(), 0) == -1)
 		throw Error::SendMessageException();
 }
 
@@ -90,7 +90,8 @@ void	Server::parseMessageStream(User* user, const std::string& fullMsg) {
 	for (cmdIter = commands.begin(); cmdIter != commands.end(); cmdIter++) {
 		std::vector<std::string>	parameters = ft_split(*cmdIter, ' ');
 
-		if (*parameters.begin() == CMD_NICK) commandNICK(user, parameters);
+		if (*parameters.begin() == CMD_CAP) commandCAP(user, parameters);
+		else if (*parameters.begin() == CMD_NICK) commandNICK(user, parameters);
 		else if (*parameters.begin() == CMD_USER) commandUser(user, parameters);
 	}
 }

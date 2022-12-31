@@ -6,11 +6,19 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 04:09:31 by jiychoi           #+#    #+#             */
-/*   Updated: 2022/12/31 15:57:14 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/31 16:54:06 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Server.hpp"
+
+void		Server::commandCAP(User* user, std::vector<std::string>& parameters) {
+	if (parameters.size() != 2) throw Error::AuthorizeException(); // TODO: 다른 오류로 교체
+	std::cout << "CAP LS received\n";
+	if (*(parameters.begin() + 1) == "LS") {
+		sendClientMessage(user, "CAP * LS ");
+	}
+}
 
 void	Server::commandNICK(User* user, std::vector<std::string>& parameters) {
 	std::vector<User>::iterator	iter;
@@ -36,4 +44,5 @@ void	Server::commandUser(User* user, std::vector<std::string>& parameters) {
 	user->setUsername(username);
 
 	_user_vector.push_back(*user);
+	sendClientMessage(user, ":127.0.0.1 001 chichoon :Welcome to the IRCServ Network " + user->getNickname() + "!" + username + "@127.0.0.1");
 }

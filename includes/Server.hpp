@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2022/12/31 16:17:27 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/31 16:21:40 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ class Server {
 		std::string	concatMessage(int clientSocket);
 		void		parseMessageStream(User* user, const std::string& fullMsg);
 
-		void		commandCAP(std::vector<std::string>& parameters);
+		void		commandCAP(User* user, std::vector<std::string>& parameters);
 		void		commandPASS(User* user, std::vector<std::string>& parameters);
 		void		commandNICK(User* user, std::vector<std::string>& parameters);
 		void		commandUser(User* user, std::vector<std::string>& parameters);
