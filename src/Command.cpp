@@ -6,30 +6,57 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 04:09:31 by jiychoi           #+#    #+#             */
-/*   Updated: 2022/12/30 05:09:02 by jiychoi          ###   ########.fr       */
+/*   Updated: 2022/12/31 17:47:15 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Command.hpp"
+#include "../includes/Server.hpp"
 
-void	commandNICK(User* user, std::vector<std::string>& parameters) {
-	user->setNickname(*(parameters.end() - 1));
-
-	// 닉네임 검증이 들어갈 부분
-	// 통과 실패할 경우 예외 throw 해주세요 (Error::AuthorizeException())
+void		Server::commandCAP(User* user, std::vector<std::string>& parameters) {
+	if (parameters.size() != 2) throw Error::AuthorizeException(); // TODO: 다른 오류로 교체
+	std::cout << "CAP LS received\n";
+	if (*(parameters.begin() + 1) == "LS") {
+		sendClientMessage(user, "CAP * LS ");
+	}
 }
 
-void	commandUser(User* user, std::vector<std::string>& parameters, std::vector<User*>& user_vector) {
-	user->setUsername(*(parameters.end() - 1));
+void	Server::commandNICK(User* user, std::vector<std::string>& parameters) {
+	std::vector<User>::iterator	iter;
+	const std::string nickname = *(parameters.end() - 1);
+	if (parameters.size() != 2) throw Error::AuthorizeException();
+	if (nickname.length() <= 0 || nickname.length() > 9) throw Error::AuthorizeException();
+	if (!ft_isValidNickname(nickname)) throw Error::AuthorizeException();
 
-	// 유저명 검증이 들어갈 부분
-	user_vector.push_back(user);
-	// 통과했을 때만 _user_vector에 push_back
-	// 닉네임 검증은 어차피 위에서 해주기 때문에 commandUser에서만 push_back 하면 됨
+	user->setNickname(nickname);
 
-	std::vector<User*>::iterator	userIter;
-	for (userIter = user_vector.begin(); userIter != user_vector.end(); userIter++) {
-		std::cout << "User [" << (*userIter)->getUsername() << "] (" << (*userIter)->getNickname() << ") joined\n";
+	for (iter = _user_vector.begin(); iter < _user_vector.end(); iter++) {
+		if ((*iter).getNickname() == nickname)
+			throw Error::AuthorizeException();
 	}
-	// 위 코드 주석해제하면 유저 목록 볼 수 있음
+}
+
+void	Server::commandUser(User* user, std::vector<std::string>& parameters) {
+	const std::string username = *(parameters.begin() + 1);
+
+	if (parameters.size() != 5) throw Error::AuthorizeException();
+	if (username.length() <= 0)
+		throw Error::AuthorizeException();
+	user->setUsername(parameters[1]);
+	user->setHostname(parameters[2]);
+
+	_user_vector.push_back(*user);
+
+	sendClientMessage(user,
+		":127.0.0.1 001 " + user->getNickname() + " :\033[1;32mWelcome to the " + SERVER_NAME + "\e[0m " + \
+		user->getNickname() + "!" + user->getUsername() + "@" + user->getHostname()
+	);
+	sendClientMessage(user,
+		":127.0.0.1 002 " + user->getNickname() + " :\033[1;32mYour host is " + SERVER_NAME + ", " + "running version 0.1\e[0m"
+	);
+	sendClientMessage(user,
+		":127.0.0.1 003 " + user->getNickname() + " :\033[1;32mThis server was created " + ctime(&_created_time) + "\e[0m"
+	);
+	sendClientMessage(user,
+		":127.0.0.1 004 " + user->getNickname() + " :\033[1;32m" + SERVER_NAME + " 0.1\e[0m"
+	);
 }
