@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/01 16:21:59 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/01 17:07:25 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,18 @@ class Server {
 		std::vector<struct pollfd>	_poll_fds;
 
 		void		sendClientMessage(User& user, std::string str);
-		void		receiveClientMessage();
+		void		welcomeProcess(void);
+		void		receiveClientMessage(int clientSocket);
 		std::string	concatMessage(int clientSocket);
 		void		parseMessageStream(User& user, const std::string& fullMsg);
+		void		parseWelcomeMessageStream(User& user, const std::string& fullMsg);
 
 		void		commandPASS(User& user, std::vector<std::string>& parameters);
 		void		commandNICK(User& user, std::vector<std::string>& parameters);
 		void		commandUser(User& user, std::vector<std::string>& parameters);
+
+
+		int			getUserIndexByFd(int fd);
 
 	public:
 		Server(char *port);// 비번 추가 해야 함.
