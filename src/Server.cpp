@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/01 16:20:03 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/01 16:35:01 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	Server::serverOn(void) {
 			// std::cout << "Poll timeout\n";
 			continue ;
 		}
-		if (_poll_fds[0].revents & POLLIN) {
+		if (_poll_fds[0].revents & POLLIN) { // _poll_fds[0] -> 서버 fd에 POLLIN event발생
 			struct pollfd client_pollfd;
 
 			receiveClientMessage(); // 새 클라이언트 추가
@@ -60,6 +60,7 @@ void	Server::serverOn(void) {
 			_poll_fds.push_back(client_pollfd);
 		} else {
 			std::vector<struct pollfd>::iterator iter;
+
 			for (iter = _poll_fds.begin() + 1; iter < _poll_fds.end(); iter++) {
 				if (iter->revents & POLLIN) {
 					std::string fullStr = concatMessage(iter->fd);
@@ -143,4 +144,12 @@ std::string	Server::getPassword() const {
 
 void	Server::setPassword(std::string password) {
 	_password = password;
+}
+
+void		Server::testUser(void) {
+	std::vector<User>::iterator	iter;
+
+	for (iter = _user_vector.begin(); iter < _user_vector.end(); iter++) {
+		std::cout << (*iter) << '\n';
+	}
 }
