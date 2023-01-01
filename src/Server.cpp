@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/01 17:26:26 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/01 17:28:32 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,13 @@ void	Server::serverOn(void) {
 		}
 		if (_poll_fds[0].revents & POLLIN) { // _poll_fds[0] -> 서버 fd에 POLLIN event발생
 			welcomeProcess();
-		} else {
-			std::vector<struct pollfd>::iterator iter;
+			continue;
+		}
+		std::vector<struct pollfd>::iterator iter;
 
-			for (iter = _poll_fds.begin() + 1; iter < _poll_fds.end(); iter++) {
-				if (iter->revents & POLLIN) {
-					receiveClientMessage(iter->fd);
-				}
-			}
+		for (iter = _poll_fds.begin() + 1; iter < _poll_fds.end(); iter++) {
+			if (iter->revents & POLLIN)
+				receiveClientMessage(iter->fd);
 		}
 	}
 }
