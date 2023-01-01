@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2022/12/31 21:18:23 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/01 16:20:03 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,10 +101,8 @@ void	Server::receiveClientMessage(void) {
 std::string	Server::concatMessage(int clientSocket) {
 	int		message_length;
 	std::string	fullMsg = "";
-	// int		i = 0;
 
 	while ((message_length = recv(clientSocket, _message, BUF_SIZE, 0)) != 0) {
-		// std::cout << i++ << " : " << _message << std::endl;
 		if (message_length < 0) continue;
 		_message[message_length] = 0;
 		fullMsg += _message;
@@ -125,9 +123,9 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 		std::vector<std::string>	parameters = ft_split(*cmdIter, ' ');
 
 		// std::cout << "parameter : " << *cmdIter << "\n";
-		if (*parameters.begin() == CMD_CAP) commandCAP(user, parameters);
-		else if (*parameters.begin() == CMD_NICK) commandNICK(user, parameters);
+		if (*parameters.begin() == CMD_NICK) commandNICK(user, parameters);
 		else if (*parameters.begin() == CMD_USER) commandUser(user, parameters);
+		else continue;
 	}
 }
 

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Server.hpp                                         :+:      :+:    :+:   */
+/*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2022/12/31 21:23:57 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/01 16:21:59 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 # define BUF_SIZE 1024
 # define SERVER_NAME "San-Ji-jik-Song_IRCServ"
 
-# define CMD_CAP "CAP"
 # define CMD_PASS "PASS"
 # define CMD_NICK "NICK"
 # define CMD_USER "USER"
@@ -41,7 +40,6 @@ class Server {
 		std::string	concatMessage(int clientSocket);
 		void		parseMessageStream(User& user, const std::string& fullMsg);
 
-		void		commandCAP(User& user, std::vector<std::string>& parameters);
 		void		commandPASS(User& user, std::vector<std::string>& parameters);
 		void		commandNICK(User& user, std::vector<std::string>& parameters);
 		void		commandUser(User& user, std::vector<std::string>& parameters);

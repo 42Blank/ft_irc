@@ -3,22 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 04:09:31 by jiychoi           #+#    #+#             */
-/*   Updated: 2022/12/31 21:23:40 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/01 16:18:35 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Server.hpp"
-
-void		Server::commandCAP(User& user, std::vector<std::string>& parameters) {
-	if (parameters.size() != 2) throw Error::AuthorizeException(); // TODO: 다른 오류로 교체
-	std::cout << "CAP LS received\n";
-	if (*(parameters.begin() + 1) == "LS") {
-		sendClientMessage(user, "CAP * LS ");
-	}
-}
 
 void	Server::commandNICK(User& user, std::vector<std::string>& parameters) {
 	std::vector<User>::iterator	iter;
@@ -36,10 +28,9 @@ void	Server::commandNICK(User& user, std::vector<std::string>& parameters) {
 }
 
 void	Server::commandUser(User& user, std::vector<std::string>& parameters) {
-	const std::string username = *(parameters.begin() + 1);
-
-	// if (parameters.size() != 5) throw Error::AuthorizeException();
-	if (username.length() <= 0)
+	if (parameters.size() < 5)
+		throw Error::AuthorizeException();
+	if (parameters[1].length() <= 0 || parameters[2].length() <= 0)
 		throw Error::AuthorizeException();
 	user.setUsername(parameters[1]);
 	user.setHostname(parameters[2]);
