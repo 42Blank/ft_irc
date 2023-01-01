@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   irc.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 13:44:22 by jiychoi           #+#    #+#             */
-/*   Updated: 2022/12/31 19:02:38 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/01 16:16:38 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,6 @@
 std::vector<std::string>	ft_split(std::string input, char delimiter);
 void						ft_replaceStr(std::string& str, std::string src, std::string des);
 bool						ft_isValidNickname(const std::string& str);
+std::string					ft_getStringAfterColon(std::vector<std::string> parameter);
 
 #endif

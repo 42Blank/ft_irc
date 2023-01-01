@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:41:37 by jiychoi           #+#    #+#             */
-/*   Updated: 2022/12/31 16:03:07 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/01 16:16:45 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,23 @@ bool	ft_isValidNickname(const std::string& str) {
 		return false;
 	}
 	return true;
+}
+
+std::string ft_getStringAfterColon(std::vector<std::string> parameter) {
+	std::vector<std::string>::iterator iter;
+	std::string returnStr = "";
+	bool flag = false;
+
+	for (iter = parameter.begin(); iter < parameter.end(); iter++)
+	{
+		if ((*iter)[0] == ':')
+		{
+			flag = true;
+			returnStr += (*iter);
+			continue;
+		}
+		if (flag)
+			returnStr += " " + *iter;
+	}
+	return returnStr.substr(1, returnStr.length() - 1);
 }
