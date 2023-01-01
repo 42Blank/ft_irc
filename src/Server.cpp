@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/01 17:28:32 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/01 17:39:42 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ void	Server::serverOn(void) {
 		for (iter = _poll_fds.begin() + 1; iter < _poll_fds.end(); iter++) {
 			if (iter->revents & POLLIN)
 				receiveClientMessage(iter->fd);
+			else if (iter->revents & POLLHUP)
+				std::cout << "비정상종료\n";
 		}
 	}
 }
@@ -145,6 +147,7 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 		std::vector<std::string>	parameters = ft_split(*cmdIter, ' ');
 		// if (*parameters.begin() == CMD_JOIN) commandJoin(user, parameters);
 	}
+	(void)user; // unused parameter때문에 꼼수씀
 }
 
 int	Server::getUserIndexByFd(int fd) {
