@@ -2,9 +2,10 @@
 #include "../includes/Channel.hpp"
 
 // 여기 유저 nickname만 받아서 Channel user list에 넣으면 안될지 고민 중 
-Channel::Channel(User &user) {
+Channel::Channel(User &user, std::string name) {
 	_operator = user.getNickname();
 	_userList.push_back(user);
+	_channelName = name;
 }
 
 Channel::~Channel() {
@@ -17,6 +18,10 @@ std::string			Channel::getTopic() {
 
 std::vector<User>	Channel::getuserList() {
 	return _userList;
+}
+
+std::string			Channel::getChannelName() {
+	return _channelName;
 }
 
 void				Channel::setTopic(std::string topic) {
