@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2022/12/31 17:26:36 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/01 17:07:25 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,32 +20,34 @@
 # define BUF_SIZE 1024
 # define SERVER_NAME "San-Ji-jik-Song_IRCServ"
 
-# define CMD_CAP "CAP"
 # define CMD_PASS "PASS"
 # define CMD_NICK "NICK"
 # define CMD_USER "USER"
 
 class Server {
 	private:
-		int					_port;
-		std::string			_password;
-		int					_serverSocket;
-		struct sockaddr_in	_serverAddress;
-		std::vector<User>	_user_vector;
-		time_t				_created_time;
-		char				_message[BUF_SIZE];
-		struct timeval		_timeout;
-		fd_set				_reads;
+		int							_port;
+		std::string					_password;
+		int							_serverSocket;
+		struct sockaddr_in			_serverAddress;
+		std::vector<User>			_user_vector;
+		time_t						_created_time;
+		char						_message[BUF_SIZE];
+		std::vector<struct pollfd>	_poll_fds;
 
-		void		sendClientMessage(User* user, std::string str);
-		void		receiveClientMessage();
+		void		sendClientMessage(User& user, std::string str);
+		void		welcomeProcess(void);
+		void		receiveClientMessage(int clientSocket);
 		std::string	concatMessage(int clientSocket);
-		void		parseMessageStream(User* user, const std::string& fullMsg);
+		void		parseMessageStream(User& user, const std::string& fullMsg);
+		void		parseWelcomeMessageStream(User& user, const std::string& fullMsg);
 
-		void		commandCAP(User* user, std::vector<std::string>& parameters);
-		void		commandPASS(User* user, std::vector<std::string>& parameters);
-		void		commandNICK(User* user, std::vector<std::string>& parameters);
-		void		commandUser(User* user, std::vector<std::string>& parameters);
+		void		commandPASS(User& user, std::vector<std::string>& parameters);
+		void		commandNICK(User& user, std::vector<std::string>& parameters);
+		void		commandUser(User& user, std::vector<std::string>& parameters);
+
+
+		int			getUserIndexByFd(int fd);
 
 	public:
 		Server(char *port);// 비번 추가 해야 함.
