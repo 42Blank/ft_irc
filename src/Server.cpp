@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/01 18:55:50 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/01 19:08:35 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,6 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 	std::vector<std::string>::iterator	cmdIter;
 
 	std::cout << "\n======Message======\n" << fullMsg << "\n";
-	std::cout << "\n======hihi======\n";
 
 	for (cmdIter = commands.begin(); cmdIter != commands.end(); cmdIter++) {
 		std::vector<std::string>	parameters = ft_split(*cmdIter, ' ');
