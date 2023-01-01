@@ -1,4 +1,7 @@
 *.o
+*.c
+
 ft_irc
+ircserv
 
 eserv

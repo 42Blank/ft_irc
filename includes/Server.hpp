@@ -34,6 +34,8 @@ class Server {
 		std::vector<User>	_user_vector;
 		time_t				_created_time;
 		char				_message[BUF_SIZE];
+		struct timeval		_timeout;
+		fd_set				_reads;
 
 		void		sendClientMessage(User* user, std::string str);
 		void		receiveClientMessage();
