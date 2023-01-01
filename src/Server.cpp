@@ -122,6 +122,7 @@ std::string	Server::concatMessage(int clientSocket) {
 	std::string	fullMsg = "";
 
 	while ((message_length = recv(clientSocket, _message, BUF_SIZE, 0)) != 0) {
+	std::cerr << "hire\n";
 		if (message_length < 0) continue;
 		_message[message_length] = 0;
 		fullMsg += _message;
