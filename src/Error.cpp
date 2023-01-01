@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 19:31:32 by jiychoi           #+#    #+#             */
-/*   Updated: 2022/12/31 16:19:14 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/01 16:59:50 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,4 +26,8 @@ const char*	Error::AuthorizeException::what() const throw() {
 
 const char*	Error::SendMessageException::what() const throw() {
 	return "Failed to send message to client";
+}
+
+const char*	Error::UserNotFoundException::what() const throw() {
+	return "Cannot find user";
 }
