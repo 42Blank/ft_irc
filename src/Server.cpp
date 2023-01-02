@@ -133,21 +133,23 @@ std::string	Server::concatMessage(int clientSocket) {
 	return fullMsg;
 }
 
-void	Server::parseWelcomeMessageStream(User &user, const std::string& fullMsg) {
-	std::vector<std::string>			commands = ft_split(fullMsg, '\n');
-	std::vector<std::string>::iterator	cmdIter;
+// void	Server::parseWelcomeMessageStream(User &user, const std::string& fullMsg) {
+// 	std::vector<std::string>			commands = ft_split(fullMsg, '\n');
+// 	std::vector<std::string>::iterator	cmdIter;
 
-	std::cout << "\n======Message======\n" << fullMsg << "\n";
+// 	std::cout << "\n======Message======\n" << fullMsg << "\n";
 
-	for (cmdIter = commands.begin(); cmdIter != commands.end(); cmdIter++) {
-		std::vector<std::string>	parameters = ft_split(*cmdIter, ' ');
+// 	for (cmdIter = commands.begin(); cmdIter != commands.end(); cmdIter++) {
+// 		std::vector<std::string>	parameters = ft_split(*cmdIter, ' ');
 
-		// std::cout << "parameter : " << *cmdIter << "\n";
-		if (*parameters.begin() == CMD_NICK) commandNICK(user, parameters);
-		else if (*parameters.begin() == CMD_USER) commandUser(user, parameters);
-		else continue;
-	}
-}
+// 		// std::cout << "parameter : " << *cmdIter << "\n";
+// 		if (*parameters.begin() == CMD_NICK) commandNICK(user, parameters);
+// 		else if (*parameters.begin() == CMD_USER) commandUser(user, parameters);
+// 		else if (*parameters.begin() == CMD_TOPIC) commandTOPIC(user, parameters);
+		
+// 		else continue;
+// 	}
+// }
 
 void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 	std::vector<std::string>			commands = ft_split(fullMsg, '\n');

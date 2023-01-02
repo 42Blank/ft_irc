@@ -8,24 +8,26 @@
 
 class Channel {
 	private:
+		std::string		_channelName;
 		std::string		_operator;	// user의 nickname 저장
 		std::string		_topic;		
 		std::vector<User>	_userList;
 
 	public:
-		Channel(User &user);
+		Channel(User &user, std::string name);
 		~Channel();
 
-		void	Channel::joinNewUser(User user);
-		bool	Channel::isOperator(User user);
+		void				joinNewUser(User user);
+		bool				isOperator(User user);
 
-		std::string			Channel::getTopic();
-		std::vector<User>	Channel::getuserList();
+		std::string			getTopic();
+		std::string			getuserList();
+		std::string			getChannelName();
 
-		void				Channel::setTopic(std::string topic);
-		
-		void				Channel::deleteNormalUser(std::string nickname);
-		void				Channel::deleteOperatorUser(std::string nickname);
+		void				setTopic(std::string topic);
+
+		void				deleteNormalUser(std::string nickname);
+		// void				deleteOperatorUser(std::string nickname);
 
 };
 

@@ -14,16 +14,18 @@
 # define USER_HPP
 
 # include "irc.hpp"
-
+# include <vector>
 class User {
 	private:
-		int					_clientSocket; // 클라이언트 소켓 fd
-		struct sockaddr_in*	_clientAddress; // 클라이언트 소켓 정보
-		socklen_t*			_clientAddressSize; // 클라이언트 소켓 정보 크기
-		std::string			_nickname;
-		std::string			_username;
-		std::string			_hostname;
-		// bool				_isAdmin;
+		int							_clientSocket; // 클라이언트 소켓 fd
+		struct sockaddr_in*			_clientAddress; // 클라이언트 소켓 정보
+		socklen_t*					_clientAddressSize; // 클라이언트 소켓 정보 크기
+		std::string					_nickname;
+		std::string					_username;
+		std::string					_hostname;
+		// bool						_isAdmin;
+
+		std::vector<std::string>	_channelList;
 
 	public:
 		User();

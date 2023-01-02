@@ -2,9 +2,10 @@
 #include "../includes/Channel.hpp"
 
 // 여기 유저 nickname만 받아서 Channel user list에 넣으면 안될지 고민 중 
-Channel::Channel(User &user) {
+Channel::Channel(User &user, std::string name) {
 	_operator = user.getNickname();
 	_userList.push_back(user);
+	_channelName = name;
 }
 
 Channel::~Channel() {
@@ -15,8 +16,22 @@ std::string			Channel::getTopic() {
 	return _topic;
 }
 
-std::vector<User>	Channel::getuserList() {
-	return _userList;
+// 그냥 유저 닉네임을 모두 출력하도록 함
+std::string			Channel::getuserList() {
+	
+	std::string	userList;
+	std::vector<User>::iterator	iter;
+
+	userList = _channelName + " operator is " + _operator + "\nUserList [ ";
+	for (iter = _userList.begin(); iter < _userList.end(); iter++) {
+		userList = userList + (*iter).getNickname() + " ";
+	}
+	userList = userList + "]";
+	return userList;
+}
+
+std::string			Channel::getChannelName() {
+	return _channelName;
 }
 
 void				Channel::setTopic(std::string topic) {
@@ -36,7 +51,7 @@ bool	Channel::isOperator(User user) {
 	return false;
 }
 
-void				Channel::deleteNormalUser(std::string nickname){
+void	Channel::deleteNormalUser(std::string nickname){
 	std::vector<User>::iterator	iter;
 
 	for (iter = _userList.begin(); iter < _userList.end(); iter++) {
@@ -45,6 +60,6 @@ void				Channel::deleteNormalUser(std::string nickname){
 	}
 }
 
-void				Channel::deleteOperatorUser(std::string nickname) {
+// void	Channel::deleteOperatorUser(std::string nickname) {
 	
-}
+// }
