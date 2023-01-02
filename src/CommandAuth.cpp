@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 21:49:06 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/03 01:47:00 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/03 01:50:17 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	Server::commandUSER(User& user, std::vector<std::string>& parameters) {
 		throw std::runtime_error(Error(ERR_NEEDMOREPARAMS, CMD_NICK));
 
 	user.setUsername(parameters[1]);
+	user.setHostname(parameters[2]);
 	user.setIsVerified(USER_VERIFIED);
 	checkIsVerified(user);
 }
@@ -54,7 +55,7 @@ void	Server::checkIsVerified(User& user) {
 
 	sendClientMessage(user,
 		"001 " + user.getNickname() + " :\033[1;32mWelcome to the " + SERVER_NAME + "\e[0m " + \
-		user.getNickname() + "@" + user.getUsername()
+		user.getNickname() + "!" + user.getUsername() + "@" + user.getHostname()
 	);
 	sendClientMessage(user,
 		"002 " + user.getNickname() + " :\033[1;32mYour host is " + SERVER_NAME + ", " + "running version 0.1\e[0m"

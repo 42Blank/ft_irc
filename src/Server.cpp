@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/03 01:42:04 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/03 01:57:56 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,9 @@ void	Server::serverOff(void) {
 }
 
 void	Server::sendClientMessage(User& user, std::string str) {
-	std::string strToSend = ":" + std::string(SERVER_NAME) + " " + str;
-	std::cout << strToSend << "\n";
-	if (send(user.getSocketDesc(), (strToSend  + "\r\n").c_str(), strToSend.length(), 0) == -1)
+	std::string strToSend = ":127.0.0.1 " + str + "\r\n";
+	std::cout << strToSend;
+	if (send(user.getSocketDesc(), (strToSend).c_str(), strToSend.length(), 0) == -1)
 		throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
 }
 
