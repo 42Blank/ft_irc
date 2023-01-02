@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/02 22:02:31 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/02 22:24:58 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,6 @@
 
 # define BUF_SIZE 1024
 # define SERVER_NAME "San-Ji-jik-Song_IRCServ"
-
-# define CMD_PASS "PASS"
-# define CMD_NICK "NICK"
-# define CMD_USER "USER"
-# define CMD_JOIN "JOIN"
-# define CMD_TOPIC "TOPIC"
-# define CMD_NAMES "NAMES"
-# define CMD_MSG "PRIVMSG"
-# define CMD_PART "PART"
 
 # define PASS_VERIFIED 0b001
 # define NICK_VERIFIED 0b010

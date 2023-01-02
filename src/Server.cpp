@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/02 22:17:10 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/02 22:29:09 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,13 +120,14 @@ std::string	Server::concatMessage(int clientSocket) {
 void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 	std::vector<std::string>			commands = ft_split(fullMsg, '\n');
 	std::vector<std::string>::iterator	cmdIter;
+	bool								isAllCommandInvalid = false;
 
 	std::cout << "\n======Message======\n" << fullMsg << "\n";
 
 	for (cmdIter = commands.begin(); cmdIter != commands.end(); cmdIter++) {
 		std::vector<std::string>	parameters = ft_split(*cmdIter, ' ');
-		// parameters.
 
+		isAllCommandInvalid = ft_checkIsCommandValid(*parameters.begin(), user.getIsVerified());
 		if (*parameters.begin() == CMD_PASS) commandPASS(user, parameters);
 		else if (*parameters.begin() == CMD_NICK) commandNICK(user, parameters);
 		else if (*parameters.begin() == CMD_USER) commandUSER(user, parameters);
@@ -137,8 +138,9 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 			else if (*parameters.begin() == CMD_NAMES) commandNAMES(user, parameters);
 			else if (*parameters.begin() == CMD_PART) commandPART(user, parameters);
 		}
-		else throw Error::InvalidCommandException();
+		else std::cout << "Invalid Command: " << *parameters.begin() << "\n";
 	}
+	if (!isAllCommandInvalid) throw Error::InvalidCommandException();
 }
 
 void	Server::removeClient(std::vector<struct pollfd>::iterator fdIter) {
