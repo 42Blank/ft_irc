@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:50:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/02 19:11:29 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/03 01:44:49 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	User::setSocketDesc(int clientSocket) {
 }
 
 void	User::setIsVerified(short what) {
-	_isVerified &= what;
+	_isVerified |= what;
 }
 
 std::ostream& operator<<(std::ostream& out, const User& instance) {
