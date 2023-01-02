@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/02 22:24:58 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/02 22:32:36 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ class Server {
 		void		checkIsVerified(User& user);
 
 	public:
-		Server(char *port);// 비번 추가 해야 함.
+		Server(char* port, char* password);
 		~Server();
 
 		void		serverOn(void);

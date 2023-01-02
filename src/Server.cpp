@@ -6,13 +6,13 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/02 22:29:09 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/02 22:32:53 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../includes/Server.hpp"
 
-Server::Server(char *port) {
+Server::Server(char* port, char* password) {
 	struct pollfd server_pollfd;
 
 	_serverSocket = socket(PF_INET, SOCK_STREAM, 0);	// 소켓 생성
@@ -20,6 +20,7 @@ Server::Server(char *port) {
 		throw Error::SocketOpenException();
 
 	_port = atoi(port);
+	_password = password;
 	memset(&_serverAddress, 0, sizeof(_serverAddress));	// 구조체 변수의 모든 멤버를 0으로 초기화
 	_serverAddress.sin_family = AF_INET;			// 주소 체계 지정, AF_INET : IPv4 인터넷 프로토콜에 적용
 	_serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);	// IP 주소
@@ -29,7 +30,7 @@ Server::Server(char *port) {
 	server_pollfd.events = POLLIN;
 	_poll_fds.push_back(server_pollfd);
 
-	if (bind(_serverSocket, (struct sockaddr *)&_serverAddress, sizeof(_serverAddress)) < 0)	// 소켓 주소 할당
+	if (bind(_serverSocket, (struct sockaddr*)&_serverAddress, sizeof(_serverAddress)) < 0)	// 소켓 주소 할당
 		throw Error::SocketOpenException();
 }
 

@@ -6,15 +6,13 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 21:49:06 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/02 22:11:14 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/02 22:35:31 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Server.hpp"
 
 void	Server::commandPASS(User& user, std::vector<std::string>& parameters) {
-	std::vector<std::string>::iterator iter;
-
 	if (parameters.size() != 2) throw Error::PasswordException();
 	if (_password != parameters[1]) throw Error::PasswordException();
 
