@@ -98,6 +98,8 @@ void	Server::parseMessageStream(User* user, const std::string& fullMsg) {
 		if (*parameters.begin() == CMD_CAP) commandCAP(user, parameters);
 		else if (*parameters.begin() == CMD_NICK) commandNICK(user, parameters);
 		else if (*parameters.begin() == CMD_USER) commandUser(user, parameters);
+		else if (*parameters.begin() == CMD_TOPIC) commandTOPIC(user, parameters);
+		
 	}
 }
 
