@@ -5,7 +5,7 @@
 #include <iostream>
 
 void	Server::commandJOIN(User &user, std::vector<std::string> &parameters) {
-
+	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 	std::cerr << "in\n";
 	//ERR_NEEDMOREPARAMS (461)
 	if (parameters.size() < 2) throw std::runtime_error(Error(ERR_NEEDMOREPARAMS, CMD_JOIN));
@@ -64,6 +64,7 @@ bool		Server::isChannel(std::string channelName) {
 
 //관리자만 사용할 수 있다.
 void		Server::commandTOPIC(User &user, std::vector<std::string>& parameters) {
+	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 	if (parameters.size() < 3) throw std::runtime_error(Error(ERR_NEEDMOREPARAMS, CMD_TOPIC));
 
 	std::string channelName = parameters[1];
@@ -88,6 +89,7 @@ void		Server::commandTOPIC(User &user, std::vector<std::string>& parameters) {
 }
 
 void		Server::commandMSG(User &user, std::vector<std::string>& parameters) {
+	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 
 (void)user;
 (void)parameters;
@@ -95,6 +97,7 @@ void		Server::commandMSG(User &user, std::vector<std::string>& parameters) {
 }
 
 void		Server::commandPART(User &user, std::vector<std::string>& parameters) {
+	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 
 (void)user;
 (void)parameters;
@@ -102,6 +105,7 @@ void		Server::commandPART(User &user, std::vector<std::string>& parameters) {
 
 
 void		Server::commandNAMES(User &user, std::vector<std::string>& parameters) {
+	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 
 (void)user;
 (void)parameters;
