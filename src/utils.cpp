@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:41:37 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/02 22:27:40 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/03 01:40:28 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,10 @@ void	ft_checkPollReturnEvent(short revents) {
 }
 
 bool	ft_checkIsCommandValid(std::string command, bool isVerified) {
-	if (command == CMD_PASS || command == CMD_NICK || command == CMD_USER) return true;
+	if (command == CMD_CAP ||
+		command == CMD_PASS ||
+		command == CMD_NICK ||
+		command == CMD_USER) return true;
 	if (isVerified) {
 		if (command == CMD_JOIN ||
 			command == CMD_MSG ||

@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 21:49:06 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/03 01:30:46 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/03 01:47:00 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	Server::commandPASS(User& user, std::vector<std::string>& parameters) {
 	if (_password != parameters[1]) throw std::runtime_error(Error(ERR_PASSWDMISMATCH));
 
 	user.setIsVerified(PASS_VERIFIED);
-	checkIsVerified(user);
 }
 
 void	Server::commandNICK(User& user, std::vector<std::string>& parameters) {

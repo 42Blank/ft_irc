@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/03 00:51:05 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/03 01:37:57 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ class Server {
 		void		parseMessageStream(User& user, const std::string& fullMsg);
 		void		removeClient(std::vector<struct pollfd>::iterator fdIter);
 
+		void		commandCAP(User& user, std::vector<std::string>& parameters);
 		void		commandPASS(User& user, std::vector<std::string>& parameters);
 		void		commandNICK(User& user, std::vector<std::string>& parameters);
 		void		commandUSER(User& user, std::vector<std::string>& parameters);

@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/03 01:31:27 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/03 01:42:04 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,8 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 		std::vector<std::string>	parameters = ft_split(*cmdIter, ' ');
 
 		isAllCommandInvalid = ft_checkIsCommandValid(parameters[0], user.getIsVerified());
-		if (parameters[0] == CMD_PASS) commandPASS(user, parameters);
+		if (parameters[0] == CMD_CAP) commandCAP(user, parameters);
+		else if (parameters[0] == CMD_PASS) commandPASS(user, parameters);
 		else if (parameters[0] == CMD_NICK) commandNICK(user, parameters);
 		else if (parameters[0] == CMD_USER) commandUSER(user, parameters);
 		else if (user.getIsVerified() == ALL_VERIFIED) {

@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 13:44:22 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/02 22:27:58 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/03 01:38:58 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # include <arpa/inet.h>
 # include <netinet/in.h>
 
+# define CMD_CAP "CAP"
 # define CMD_PASS "PASS"
 # define CMD_NICK "NICK"
 # define CMD_USER "USER"
