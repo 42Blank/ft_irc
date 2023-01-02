@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/02 21:26:29 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/02 21:38:16 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,10 @@ Server::~Server(void) {
 }
 
 void	Server::serverOn(void) {
-	int	poll_result;
-
 	if (listen(_serverSocket, 5) < 0)	// 연결요청 대기상태
 		throw Error::SocketOpenException();
 	while (true) {
-		poll_result = poll(_poll_fds.data(), _poll_fds.size(), 1000);
-		if (poll_result == 0) {
+		if (poll(_poll_fds.data(), _poll_fds.size(), 1000) == 0) {
 			// std::cout << "Poll timeout\n";
 			continue ;
 		}
@@ -121,7 +118,6 @@ std::string	Server::concatMessage(int clientSocket) {
 	std::string	fullMsg = "";
 
 	while ((message_length = recv(clientSocket, _message, BUF_SIZE, 0)) != 0) {
-	std::cerr << "here\n";
 		if (message_length < 0) continue;
 		_message[message_length] = 0;
 		fullMsg += _message;
@@ -170,21 +166,7 @@ int	Server::getUserIndexByFd(int fd) {
 	return (-1);
 }
 
-int	Server::getPort() const {
-	return _port;
-}
-
-void	Server::setPort(int port) {
-	_port = port;
-}
-
-std::string	Server::getPassword() const {
-	return _password;
-}
-
-void	Server::setPassword(std::string password) {
-	_password = password;
-}
+////////////////////////////////////////// FOR DEBUG
 
 void		Server::testUser(void) {
 	std::vector<User>::iterator	iter;

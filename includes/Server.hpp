@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/02 21:27:04 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/02 21:37:55 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,13 @@ class Server {
 		std::string	concatMessage(int clientSocket);
 		void		parseMessageStream(User& user, const std::string& fullMsg);
 
-		void		commandPASS(User& user, std::vector<std::string>& parameters);
-		void		commandNICK(User& user, std::vector<std::string>& parameters);
-		void		commandUser(User& user, std::vector<std::string>& parameters);
-
 		bool		isChannel(std::string channelName);
 		Channel		findChannel(std::string channelName);
 		int			getUserIndexByFd(int fd);
 
+		void		commandPASS(User& user, std::vector<std::string>& parameters);
+		void		commandNICK(User& user, std::vector<std::string>& parameters);
+		void		commandUser(User& user, std::vector<std::string>& parameters);
 		void		commandJOIN(User &user, std::vector<std::string> &parameters);
 		void		commandTOPIC(User &user, std::vector<std::string>& parameters);
 		void		commandNAMES(User &user, std::vector<std::string>& parameters);
@@ -76,11 +75,6 @@ class Server {
 		void		serverOn(void);
 		void		serverOff(void);
 		void		testUser(void);
-
-		int			getPort() const;
-		void		setPort(int port);
-		std::string	getPassword() const;
-		void		setPassword(std::string password);
 };
 
 #endif
