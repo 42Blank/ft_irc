@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:50:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2022/12/31 17:33:06 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/02 19:03:30 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,20 +58,12 @@ std::string	User::getUsername() const {
 	return _username;
 }
 
-std::string User::getHostname() const {
-	return _hostname;
-}
-
 void	User::setNickname(std::string nickname) {
 	_nickname = nickname;
 }
 
 void	User::setUsername(std::string username) {
 	_username = username;
-}
-
-void	User::setHostname(std::string hostname) {
-	_hostname = hostname;
 }
 
 void	User::setSocketDesc(int clientSocket) {
