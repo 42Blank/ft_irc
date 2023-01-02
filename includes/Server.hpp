@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/02 21:14:34 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/02 21:16:38 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,25 +34,17 @@
 
 class Server {
 	private:
-		int					_port;
-		std::string			_password;
-		int					_serverSocket;
-		struct sockaddr_in	_serverAddress;
-		std::vector<User>	_user_vector;
-		time_t				_created_time;
-		char				_message[BUF_SIZE];
-		struct timeval		_timeout;
-		fd_set				_reads;
-		std::vector<Channel>	_channelList;
-
 		int							_port;
 		std::string					_password;
 		int							_serverSocket;
 		struct sockaddr_in			_serverAddress;
-		std::vector<User>			_user_vector;
 		time_t						_created_time;
 		char						_message[BUF_SIZE];
+		struct timeval				_timeout;
+		fd_set						_reads;
 		std::vector<struct pollfd>	_poll_fds;
+		std::vector<User>			_userList;
+		std::vector<Channel>		_channelList;
 
 		void		sendClientMessage(User& user, std::string str);
 		void		receiveFirstClientMessage(void);
@@ -64,13 +56,12 @@ class Server {
 		void		commandNICK(User& user, std::vector<std::string>& parameters);
 		void		commandUser(User& user, std::vector<std::string>& parameters);
 
-
+		Channel		findChannel(std::string channelName);
 		int			getUserIndexByFd(int fd);
 
 		void		commandJOIN(User *user, std::vector<std::string> &parameters);
 		void		commandTOPIC(User* user, std::vector<std::string>& parameters);
 		bool		isChannel(std::string channelName);
-		Channel		Server::findChannel(std::string channelName);
 		void		commandNAMES(User* user, std::vector<std::string>& parameters);
 
 	public:

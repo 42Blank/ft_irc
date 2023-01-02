@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 04:09:31 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/02 19:12:31 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/02 21:16:11 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	Server::commandNICK(User& user, std::vector<std::string>& parameters) {
 
 	user.setNickname(nickname);
 
-	for (iter = _user_vector.begin(); iter < _user_vector.end(); iter++) {
+	for (iter = _userList.begin(); iter < _userList.end(); iter++) {
 		if ((*iter).getNickname() == nickname)
 			throw Error::AuthorizeException();
 	}
@@ -43,7 +43,7 @@ void	Server::commandUser(User& user, std::vector<std::string>& parameters) {
 	user.setUsername(parameters[1]);
 	user.setIsVerified(USER_VERIFIED);
 
-	_user_vector.push_back(user);
+	_userList.push_back(user);
 
 	sendClientMessage(user,
 		":127.0.0.1 001 " + user.getNickname() + " :\033[1;32mWelcome to the " + SERVER_NAME + "\e[0m " + \

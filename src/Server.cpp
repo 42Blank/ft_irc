@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/02 21:13:50 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/02 21:16:15 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	Server::serverOn(void) {
 				close((*iter).fd);
 				try  {
 					int	idx = getUserIndexByFd((*iter).fd);
-					_user_vector.erase(_user_vector.begin() + idx);
+					_userList.erase(_userList.begin() + idx);
 				}
 				catch (std::exception &e) {
 					std::cout << e.what() << "\n";
@@ -110,7 +110,7 @@ void	Server::receiveClientMessage(int clientSocket) {
 	try {
 		std::string	fullMsg = concatMessage(clientSocket);
 		int			userIdx = getUserIndexByFd(clientSocket);
-		parseMessageStream(_user_vector[userIdx], fullMsg);
+		parseMessageStream(_userList[userIdx], fullMsg);
 	} catch (std::exception &e) {
 		std::cout << e.what() << "\n";
 	}
@@ -157,7 +157,7 @@ int	Server::getUserIndexByFd(int fd) {
 	int							index;
 
 	index = 0;
-	for (iter = _user_vector.begin(); iter < _user_vector.end(); iter++) {
+	for (iter = _userList.begin(); iter < _userList.end(); iter++) {
 		if (fd == (*iter).getSocketDesc())
 			return (index);
 		index++;
@@ -185,7 +185,7 @@ void	Server::setPassword(std::string password) {
 void		Server::testUser(void) {
 	std::vector<User>::iterator	iter;
 
-	for (iter = _user_vector.begin(); iter < _user_vector.end(); iter++) {
+	for (iter = _userList.begin(); iter < _userList.end(); iter++) {
 		std::cout << (*iter) << '\n';
 	}
 }
