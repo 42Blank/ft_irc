@@ -27,20 +27,12 @@
 
 # define CMD_JOIN "JOIN"
 # define CMD_TOPIC "TOPIC"
+# define CMD_NAMES "NAMES"
+# define CMD_MSG "PRIVMSG"
+# define CMD_PART "PART"
 
 class Server {
 	private:
-		int					_port;
-		std::string			_password;
-		int					_serverSocket;
-		struct sockaddr_in	_serverAddress;
-		std::vector<User>	_user_vector;
-		time_t				_created_time;
-		char				_message[BUF_SIZE];
-		struct timeval		_timeout;
-		fd_set				_reads;
-		std::vector<Channel>	_channelList;
-		
 		int							_port;
 		std::string					_password;
 		int							_serverSocket;
@@ -49,6 +41,9 @@ class Server {
 		time_t						_created_time;
 		char						_message[BUF_SIZE];
 		std::vector<struct pollfd>	_poll_fds;
+
+		std::vector<Channel>		_channelList;
+
 
 		void		sendClientMessage(User& user, std::string str);
 		void		welcomeProcess(void);
@@ -64,11 +59,13 @@ class Server {
 
 		int			getUserIndexByFd(int fd);
 
-		void		commandJOIN(User *user, std::vector<std::string> &parameters);
-		void		commandTOPIC(User* user, std::vector<std::string>& parameters);
+		void		commandJOIN(User &user, std::vector<std::string> &parameters);
+		void		commandTOPIC(User &user, std::vector<std::string>& parameters);
 		bool		isChannel(std::string channelName);
-		Channel		Server::findChannel(std::string channelName);
-		void		commandNAMES(User* user, std::vector<std::string>& parameters);
+		Channel		findChannel(std::string channelName);
+		void		commandNAMES(User &user, std::vector<std::string>& parameters);
+		void		commandMSG(User &user, std::vector<std::string>& parameters);
+		void		commandPART(User &user, std::vector<std::string>& parameters);
 
 
 

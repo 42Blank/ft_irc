@@ -4,29 +4,37 @@
 #include "../includes/Reply.hpp"
 
 
+#include <iostream>
 
+void	Server::commandJOIN(User &user, std::vector<std::string> &parameters) {
 
-void	Server::commandJOIN(User *user, std::vector<std::string> &parameters) {
-
+	std::cerr << "in\n";
 	//ERR_NEEDMOREPARAMS (461)
 	if (parameters.size() < 2) throw Error::AuthorizeException(); // TODO: 다른 오류(파라미터 부족)로 교체
 
 	if (isChannel(parameters[1])) {
 		//채널에 가입된다. 
-		findChannel(parameters[1]).joinNewUser(*user);
-		sendClientMessage(user, user->getNickname() + " JOIN " + parameters[1]);
+		findChannel(parameters[1]).joinNewUser(user);
+		sendClientMessage(user, user.getNickname() + " JOIN " + parameters[1]);
 		Channel ch = findChannel(parameters[1]);
 		if (ch.getTopic() == "")
 			sendClientMessage(user, RPL_NOTOPIC(ch.getChannelName()));
-		else
-		sendClientMessage(user, RPL_TOPIC(ch.getChannelName(), ch.getTopic()));
+		else {
+			sendClientMessage(user, RPL_TOPIC(ch.getChannelName(), ch.getTopic()));
+		}
+		std::cerr << "send\n";
 		sendClientMessage(user, RPL_NAMREPLY(ch.getChannelName(), ch.getuserList()));
 		sendClientMessage(user, RPL_ENDOFNAMES(ch.getChannelName()));
+		std::cerr << "send2\n";
+
 	} else {
-		Channel channel = Channel(*user, parameters[1]);
+		Channel channel = Channel(user, parameters[1]);
 		_channelList.push_back(channel);
+		std::cerr << "send\n";
 		sendClientMessage(user, RPL_NOTOPIC(channel.getChannelName()));
+		std::cerr << "send2\n";
 		sendClientMessage(user, RPL_NAMREPLY(channel.getChannelName(), channel.getuserList()));
+		std::cerr << "send3\n";
 		sendClientMessage(user, RPL_ENDOFNAMES(channel.getChannelName()));
 	}
 
@@ -58,7 +66,7 @@ bool		Server::isChannel(std::string channelName) {
 }
 
 //관리자만 사용할 수 있다. 
-void		Server::commandTOPIC(User* user, std::vector<std::string>& parameters) {
+void		Server::commandTOPIC(User &user, std::vector<std::string>& parameters) {
 	if (parameters.size() < 3) throw Error::AuthorizeException(); // TODO: 다른 오류(파라미터 부족)로 교체
 	if (!isChannel(parameters[1])) throw Error::AuthorizeException(); // TODO: 존재하지 않는 채널이라는 에러로 교체
 
@@ -71,7 +79,7 @@ void		Server::commandTOPIC(User* user, std::vector<std::string>& parameters) {
 	std::vector<Channel>::iterator	iterChannel;
 	for (iterChannel = _channelList.begin(); iterChannel < _channelList.end(); iterChannel++) {
 		if ((*iterChannel).getChannelName().compare(parameters[1]) == 0) {
-			if ((*iterChannel).isOperator(*user))
+			if ((*iterChannel).isOperator(user))
 				(*iterChannel).setTopic(topic);
 			else
 				throw Error::AuthorizeException(); // TODO: 관리자가 아니라는 에러 메세지 출력으로 바꾸기 
@@ -80,9 +88,26 @@ void		Server::commandTOPIC(User* user, std::vector<std::string>& parameters) {
 	
 }
 
-// void	Server::commandNAMES(User* user, std::vector<std::string>& parameters) {
+void		Server::commandMSG(User &user, std::vector<std::string>& parameters) {
 	
-// }
+(void)user;
+(void)parameters;
+
+}
+
+void		Server::commandPART(User &user, std::vector<std::string>& parameters) {
+
+(void)user;
+(void)parameters;
+}
+
+
+void		Server::commandNAMES(User &user, std::vector<std::string>& parameters) {
+
+(void)user;
+(void)parameters;
+	
+}
 
 // void	Server::commandUser(User* user, std::vector<std::string>& parameters) {
 
