@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:41:37 by jiychoi           #+#    #+#             */
-/*   Updated: 2022/12/31 16:03:07 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/01 18:56:11 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,46 @@ bool	ft_isValidNickname(const std::string& str) {
 		return false;
 	}
 	return true;
+}
+
+std::string ft_getStringAfterColon(std::vector<std::string> parameter) {
+	std::vector<std::string>::iterator iter;
+	std::string returnStr = "";
+	bool flag = false;
+
+	for (iter = parameter.begin(); iter < parameter.end(); iter++)
+	{
+		if ((*iter)[0] == ':')
+		{
+			flag = true;
+			returnStr += (*iter);
+			continue;
+		}
+		if (flag)
+			returnStr += " " + *iter;
+	}
+	return returnStr.substr(1, returnStr.length() - 1);
+}
+
+void	ft_checkPollReturnEvent(short revents) {
+	if (revents & POLLIN)
+		std::cout << "POLLIN\n";
+	if (revents & POLLRDNORM)
+		std::cout << "POLLRDNORM\n";
+	if (revents & POLLRDBAND)
+		std::cout << "POLLRDBAND\n";
+	if (revents & POLLPRI)
+		std::cout << "POLLPRI\n";
+	if (revents & POLLOUT)
+		std::cout << "POLLOUT\n";
+	if (revents & POLLWRNORM)
+		std::cout << "POLLWRNORM\n";
+	if (revents & POLLWRBAND)
+		std::cout << "POLLWRBAND\n";
+	if (revents & POLLERR)
+		std::cout << "POLLERR\n";
+	if (revents & POLLHUP)
+		std::cout << "POLLHUP\n";
+	if (revents & POLLNVAL)
+		std::cout << "POLLNVAL\n";
 }

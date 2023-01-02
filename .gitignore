@@ -1,8 +1,7 @@
 *.o
 *.c
-
-ft_irc
 ircserv
-
 eserv
 .DS_Store
+.vscode
+src/socket_test.cpp

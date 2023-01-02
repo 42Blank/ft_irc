@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 19:30:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2022/12/31 16:19:27 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/01 16:59:46 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,10 @@ class Error {
 				const char* what() const throw();
 		};
 		class SendMessageException: public std::exception {
+			public:
+				const char* what() const throw();
+		};
+		class UserNotFoundException: public std::exception {
 			public:
 				const char* what() const throw();
 		};
