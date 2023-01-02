@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/02 21:56:57 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/02 22:02:31 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ class Server {
 		void		receiveClientMessage(int clientSocket);
 		std::string	concatMessage(int clientSocket);
 		void		parseMessageStream(User& user, const std::string& fullMsg);
+		void		removeClient(std::vector<struct pollfd>::iterator fdIter);
 
 		void		commandPASS(User& user, std::vector<std::string>& parameters);
 		void		commandNICK(User& user, std::vector<std::string>& parameters);

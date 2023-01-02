@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 21:49:06 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/02 21:56:53 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/02 21:58:01 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,6 @@ void	Server::commandUSER(User& user, std::vector<std::string>& parameters) {
 
 void	Server::checkIsVerified(User& user) {
 	if (user.getIsVerified() != ALL_VERIFIED) return;
-
-	_userList.push_back(user);
 
 	sendClientMessage(user,
 		":127.0.0.1 001 " + user.getNickname() + " :\033[1;32mWelcome to the " + SERVER_NAME + "\e[0m " + \

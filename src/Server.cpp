@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/02 21:38:16 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/02 22:04:57 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,35 +39,23 @@ Server::~Server(void) {
 }
 
 void	Server::serverOn(void) {
+	std::vector<struct pollfd>::iterator iter;
+
 	if (listen(_serverSocket, 5) < 0)	// 연결요청 대기상태
 		throw Error::SocketOpenException();
 	while (true) {
-		if (poll(_poll_fds.data(), _poll_fds.size(), 1000) == 0) {
-			// std::cout << "Poll timeout\n";
+		if (poll(_poll_fds.data(), _poll_fds.size(), 1000) == 0)
 			continue ;
-		}
 		if (_poll_fds[0].revents & POLLIN) { // _poll_fds[0] -> 서버 fd에 POLLIN event발생
 			receiveFirstClientMessage();
 			continue;
 		}
-		std::vector<struct pollfd>::iterator iter;
-
 		for (iter = _poll_fds.begin() + 1; iter < _poll_fds.end(); iter++) {
-			if (iter->revents & POLLHUP) { // 현재 클라이언트 연결 끊김
-				close((*iter).fd);
-				try  {
-					int	idx = getUserIndexByFd((*iter).fd);
-					_userList.erase(_userList.begin() + idx);
-				}
-				catch (std::exception &e) {
-					std::cout << e.what() << "\n";
-				}
-				_poll_fds.erase(iter);
-			}
-			else if (iter->revents & POLLIN) {
+			if (iter->revents & POLLHUP) // 현재 클라이언트 연결 끊김
+				removeClient(iter)
+			else if (iter->revents & POLLIN)
 				receiveClientMessage(iter->fd);
-				ft_checkPollReturnEvent(iter->revents);
-			}
+			ft_checkPollReturnEvent(iter->revents);
 		}
 	}
 }
@@ -97,6 +85,7 @@ void	Server::receiveFirstClientMessage(void) {
 		client_pollfd.fd = clientSocket;
 		client_pollfd.events = POLLIN;
 		_poll_fds.push_back(client_pollfd);
+		_userList.push_back(user);
 	}	catch (std::exception &e) {
 		std::cout << e.what() << "\n";
 		close(user.getSocketDesc()); // 위의 절차 중 하나라도 실패 시에는 유저 통신 끊어야함
@@ -149,6 +138,18 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 			else if (*parameters.begin() == CMD_PART) commandPART(user, parameters);
 		}
 		else continue;
+	}
+}
+
+void	Server::removeClient(std::vector<struct pollfd>::iterator fdIter) {
+	try  {
+		close((*fdIter).fd);
+		int	idx = getUserIndexByFd((*fdIter).fd);
+		_userList.erase(_userList.begin() + idx);
+		_poll_fds.erase(fdIter);
+	}
+	catch (std::exception &e) {
+		std::cout << e.what() << "\n";
 	}
 }
 
