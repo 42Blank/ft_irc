@@ -16,8 +16,18 @@ std::string			Channel::getTopic() {
 	return _topic;
 }
 
-std::vector<User>	Channel::getuserList() {
-	return _userList;
+// 그냥 유저 닉네임을 모두 출력하도록 함
+std::string			Channel::getuserList() {
+	
+	std::string	userList;
+	std::vector<User>::iterator	iter;
+
+	userList = _channelName + " operator is " + _operator + "\nUserList [ ";
+	for (iter = _userList.begin(); iter < _userList.end(); iter++) {
+		userList = userList + (*iter).getNickname() + " ";
+	}
+	userList = userList + "]";
+	return userList;
 }
 
 std::string			Channel::getChannelName() {
@@ -41,7 +51,7 @@ bool	Channel::isOperator(User user) {
 	return false;
 }
 
-void				Channel::deleteNormalUser(std::string nickname){
+void	Channel::deleteNormalUser(std::string nickname){
 	std::vector<User>::iterator	iter;
 
 	for (iter = _userList.begin(); iter < _userList.end(); iter++) {
@@ -50,6 +60,6 @@ void				Channel::deleteNormalUser(std::string nickname){
 	}
 }
 
-void				Channel::deleteOperatorUser(std::string nickname) {
+// void	Channel::deleteOperatorUser(std::string nickname) {
 	
-}
+// }

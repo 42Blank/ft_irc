@@ -17,17 +17,17 @@ class Channel {
 		Channel(User &user, std::string name);
 		~Channel();
 
-		void	Channel::joinNewUser(User user);
-		bool	Channel::isOperator(User user);
+		void				joinNewUser(User user);
+		bool				isOperator(User user);
 
-		std::string			Channel::getTopic();
-		std::vector<User>	Channel::getuserList();
-		std::string			Channel::getChannelName();
+		std::string			getTopic();
+		std::string			getuserList();
+		std::string			getChannelName();
 
-		void				Channel::setTopic(std::string topic);
+		void				setTopic(std::string topic);
 
-		void				Channel::deleteNormalUser(std::string nickname);
-		void				Channel::deleteOperatorUser(std::string nickname);
+		void				deleteNormalUser(std::string nickname);
+		// void				deleteOperatorUser(std::string nickname);
 
 };
 
