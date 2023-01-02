@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/03 01:01:11 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/03 01:31:27 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ Server::Server(char* port, char* password) {
 
 	_serverSocket = socket(PF_INET, SOCK_STREAM, 0);	// 소켓 생성
 	if (_serverSocket < 0)
-		throw Error(ERR_SERVEROPENFAILED, "socket");
+		throw std::runtime_error(Error(ERR_SERVEROPENFAILED, "socket"));
 
 	_port = atoi(port);
 	_password = password;
@@ -31,7 +31,7 @@ Server::Server(char* port, char* password) {
 	_poll_fds.push_back(server_pollfd);
 
 	if (bind(_serverSocket, (struct sockaddr*)&_serverAddress, sizeof(_serverAddress)) < 0)	// 소켓 주소 할당
-		throw Error(ERR_SERVEROPENFAILED, "bind");
+		throw std::runtime_error(Error(ERR_SERVEROPENFAILED, "bind"));
 }
 
 Server::~Server(void) {
@@ -43,7 +43,7 @@ void	Server::serverOn(void) {
 	std::vector<struct pollfd>::iterator iter;
 
 	if (listen(_serverSocket, 5) < 0)	// 연결요청 대기상태
-		throw Error(ERR_SERVEROPENFAILED, "listen");
+		throw std::runtime_error(Error(ERR_SERVEROPENFAILED, "listen"));
 	while (true) {
 		if (poll(_poll_fds.data(), _poll_fds.size(), 1000) == 0)
 			continue ;
@@ -70,7 +70,7 @@ void	Server::sendClientMessage(User& user, std::string str) {
 	std::string strToSend = ":" + std::string(SERVER_NAME) + " " + str;
 	std::cout << strToSend << "\n";
 	if (send(user.getSocketDesc(), (strToSend  + "\r\n").c_str(), strToSend.length(), 0) == -1)
-		throw Error(ERR_MESSAGESENDFAILED);
+		throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
 }
 
 void	Server::receiveFirstClientMessage(void) {
@@ -80,7 +80,7 @@ void	Server::receiveFirstClientMessage(void) {
 	try {
 		int	clientSocket = accept(_serverSocket, (struct sockaddr*)user.getAddressPtr(), user.getAddressSizePtr());
 		if (clientSocket < 0)
-			throw Error(ERR_CLIENTCONNECTFAILED);
+			throw std::runtime_error(Error(ERR_CLIENTCONNECTFAILED));
 		user.setSocketDesc(clientSocket);
 		std::string fullMsg = concatMessage(user.getSocketDesc());
 		parseMessageStream(user, fullMsg);
@@ -142,7 +142,7 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 		}
 		else sendClientMessage(user, parameters[0] + " " + ERR_UNKNOWNCOMMAND);
 	}
-	if (!isAllCommandInvalid) throw Error(ERR_NOTREGISTERED);
+	if (!isAllCommandInvalid) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 }
 
 void	Server::removeClient(std::vector<struct pollfd>::iterator fdIter) {
@@ -167,7 +167,7 @@ int	Server::getUserIndexByFd(int fd) {
 			return (index);
 		index++;
 	}
-	throw Error(ERR_CANNOTFINDUSERFD);
+	throw std::runtime_error(Error(ERR_CANNOTFINDUSERFD));
 	return (-1);
 }
 
