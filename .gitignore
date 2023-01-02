@@ -1,6 +1,6 @@
 *.o
+*.c
 ircserv
+eserv
 .vscode
 src/socket_test.cpp
-
-eserv

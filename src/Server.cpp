@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/01 17:39:42 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/01 19:08:35 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,21 @@ void	Server::serverOn(void) {
 		std::vector<struct pollfd>::iterator iter;
 
 		for (iter = _poll_fds.begin() + 1; iter < _poll_fds.end(); iter++) {
-			if (iter->revents & POLLIN)
+			if (iter->revents & POLLHUP) { // 현재 클라이언트 연결 끊김
+				close((*iter).fd);
+				try  {
+					int	idx = getUserIndexByFd((*iter).fd);
+					_user_vector.erase(_user_vector.begin() + idx);
+				}
+				catch (std::exception &e) {
+					std::cout << e.what() << "\n";
+				}
+				_poll_fds.erase(iter);
+			}
+			else if (iter->revents & POLLIN) {
 				receiveClientMessage(iter->fd);
-			else if (iter->revents & POLLHUP)
-				std::cout << "비정상종료\n";
+				ft_checkPollReturnEvent(iter->revents);
+			}
 		}
 	}
 }
@@ -111,6 +122,7 @@ std::string	Server::concatMessage(int clientSocket) {
 	std::string	fullMsg = "";
 
 	while ((message_length = recv(clientSocket, _message, BUF_SIZE, 0)) != 0) {
+	std::cerr << "hire\n";
 		if (message_length < 0) continue;
 		_message[message_length] = 0;
 		fullMsg += _message;
