@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 21:49:06 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/02 21:58:01 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/02 22:11:14 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	Server::commandNICK(User& user, std::vector<std::string>& parameters) {
 	std::vector<User>::iterator	iter;
 
 	const std::string nickname = *(parameters.end() - 1);
+	if (!(user.getIsVerified() & PASS_VERIFIED)) throw Error::AuthorizeException();
 	if (parameters.size() != 2) throw Error::AuthorizeException();
 	if (nickname.length() <= 0 || nickname.length() > 9) throw Error::AuthorizeException();
 	if (!ft_isValidNickname(nickname)) throw Error::AuthorizeException();
@@ -41,6 +42,7 @@ void	Server::commandNICK(User& user, std::vector<std::string>& parameters) {
 }
 
 void	Server::commandUSER(User& user, std::vector<std::string>& parameters) {
+	if (!(user.getIsVerified() & PASS_VERIFIED)) throw Error::AuthorizeException();
 	if (parameters.size() < 5)
 		throw Error::AuthorizeException();
 	if (parameters[1].length() <= 0)
