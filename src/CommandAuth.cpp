@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 21:49:06 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/02 21:56:06 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/02 21:56:53 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	Server::commandNICK(User& user, std::vector<std::string>& parameters) {
 	checkIsVerified(user);
 }
 
-void	Server::commandUser(User& user, std::vector<std::string>& parameters) {
+void	Server::commandUSER(User& user, std::vector<std::string>& parameters) {
 	if (parameters.size() < 5)
 		throw Error::AuthorizeException();
 	if (parameters[1].length() <= 0)
