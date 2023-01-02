@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.hpp                                         :+:      :+:    :+:   */
+/*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/02 22:32:36 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/03 00:51:05 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include "Channel.hpp"
 
 # define BUF_SIZE 1024
-# define SERVER_NAME "San-Ji-jik-Song_IRCServ"
+# define SERVER_NAME "SJJS_IRCServ"
 
 # define PASS_VERIFIED 0b001
 # define NICK_VERIFIED 0b010
