@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/02 21:37:55 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/02 21:54:00 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,6 @@ class Server {
 		std::string	concatMessage(int clientSocket);
 		void		parseMessageStream(User& user, const std::string& fullMsg);
 
-		bool		isChannel(std::string channelName);
-		Channel		findChannel(std::string channelName);
-		int			getUserIndexByFd(int fd);
-
 		void		commandPASS(User& user, std::vector<std::string>& parameters);
 		void		commandNICK(User& user, std::vector<std::string>& parameters);
 		void		commandUser(User& user, std::vector<std::string>& parameters);
@@ -67,6 +63,11 @@ class Server {
 		void		commandNAMES(User &user, std::vector<std::string>& parameters);
 		void		commandMSG(User &user, std::vector<std::string>& parameters);
 		void		commandPART(User &user, std::vector<std::string>& parameters);
+
+		bool		isChannel(std::string channelName);
+		Channel		findChannel(std::string channelName);
+		int			getUserIndexByFd(int fd);
+		void		checkIsVerified(User& user);
 
 	public:
 		Server(char *port);// 비번 추가 해야 함.
