@@ -13,8 +13,8 @@
 CXX			=	c++
 CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98
 SRCS		=	src/main.cpp \
-				src/Server.cpp src/User.cpp src/Command.cpp \
-				src/Error.cpp src/utils.cpp
+				src/Server.cpp src/User.cpp src/Command.cpp src/CommandChannel.cpp \
+				src/Error.cpp src/utils.cpp src/Reply.cpp
 OBJS		=	$(SRCS:.cpp=.o)
 TARGET		=	ircserv
 SANFLAG		=	-g3 -fsanitize=address
