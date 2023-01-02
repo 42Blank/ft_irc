@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 19:30:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/03 02:34:29 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/03 02:40:57 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,9 @@
 
 // Error
 
+# define ERR_NOSUCHSERVER			"402" // No such server
 # define ERR_NOSUCHCHANNEL			"403" // No such channel
+# define ERR_NOORIGIN				"409" // No origin specified
 # define ERR_UNKNOWNCOMMAND			"421" // Unknown command
 # define ERR_NONICKNAMEGIVEN		"431" // No nickname given
 # define ERR_ERRONEUSNICKNAME		"432" // Erroneous nickname

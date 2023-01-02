@@ -6,14 +6,16 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 19:31:32 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/03 02:08:24 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/03 02:41:41 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../includes/Reply.hpp"
 
 static std::string	getErrorMessage(std::string code) {
+	if (code == ERR_NOSUCHSERVER) return " :No such server";
 	if (code == ERR_NOSUCHCHANNEL) return " :No such channel";
+	if (code == ERR_NOORIGIN) return " :No origin specified";
 	if (code == ERR_UNKNOWNCOMMAND) return " :Unknown command";
 	if (code == ERR_NONICKNAMEGIVEN) return " :No nickname given";
 	if (code == ERR_ERRONEUSNICKNAME) return " :Erroneous nickname";
