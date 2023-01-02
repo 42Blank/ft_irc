@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/02 22:04:57 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/02 22:07:05 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ Server::Server(char *port) {
 	if (_serverSocket < 0)
 		throw Error::SocketOpenException();
 
-	setPort(atoi(port));
+	_port = atoi(port);
 	memset(&_serverAddress, 0, sizeof(_serverAddress));	// 구조체 변수의 모든 멤버를 0으로 초기화
 	_serverAddress.sin_family = AF_INET;			// 주소 체계 지정, AF_INET : IPv4 인터넷 프로토콜에 적용
 	_serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);	// IP 주소
@@ -52,7 +52,7 @@ void	Server::serverOn(void) {
 		}
 		for (iter = _poll_fds.begin() + 1; iter < _poll_fds.end(); iter++) {
 			if (iter->revents & POLLHUP) // 현재 클라이언트 연결 끊김
-				removeClient(iter)
+				removeClient(iter);
 			else if (iter->revents & POLLIN)
 				receiveClientMessage(iter->fd);
 			ft_checkPollReturnEvent(iter->revents);
@@ -129,7 +129,7 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 
 		if (*parameters.begin() == CMD_PASS) commandPASS(user, parameters);
 		else if (*parameters.begin() == CMD_NICK) commandNICK(user, parameters);
-		else if (*parameters.begin() == CMD_USER) commandUser(user, parameters);
+		else if (*parameters.begin() == CMD_USER) commandUSER(user, parameters);
 		else if (user.getIsVerified() == ALL_VERIFIED) {
 			if (*parameters.begin() == CMD_JOIN) commandJOIN(user, parameters);
 			else if (*parameters.begin() == CMD_MSG) commandMSG(user, parameters);
