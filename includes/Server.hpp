@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/01 17:07:25 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/02 20:54:06 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@
 # define CMD_NICK "NICK"
 # define CMD_USER "USER"
 
+# define PASS_VERIFIED 0b001
+# define NICK_VERIFIED 0b010
+# define USER_VERIFIED 0b100
+# define ALL_VERIFIED 0b111
+
 class Server {
 	private:
 		int							_port;
@@ -36,7 +41,7 @@ class Server {
 		std::vector<struct pollfd>	_poll_fds;
 
 		void		sendClientMessage(User& user, std::string str);
-		void		welcomeProcess(void);
+		void		receiveFirstClientMessage(void);
 		void		receiveClientMessage(int clientSocket);
 		std::string	concatMessage(int clientSocket);
 		void		parseMessageStream(User& user, const std::string& fullMsg);

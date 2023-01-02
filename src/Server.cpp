@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/01 19:08:35 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/02 20:59:06 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	Server::serverOn(void) {
 			continue ;
 		}
 		if (_poll_fds[0].revents & POLLIN) { // _poll_fds[0] -> 서버 fd에 POLLIN event발생
-			welcomeProcess();
+			receiveFirstClientMessage();
 			continue;
 		}
 		std::vector<struct pollfd>::iterator iter;
@@ -86,7 +86,7 @@ void	Server::sendClientMessage(User& user, std::string str) {
 		throw Error::SendMessageException();
 }
 
-void	Server::welcomeProcess(void) {
+void	Server::receiveFirstClientMessage(void) {
 	struct pollfd client_pollfd;
 	User user;
 
@@ -96,14 +96,13 @@ void	Server::welcomeProcess(void) {
 			throw Error::SocketOpenException();
 		user.setSocketDesc(clientSocket);
 		std::string fullMsg = concatMessage(user.getSocketDesc());
-		parseWelcomeMessageStream(user, fullMsg);
-		this->testUser(); // 테스트용 함수
-		client_pollfd.fd = user.getSocketDesc();
+		parseMessageStream(user, fullMsg);
+		client_pollfd.fd = clientSocket;
 		client_pollfd.events = POLLIN;
 		_poll_fds.push_back(client_pollfd);
 	}	catch (std::exception &e) {
 		std::cout << e.what() << "\n";
-		close(user.getSocketDesc()); // 웰컴 프로세스 실패 시에는 유저 통신 끊어야함
+		close(user.getSocketDesc()); // 위의 절차 중 하나라도 실패 시에는 유저 통신 끊어야함
 	}
 }
 
@@ -133,22 +132,6 @@ std::string	Server::concatMessage(int clientSocket) {
 	return fullMsg;
 }
 
-void	Server::parseWelcomeMessageStream(User &user, const std::string& fullMsg) {
-	std::vector<std::string>			commands = ft_split(fullMsg, '\n');
-	std::vector<std::string>::iterator	cmdIter;
-
-	std::cout << "\n======Message======\n" << fullMsg << "\n";
-
-	for (cmdIter = commands.begin(); cmdIter != commands.end(); cmdIter++) {
-		std::vector<std::string>	parameters = ft_split(*cmdIter, ' ');
-
-		// std::cout << "parameter : " << *cmdIter << "\n";
-		if (*parameters.begin() == CMD_NICK) commandNICK(user, parameters);
-		else if (*parameters.begin() == CMD_USER) commandUser(user, parameters);
-		else continue;
-	}
-}
-
 void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 	std::vector<std::string>			commands = ft_split(fullMsg, '\n');
 	std::vector<std::string>::iterator	cmdIter;
@@ -157,9 +140,16 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 
 	for (cmdIter = commands.begin(); cmdIter != commands.end(); cmdIter++) {
 		std::vector<std::string>	parameters = ft_split(*cmdIter, ' ');
-		// if (*parameters.begin() == CMD_JOIN) commandJoin(user, parameters);
+		parameters.
+
+		if (*parameters.begin() == CMD_PASS) commandPASS(user, parameters);
+		else if (*parameters.begin() == CMD_NICK) commandNICK(user, parameters);
+		else if (*parameters.begin() == CMD_USER) commandUser(user, parameters);
+		else if (user.getIsVerified() == ALL_VERIFIED) {
+			// 인증된 유저만 접근할 수 있는 커맨드들은 이곳에!!!
+		}
+		else continue;
 	}
-	(void)user; // unused parameter때문에 꼼수씀
 }
 
 int	Server::getUserIndexByFd(int fd) {

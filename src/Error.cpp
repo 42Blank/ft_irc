@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 19:31:32 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/01 18:15:43 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/01 18:16:56 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,5 @@ const char*	Error::UserNotFoundException::what() const throw() {
 }
 
 const char*	Error::PasswordException::what() const throw() {
-	return "Parameters needed or too much parameter";
+	return "Wrong Password or invalid parameter";
 }
