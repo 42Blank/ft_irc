@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:41:37 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/03 01:40:28 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/03 02:55:56 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,9 @@ bool	ft_checkIsCommandValid(std::string command, bool isVerified) {
 			command == CMD_MSG ||
 			command == CMD_TOPIC ||
 			command == CMD_NAMES ||
-			command == CMD_PART ) return true;
+			command == CMD_PART ||
+			command == CMD_PING ||
+			command == CMD_PONG ) return true;
 	}
 	return false;
 }

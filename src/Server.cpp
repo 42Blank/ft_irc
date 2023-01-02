@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/03 02:01:33 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/03 02:57:30 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,28 +122,25 @@ std::string	Server::concatMessage(int clientSocket) {
 void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 	std::vector<std::string>			commands = ft_split(fullMsg, '\n');
 	std::vector<std::string>::iterator	cmdIter;
-	bool								isAllCommandInvalid = false;
 
 	std::cout << "\n======Message======\n" << fullMsg << "\n";
 
 	for (cmdIter = commands.begin(); cmdIter != commands.end(); cmdIter++) {
 		std::vector<std::string>	parameters = ft_split(*cmdIter, ' ');
 
-		isAllCommandInvalid = ft_checkIsCommandValid(parameters[0], user.getIsVerified());
 		if (parameters[0] == CMD_CAP) commandCAP(user, parameters);
 		else if (parameters[0] == CMD_PASS) commandPASS(user, parameters);
 		else if (parameters[0] == CMD_NICK) commandNICK(user, parameters);
 		else if (parameters[0] == CMD_USER) commandUSER(user, parameters);
-		else if (user.getIsVerified() == ALL_VERIFIED) {
-			if (parameters[0] == CMD_JOIN) commandJOIN(user, parameters);
-			else if (parameters[0] == CMD_MSG) commandMSG(user, parameters);
-			else if (parameters[0] == CMD_TOPIC) commandTOPIC(user, parameters);
-			else if (parameters[0] == CMD_NAMES) commandNAMES(user, parameters);
-			else if (parameters[0] == CMD_PART) commandPART(user, parameters);
-		}
+		else if (parameters[0] == CMD_PING) commandPING(user, parameters);
+		else if (parameters[0] == CMD_PONG) commandPONG(user, parameters);
+		else if (parameters[0] == CMD_JOIN) commandJOIN(user, parameters);
+		else if (parameters[0] == CMD_MSG) commandMSG(user, parameters);
+		else if (parameters[0] == CMD_TOPIC) commandTOPIC(user, parameters);
+		else if (parameters[0] == CMD_NAMES) commandNAMES(user, parameters);
+		else if (parameters[0] == CMD_PART) commandPART(user, parameters);
 		else sendClientMessage(user, Error(ERR_UNKNOWNCOMMAND, parameters[0]));
 	}
-	if (!isAllCommandInvalid) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 }
 
 void	Server::removeClient(std::vector<struct pollfd>::iterator fdIter) {

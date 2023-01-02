@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/03 02:10:07 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/03 02:38:49 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ class Server {
 		void		commandPASS(User& user, std::vector<std::string>& parameters);
 		void		commandNICK(User& user, std::vector<std::string>& parameters);
 		void		commandUSER(User& user, std::vector<std::string>& parameters);
+		void		commandPING(User& user, std::vector<std::string>& parameters);
+		void		commandPONG(User& user, std::vector<std::string>& parameters);
 		void		commandJOIN(User &user, std::vector<std::string> &parameters);
 		void		commandTOPIC(User &user, std::vector<std::string>& parameters);
 		void		commandNAMES(User &user, std::vector<std::string>& parameters);

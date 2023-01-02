@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 13:44:22 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/03 01:38:58 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/03 01:59:48 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@
 # define CMD_NAMES "NAMES"
 # define CMD_MSG "PRIVMSG"
 # define CMD_PART "PART"
+# define CMD_PING "PING"
+# define CMD_PONG "PONG"
 
 # define NICK_AVAILABLE_CHAR "[]\\`_^{}|"
 
