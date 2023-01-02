@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/02 21:16:38 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/02 21:27:04 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@
 # define CMD_USER "USER"
 # define CMD_JOIN "JOIN"
 # define CMD_TOPIC "TOPIC"
+# define CMD_NAMES "NAMES"
+# define CMD_MSG "PRIVMSG"
+# define CMD_PART "PART"
 
 # define PASS_VERIFIED 0b001
 # define NICK_VERIFIED 0b010
@@ -56,13 +59,15 @@ class Server {
 		void		commandNICK(User& user, std::vector<std::string>& parameters);
 		void		commandUser(User& user, std::vector<std::string>& parameters);
 
+		bool		isChannel(std::string channelName);
 		Channel		findChannel(std::string channelName);
 		int			getUserIndexByFd(int fd);
 
-		void		commandJOIN(User *user, std::vector<std::string> &parameters);
-		void		commandTOPIC(User* user, std::vector<std::string>& parameters);
-		bool		isChannel(std::string channelName);
-		void		commandNAMES(User* user, std::vector<std::string>& parameters);
+		void		commandJOIN(User &user, std::vector<std::string> &parameters);
+		void		commandTOPIC(User &user, std::vector<std::string>& parameters);
+		void		commandNAMES(User &user, std::vector<std::string>& parameters);
+		void		commandMSG(User &user, std::vector<std::string>& parameters);
+		void		commandPART(User &user, std::vector<std::string>& parameters);
 
 	public:
 		Server(char *port);// 비번 추가 해야 함.

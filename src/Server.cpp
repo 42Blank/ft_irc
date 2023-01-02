@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/02 21:16:15 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/02 21:26:29 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ std::string	Server::concatMessage(int clientSocket) {
 	std::string	fullMsg = "";
 
 	while ((message_length = recv(clientSocket, _message, BUF_SIZE, 0)) != 0) {
-	std::cerr << "hire\n";
+	std::cerr << "here\n";
 		if (message_length < 0) continue;
 		_message[message_length] = 0;
 		fullMsg += _message;
@@ -146,7 +146,11 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 		else if (*parameters.begin() == CMD_NICK) commandNICK(user, parameters);
 		else if (*parameters.begin() == CMD_USER) commandUser(user, parameters);
 		else if (user.getIsVerified() == ALL_VERIFIED) {
-			// 인증된 유저만 접근할 수 있는 커맨드들은 이곳에!!!
+			if (*parameters.begin() == CMD_JOIN) commandJOIN(user, parameters);
+			else if (*parameters.begin() == CMD_MSG) commandMSG(user, parameters);
+			else if (*parameters.begin() == CMD_TOPIC) commandTOPIC(user, parameters);
+			else if (*parameters.begin() == CMD_NAMES) commandNAMES(user, parameters);
+			else if (*parameters.begin() == CMD_PART) commandPART(user, parameters);
 		}
 		else continue;
 	}
