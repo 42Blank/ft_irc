@@ -6,11 +6,11 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 19:31:32 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/03 01:22:09 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/03 02:08:24 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../includes/Error.hpp"
+# include "../includes/Reply.hpp"
 
 static std::string	getErrorMessage(std::string code) {
 	if (code == ERR_NOSUCHCHANNEL) return " :No such channel";

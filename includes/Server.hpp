@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/03 01:37:57 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/03 02:10:07 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "irc.hpp"
 # include "User.hpp"
-# include "Error.hpp"
+# include "Reply.hpp"
 # include "Channel.hpp"
 
 # define BUF_SIZE 1024

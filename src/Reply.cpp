@@ -1,28 +1,31 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Reply.cpp                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/29 19:31:32 by jiychoi           #+#    #+#             */
+/*   Updated: 2023/01/03 02:34:38 by jiychoi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include "../includes/Reply.hpp"
+# include "../includes/Reply.hpp"
 
-#include <string>
-
-// 331
-std::string	RPL_NOTOPIC(std::string channelName) { 
-//   "<client> <channel> :No topic is set"
-	return channelName + " :No topic is set";
+static std::string	getReplyMessage(std::string code) {
+	if (code == RPL_NOTOPIC) return " :No topic is set";
+	if (code == RPL_ENDOFNAMES) return " :End of NAMES list";
+	return "";
 }
 
-// 332
-std::string	RPL_TOPIC(std::string channelName, std::string topic) {
-//   "<client> <channel> :<topic>"
-	return channelName + " :" + topic; 
+std::string	Reply(std::string repCode) {
+	return repCode + getReplyMessage(repCode);
 }
 
-// 353
-std::string	RPL_NAMREPLY(std::string channelName, std::string userList) {
-	return channelName + " :" + userList;
+std::string	Reply(std::string repCode, std::string param1) {
+	return repCode + " " + param1 + getReplyMessage(repCode);
 }
 
-std::string	RPL_ENDOFNAMES(std::string channelName) {
-//   "<client> <channel> :End of /NAMES list"
-	return channelName + " :End of /NAMES list";
+std::string	Reply(std::string repCode, std::string param1, std::string param2) {
+	return repCode + " " + param1 + " " + param2 + getReplyMessage(repCode);
 }
-
-
