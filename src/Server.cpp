@@ -122,7 +122,7 @@ std::string	Server::concatMessage(int clientSocket) {
 	std::string	fullMsg = "";
 
 	while ((message_length = recv(clientSocket, _message, BUF_SIZE, 0)) != 0) {
-	std::cerr << "hire\n";
+	std::cerr << "here\n";
 		if (message_length < 0) continue;
 		_message[message_length] = 0;
 		fullMsg += _message;
@@ -133,23 +133,22 @@ std::string	Server::concatMessage(int clientSocket) {
 	return fullMsg;
 }
 
-// void	Server::parseWelcomeMessageStream(User &user, const std::string& fullMsg) {
-// 	std::vector<std::string>			commands = ft_split(fullMsg, '\n');
-// 	std::vector<std::string>::iterator	cmdIter;
+void	Server::parseWelcomeMessageStream(User &user, const std::string& fullMsg) {
+	std::vector<std::string>			commands = ft_split(fullMsg, '\n');
+	std::vector<std::string>::iterator	cmdIter;
 
-// 	std::cout << "\n======Message======\n" << fullMsg << "\n";
+	std::cout << "\n======Message======\n" << fullMsg << "\n";
 
-// 	for (cmdIter = commands.begin(); cmdIter != commands.end(); cmdIter++) {
-// 		std::vector<std::string>	parameters = ft_split(*cmdIter, ' ');
+	for (cmdIter = commands.begin(); cmdIter != commands.end(); cmdIter++) {
+		std::vector<std::string>	parameters = ft_split(*cmdIter, ' ');
 
-// 		// std::cout << "parameter : " << *cmdIter << "\n";
-// 		if (*parameters.begin() == CMD_NICK) commandNICK(user, parameters);
-// 		else if (*parameters.begin() == CMD_USER) commandUser(user, parameters);
-// 		else if (*parameters.begin() == CMD_TOPIC) commandTOPIC(user, parameters);
+		// std::cout << "parameter : " << *cmdIter << "\n";
+		if (*parameters.begin() == CMD_NICK) commandNICK(user, parameters);
+		else if (*parameters.begin() == CMD_USER) commandUser(user, parameters);
 		
-// 		else continue;
-// 	}
-// }
+		else continue;
+	}
+}
 
 void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 	std::vector<std::string>			commands = ft_split(fullMsg, '\n');
@@ -159,9 +158,17 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 
 	for (cmdIter = commands.begin(); cmdIter != commands.end(); cmdIter++) {
 		std::vector<std::string>	parameters = ft_split(*cmdIter, ' ');
-		// if (*parameters.begin() == CMD_JOIN) commandJoin(user, parameters);
+		
+		if (*parameters.begin() == CMD_JOIN) commandJOIN(user, parameters);
+		else if (*parameters.begin() == CMD_MSG) commandMSG(user, parameters);
+		else if (*parameters.begin() == CMD_TOPIC) commandTOPIC(user, parameters);
+		else if (*parameters.begin() == CMD_NAMES) commandNAMES(user, parameters);
+		else if (*parameters.begin() == CMD_PART) commandPART(user, parameters);
+		
+		
+		else continue;
 	}
-	(void)user; // unused parameter때문에 꼼수씀
+
 }
 
 int	Server::getUserIndexByFd(int fd) {
