@@ -14,26 +14,25 @@ void	Server::commandJOIN(User &user, std::vector<std::string> &parameters) {
 		//채널에 가입된다.
 		findChannel(parameters[1]).joinNewUser(user);
 		sendClientMessage(user, user.getNickname() + " JOIN " + parameters[1]);
-		Channel ch = findChannel(parameters[1]);
-		if (ch.getTopic() == "")
-			sendClientMessage(user, RPL_NOTOPIC(ch.getChannelName()));
-		else {
-			sendClientMessage(user, RPL_TOPIC(ch.getChannelName(), ch.getTopic()));
-		}
+		Channel channel = findChannel(parameters[1]);
+		if (channel.getTopic() == "")
+			sendClientMessage(user, Reply(RPL_NOTOPIC, channel.getChannelName()));
+		else
+			sendClientMessage(user, Reply(RPL_TOPIC, channel.getChannelName(), ":" + channel.getTopic()));
 		std::cerr << "send\n";
-		sendClientMessage(user, RPL_NAMREPLY(ch.getChannelName(), ch.getuserList()));
-		sendClientMessage(user, RPL_ENDOFNAMES(ch.getChannelName()));
+		sendClientMessage(user, Reply(RPL_NAMREPLY, channel.getChannelName(), channel.getUserList()));
+		sendClientMessage(user, Reply(RPL_ENDOFNAMES, channel.getChannelName()));
 		std::cerr << "send2\n";
 
 	} else {
 		Channel channel = Channel(user, parameters[1]);
 		_channelList.push_back(channel);
 		std::cerr << "send\n";
-		sendClientMessage(user, RPL_NOTOPIC(channel.getChannelName()));
+		sendClientMessage(user, Reply(RPL_NOTOPIC, channel.getChannelName()));
 		std::cerr << "send2\n";
-		sendClientMessage(user, RPL_NAMREPLY(channel.getChannelName(), channel.getuserList()));
+		sendClientMessage(user, Reply(RPL_NAMREPLY, channel.getChannelName(), channel.getUserList()));
 		std::cerr << "send3\n";
-		sendClientMessage(user, RPL_ENDOFNAMES(channel.getChannelName()));
+		sendClientMessage(user, Reply(RPL_ENDOFNAMES, channel.getChannelName()));
 	}
 
 }

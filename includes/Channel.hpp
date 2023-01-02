@@ -10,7 +10,7 @@ class Channel {
 	private:
 		std::string		_channelName;
 		std::string		_operator;	// user의 nickname 저장
-		std::string		_topic;		
+		std::string		_topic;
 		std::vector<User>	_userList;
 
 	public:
@@ -21,7 +21,7 @@ class Channel {
 		bool				isOperator(User user);
 
 		std::string			getTopic();
-		std::string			getuserList();
+		std::string			getUserList();
 		std::string			getChannelName();
 
 		void				setTopic(std::string topic);
