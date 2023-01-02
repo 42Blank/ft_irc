@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:41:37 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/01 18:56:11 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/03 02:55:56 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,4 +91,21 @@ void	ft_checkPollReturnEvent(short revents) {
 		std::cout << "POLLHUP\n";
 	if (revents & POLLNVAL)
 		std::cout << "POLLNVAL\n";
+}
+
+bool	ft_checkIsCommandValid(std::string command, bool isVerified) {
+	if (command == CMD_CAP ||
+		command == CMD_PASS ||
+		command == CMD_NICK ||
+		command == CMD_USER) return true;
+	if (isVerified) {
+		if (command == CMD_JOIN ||
+			command == CMD_MSG ||
+			command == CMD_TOPIC ||
+			command == CMD_NAMES ||
+			command == CMD_PART ||
+			command == CMD_PING ||
+			command == CMD_PONG ) return true;
+	}
+	return false;
 }

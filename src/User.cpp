@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:50:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2022/12/31 17:33:06 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/03 01:49:51 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 User::User(void) {
 	_clientAddress = new sockaddr_in();
 	_clientAddressSize = new socklen_t(sizeof(_clientAddress));
+	_isVerified = 0b000;
 }
 
 User::~User(void) {
@@ -58,8 +59,12 @@ std::string	User::getUsername() const {
 	return _username;
 }
 
-std::string User::getHostname() const {
+std::string	User::getHostname() const {
 	return _hostname;
+}
+
+short	User::getIsVerified() const {
+	return _isVerified;
 }
 
 void	User::setNickname(std::string nickname) {
@@ -76,6 +81,10 @@ void	User::setHostname(std::string hostname) {
 
 void	User::setSocketDesc(int clientSocket) {
 	_clientSocket = clientSocket;
+}
+
+void	User::setIsVerified(short what) {
+	_isVerified |= what;
 }
 
 std::ostream& operator<<(std::ostream& out, const User& instance) {

@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 15:55:05 by jiychoi           #+#    #+#             */
-/*   Updated: 2022/12/31 17:31:38 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/03 01:49:02 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,13 @@ class User {
 		std::string					_username;
 		std::string					_hostname;
 		// bool						_isAdmin;
-
 		std::vector<std::string>	_channelList;
+		short						_isVerified;
+		// & passVerified; => 0001
+		// & nickVerified; => 0010
+		// & userVerified; => 0100
+		// _isVerified == 7 => 전부 통과
+
 
 	public:
 		User();
@@ -39,12 +44,14 @@ class User {
 		std::string			getNickname() const;
 		std::string			getUsername() const;
 		std::string			getHostname() const;
+		short				getIsVerified() const;
 		// bool				getIsAdmin() const;
 
 		void				setNickname(std::string nickname);
 		void				setUsername(std::string username);
 		void				setHostname(std::string hostname);
 		void				setSocketDesc(int clientSocket);
+		void				setIsVerified(short what);
 };
 
 std::ostream&	operator<<(std::ostream& out, const User& instance);
