@@ -14,7 +14,7 @@
 
 static std::string	getReplyMessage(std::string code) {
 	if (code == RPL_NOTOPIC) return " :No topic is set";
-	if (code == RPL_ENDOFNAMES) return " :End of NAMES list";
+	if (code == RPL_ENDOFNAMES) return " :End of /NAMES list";
 	return "";
 }
 
