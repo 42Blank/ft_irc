@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 21:49:06 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/04 05:07:37 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/04 05:55:03 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,7 @@ void	Server::commandUSER(User& user, std::vector<std::string>& parameters) {
 		throw std::runtime_error(Error(ERR_NEEDMOREPARAMS, CMD_NICK));
 
 	user.setUsername(parameters[1]);
-	std::cout << "setUSErname" << parameters[1] << "\n";
 	user.setHostname(parameters[2]);
-	std::cout << "sethostrname : " << parameters[2] << "\n"; 
-	std::cout << "gethostrname : " << user.getHostname() << "\n"; 
 	user.setIsVerified(USER_VERIFIED);
 	checkIsVerified(user);
 }

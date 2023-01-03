@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:50:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/04 05:08:19 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/04 05:47:33 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ User&	User::operator=(const User& instance) {
 	_clientAddressSize = new socklen_t(*instance.getAddressSizePtr());
 	_nickname = instance.getNickname();
 	_username = instance.getUsername();
+	_hostname = instance.getHostname();
 	return *this;
 }
 
