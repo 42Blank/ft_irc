@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/04 05:48:30 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/04 07:13:45 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	Server::sendClientMessage(User& user, std::string str) {
 void	Server::sendClientMessage2(User& user, std::string str) {
 	// std::string strToSend = ":" + user.getNickname() + "!" + user.getNickname()  + "@127.0.0.1 " + str + "\r\n";
 	std::cout << "hostname : " + user.getHostname() << "\n";
-	std::string strToSend = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getHostname() + str + "\r\n";
+	std::string strToSend = " :" + user.getNickname() + "!" + user.getUsername() + "@" + user.getHostname() + str + "\r\n";
 	// std::string strToSend = ":127.0.0.1 " + str + "\r\n";
 	std::cout << "msg2\n";
 	std::cout << strToSend;
@@ -153,7 +153,6 @@ void	Server::receiveClientMessage(int clientSocket) {
 		std::string	fullMsg = concatMessage(clientSocket);
 		int			userIdx = getUserIndexByFd(clientSocket);
 
-		std::cout << "USERIDX : " << userIdx << std::endl;
 		parseMessageStream(_s_userList[userIdx], fullMsg);
 	} catch (std::exception &e) {
 		std::cout << e.what() << "\n";
