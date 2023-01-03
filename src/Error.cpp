@@ -20,8 +20,8 @@ static std::string	getErrorMessage(std::string code) {
 	if (code == ERR_NONICKNAMEGIVEN) return " :No nickname given";
 	if (code == ERR_ERRONEUSNICKNAME) return " :Erroneous nickname";
 	if (code == ERR_NICKNAMEINUSE) return " :Nickname is already in use";
-	if (code == ERR_USERNOTINCHANNEL) return " :You're not on that channel";
-	if (code == ERR_NOTONCHANNEL) return " :They aren't on that channel";
+	if (code == ERR_USERNOTINCHANNEL) return " :They aren't on that channel";
+	if (code == ERR_NOTONCHANNEL) return " :You're not on that channel";
 	if (code == ERR_NOTREGISTERED) return " :You have not registered";
 	if (code == ERR_NEEDMOREPARAMS) return " :Not enough parameters";
 	if (code == ERR_PASSWDMISMATCH) return " :Password incorrect";

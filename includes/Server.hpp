@@ -41,6 +41,8 @@ class Server {
 		std::vector<Channel>		_channelList;
 
 		void		sendClientMessage(User& user, std::string str);
+		void		sendClientMessage2(User& user, std::string str);
+
 		void		receiveFirstClientMessage(void);
 		void		receiveClientMessage(int clientSocket);
 		std::string	concatMessage(int clientSocket);
@@ -60,7 +62,7 @@ class Server {
 		void		commandPART(User &user, std::vector<std::string>& parameters);
 
 		bool		isChannel(std::string channelName);
-		Channel		findChannel(std::string channelName);
+		Channel		&findChannel(std::string channelName);
 		int			getUserIndexByFd(int fd);
 		void		checkIsVerified(User& user);
 

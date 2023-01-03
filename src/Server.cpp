@@ -67,7 +67,21 @@ void	Server::serverOff(void) {
 }
 
 void	Server::sendClientMessage(User& user, std::string str) {
-	std::string strToSend = ":127.0.0.1 " + str + "\r\n";
+	std::string strToSend = ":" + user.getNickname() + "!" + user.getNickname()  + "@127.0.0.1 " + str + "\r\n";
+	// std::string strToSend = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getHostname() + str + "\r\n";
+	// std::string strToSend = ":127.0.0.1 " + str + "\r\n";
+	std::cout << "msg1\n";
+	std::cout << strToSend;
+	if (send(user.getSocketDesc(), (strToSend).c_str(), strToSend.length(), 0) == -1)
+		throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
+}
+
+void	Server::sendClientMessage2(User& user, std::string str) {
+	// std::string strToSend = ":" + user.getNickname() + "!" + user.getNickname()  + "@127.0.0.1 " + str + "\r\n";
+	std::cout << "hostname : " + user.getHostname() << "\n";
+	std::string strToSend = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getHostname() + str + "\r\n";
+	// std::string strToSend = ":127.0.0.1 " + str + "\r\n";
+	std::cout << "msg2\n";
 	std::cout << strToSend;
 	if (send(user.getSocketDesc(), (strToSend).c_str(), strToSend.length(), 0) == -1)
 		throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
@@ -127,6 +141,14 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 
 	for (cmdIter = commands.begin(); cmdIter != commands.end(); cmdIter++) {
 		std::vector<std::string>	parameters = ft_split(*cmdIter, ' ');
+		std::vector<std::string>::iterator it = parameters.begin();
+		
+		std::cout << "recv from client : " ;
+		while (it != parameters.end()) {
+			std::cout << *it << " ";
+			++it;
+		}
+		std::cout << std::endl;
 
 		if (parameters[0] == CMD_CAP) commandCAP(user, parameters);
 		else if (parameters[0] == CMD_PASS) commandPASS(user, parameters);

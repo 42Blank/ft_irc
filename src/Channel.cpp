@@ -3,7 +3,7 @@
 
 // 여기 유저 nickname만 받아서 Channel user list에 넣으면 안될지 고민 중
 Channel::Channel(User &user, std::string name) {
-	_operator = user.getNickname();
+	_operator = user;
 	_userList.push_back(user);
 	_channelName = name;
 }
@@ -22,9 +22,9 @@ std::string			Channel::getUserList() {
 	std::string	userList;
 	std::vector<User>::iterator	iter;
 
-	userList = "= #" + _channelName + " :@" + _operator;
+	userList = "= " + _channelName + " :@" + _operator.getNickname() + " ";
 	for (iter = _userList.begin(); iter < _userList.end(); iter++)
-		userList += " " + (*iter).getNickname();
+		userList += "+" + (*iter).getNickname() + " ";
 	return userList;
 }
 
@@ -43,8 +43,19 @@ void	Channel::joinNewUser(User user) {
 
 // 관리자인지 확인하는 메서드
 bool	Channel::isOperator(User user) {
-	if (user.getNickname().compare(_operator) == 0) {
+	if (user.getNickname().compare(_operator.getNickname()) == 0) {
 		return true;
+	}
+	return false;
+}
+
+bool	Channel::isUser(std::string nickname) {
+
+	std::vector<User>::iterator	iter;
+
+	for (iter = _userList.begin(); iter < _userList.end(); iter++) {
+		if ((*iter).getNickname().compare(nickname) == 0)
+			return true;
 	}
 	return false;
 }
@@ -58,6 +69,7 @@ void	Channel::deleteNormalUser(std::string nickname){
 	}
 }
 
-// void	Channel::deleteOperatorUser(std::string nickname) {
-
-// }
+void	Channel::deleteOperatorUser(std::string nickname) {
+	// Operator 에 벡터의 첫번쨰 사용자 넣고 만일 벡터에 아무도 없으면 채널이 사라지도록 하기 
+(void)nickname;
+}
