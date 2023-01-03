@@ -3,5 +3,5 @@
 ircserv
 eserv
 .DS_Store
-.vscode
+.vscode&
 src/socket_test.cpp
