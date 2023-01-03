@@ -28,6 +28,7 @@ void	Server::commandJOIN(User &user, std::vector<std::string> &parameters) {
 		sendClientMessage(user, Reply(RPL_NOTOPIC, channel.getChannelName()));
 		sendClientMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), channel.getUserList()));
 		sendClientMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + channel.getChannelName()));
+		sendClientMessage2(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + channel.getChannelName()));
 	}
 }
 
@@ -64,6 +65,8 @@ void		Server::commandTOPIC(User &user, std::vector<std::string>& parameters) {
 	std::string channelName = parameters[1];
 	if (!isChannel(channelName)) throw std::runtime_error(Error(ERR_NOSUCHCHANNEL, channelName));
 
+	// if (parameters.size() == )
+
 	std::string	topic;
 	std::vector<std::string>::iterator	iter;
 	for (iter = parameters.begin() + 2; iter < parameters.end(); iter++) {
@@ -87,8 +90,19 @@ void		Server::commandMSG(User &user, std::vector<std::string>& parameters) {
 	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 
 
-(void)user;
-(void)parameters;
+	sendClientMessage(user,  + " PRIVMSG " + parameters[1] + " :" + parameters[2]);
+// 	if (isChannel(parameters[1])) {
+// 		Channel &ch = findChannel(parameters[1]);
+
+
+// 	} else if (isUser(parameters[1])) {
+
+// 	} else {
+// 		// 채널도 사용자도 아닌 에러
+// 	}
+
+// (void)user;
+// (void)parameters;
 
 }
 
@@ -99,6 +113,7 @@ void		Server::commandPART(User &user, std::vector<std::string>& parameters) {
 		Channel	&ch = findChannel(parameters[1]);
 		if (ch.isUser(user.getNickname())) { // 유저가 있으면
 			sendClientMessage(user, "PART " + ch.getChannelName());
+			sendClientMessage2(user, "PART " + ch.getChannelName());
 			ch.deleteNormalUser(user.getNickname());
 		} else {
 			throw std::runtime_error(Error(ERR_NOTONCHANNEL));
@@ -116,11 +131,3 @@ void		Server::commandNAMES(User &user, std::vector<std::string>& parameters) {
 	sendClientMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + ch.getChannelName()));
 }
 
-// void	Server::commandUser(User* user, std::vector<std::string>& parameters) {
-
-
-// 	sendClientMessage(user,
-// 		":127.0.0.1 001 " + user->getNickname() + " :\033[1;32mWelcome to the " + SERVER_NAME + "\e[0m " + \
-// 		user->getNickname() + "!" + user->getUsername() + "@" + user->getHostname()
-// 	);
-// }
