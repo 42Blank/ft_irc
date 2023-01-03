@@ -77,6 +77,10 @@ void		Server::commandTOPIC(User &user, std::vector<std::string>& parameters) {
 	} else {
 		throw std::runtime_error(Error(ERR_CHANOPRIVSNEEDED, channelName));
 	}
+	////////////debug
+	Channel &ch1 = findChannel(parameters[1]);
+	std::cerr << ch1.getTopic() << "\n";
+
 }
 
 void		Server::commandMSG(User &user, std::vector<std::string>& parameters) {
@@ -106,12 +110,10 @@ void		Server::commandPART(User &user, std::vector<std::string>& parameters) {
 void		Server::commandNAMES(User &user, std::vector<std::string>& parameters) {
 	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 
+	Channel	&ch = findChannel(parameters[1]);
 
-
-
-(void)user;
-(void)parameters;
-
+	sendClientMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), ch.getUserList()));
+	sendClientMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + ch.getChannelName()));
 }
 
 // void	Server::commandUser(User* user, std::vector<std::string>& parameters) {
