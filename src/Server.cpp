@@ -3,22 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/03 02:57:30 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/04 02:37:14 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../includes/Server.hpp"
+# include <fcntl.h>
 
 Server::Server(char* port, char* password) {
-	struct pollfd server_pollfd;
+	struct pollfd 	server_pollfd;
+	int				socket_opt = 1;
 
 	_serverSocket = socket(PF_INET, SOCK_STREAM, 0);	// 소켓 생성
 	if (_serverSocket < 0)
 		throw std::runtime_error(Error(ERR_SERVEROPENFAILED, "socket"));
-
+	if (setsockopt(_serverSocket, SOL_SOCKET, SO_REUSEADDR, &socket_opt, sizeof(socket_opt)) < 0)
+		throw std::runtime_error(Error(ERR_SERVEROPENFAILED, "socketopt"));
 	_port = atoi(port);
 	_password = password;
 	memset(&_serverAddress, 0, sizeof(_serverAddress));	// 구조체 변수의 모든 멤버를 0으로 초기화
@@ -52,8 +55,10 @@ void	Server::serverOn(void) {
 			continue;
 		}
 		for (iter = _poll_fds.begin() + 1; iter < _poll_fds.end(); iter++) {
-			if (iter->revents & POLLHUP) // 현재 클라이언트 연결 끊김
+			if (iter->revents & POLLHUP) { // 현재 클라이언트 연결 끊김
 				removeClient(iter);
+				continue ;
+			}
 			else if (iter->revents & POLLIN)
 				receiveClientMessage(iter->fd);
 			ft_checkPollReturnEvent(iter->revents);
@@ -95,6 +100,7 @@ void	Server::receiveFirstClientMessage(void) {
 		int	clientSocket = accept(_serverSocket, (struct sockaddr*)user.getAddressPtr(), user.getAddressSizePtr());
 		if (clientSocket < 0)
 			throw std::runtime_error(Error(ERR_CLIENTCONNECTFAILED));
+		fcntl(clientSocket, F_SETFL, O_NONBLOCK);
 		user.setSocketDesc(clientSocket);
 		std::string fullMsg = concatMessage(user.getSocketDesc());
 		parseMessageStream(user, fullMsg);
