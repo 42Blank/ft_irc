@@ -10,34 +10,28 @@ void	Server::commandJOIN(User &user, std::vector<std::string> &parameters) {
 	//ERR_NEEDMOREPARAMS (461)
 	if (parameters.size() < 2) throw std::runtime_error(Error(ERR_NEEDMOREPARAMS, CMD_JOIN));
 
-	if (isChannel(parameters[1])) {
-		//채널에 가입된다.
-		findChannel(parameters[1]).joinNewUser(user);
+	if (isChannel(parameters[1])) { //채널에 가입된다.
 		sendClientMessage(user, user.getNickname() + " JOIN " + parameters[1]);
-		Channel channel = findChannel(parameters[1]);
+		Channel &channel = findChannel(parameters[1]);
+		channel.joinNewUser(user);
 		if (channel.getTopic() == "")
 			sendClientMessage(user, Reply(RPL_NOTOPIC, channel.getChannelName()));
 		else
-			sendClientMessage(user, Reply(RPL_TOPIC, channel.getChannelName(), ":" + channel.getTopic()));
-		std::cerr << "send\n";
-		sendClientMessage(user, Reply(RPL_NAMREPLY, channel.getChannelName(), channel.getUserList()));
-		sendClientMessage(user, Reply(RPL_ENDOFNAMES, channel.getChannelName()));
-		std::cerr << "send2\n";
-
+			sendClientMessage(user, Reply(RPL_TOPIC, user.getNickname() + " " + channel.getChannelName(), channel.getTopic()));
+		std::cerr << "send join channel\n";
+		sendClientMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), channel.getUserList()));
+		sendClientMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + channel.getChannelName()));
 	} else {
 		Channel channel = Channel(user, parameters[1]);
 		_channelList.push_back(channel);
-		std::cerr << "send\n";
+		std::cerr << "make new channel\n";
 		sendClientMessage(user, Reply(RPL_NOTOPIC, channel.getChannelName()));
-		std::cerr << "send2\n";
-		sendClientMessage(user, Reply(RPL_NAMREPLY, channel.getChannelName(), channel.getUserList()));
-		std::cerr << "send3\n";
-		sendClientMessage(user, Reply(RPL_ENDOFNAMES, channel.getChannelName()));
+		sendClientMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), channel.getUserList()));
+		sendClientMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + channel.getChannelName()));
 	}
-
 }
 
-Channel		Server::findChannel(std::string channelName) {
+Channel		&Server::findChannel(std::string channelName) {
 	std::vector<Channel>::iterator	iterChannel;
 
 	for (iterChannel = _channelList.begin(); iterChannel < _channelList.end(); iterChannel++) {
@@ -76,20 +70,18 @@ void		Server::commandTOPIC(User &user, std::vector<std::string>& parameters) {
 		topic = topic + *iter;
 	}
 
-	std::vector<Channel>::iterator	iterChannel;
-	for (iterChannel = _channelList.begin(); iterChannel < _channelList.end(); iterChannel++) {
-		if ((*iterChannel).getChannelName().compare(channelName) == 0) {
-			if ((*iterChannel).isOperator(user))
-				(*iterChannel).setTopic(topic);
-			else
-				throw std::runtime_error(Error(ERR_CHANOPRIVSNEEDED, channelName));
-		}
+	Channel &ch = findChannel(parameters[1]);
+	if (ch.isOperator(user)) {
+		ch.setTopic(topic);
+		sendClientMessage(user, Reply(RPL_TOPIC, user.getNickname() + " " + ch.getChannelName(), ch.getTopic()));
+	} else {
+		throw std::runtime_error(Error(ERR_CHANOPRIVSNEEDED, channelName));
 	}
-
 }
 
 void		Server::commandMSG(User &user, std::vector<std::string>& parameters) {
 	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
+
 
 (void)user;
 (void)parameters;
@@ -99,13 +91,23 @@ void		Server::commandMSG(User &user, std::vector<std::string>& parameters) {
 void		Server::commandPART(User &user, std::vector<std::string>& parameters) {
 	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 
-(void)user;
-(void)parameters;
+	if (isChannel(parameters[1])) {	// 채널이면
+		Channel	&ch = findChannel(parameters[1]);
+		if (ch.isUser(user.getNickname())) { // 유저가 있으면
+			sendClientMessage(user, "PART " + ch.getChannelName());
+			ch.deleteNormalUser(user.getNickname());
+		} else {
+			throw std::runtime_error(Error(ERR_NOTONCHANNEL));
+		}
+	}
 }
 
 
 void		Server::commandNAMES(User &user, std::vector<std::string>& parameters) {
 	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
+
+
+
 
 (void)user;
 (void)parameters;
