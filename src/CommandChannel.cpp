@@ -4,25 +4,15 @@
 
 #include <iostream>
 
-void	Server::commandJOIN(User &user, std::vector<std::string> &parameters) {
-	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
-
-	if (parameters.size() < 2) throw std::runtime_error(Error(ERR_NEEDMOREPARAMS, CMD_JOIN));
-
-	if (isChannel(parameters[1])) { //채널에 가입된다.
-		sendClientMessage(user, " JOIN " + parameters[1]);
-		Channel &ch = findChannel(parameters[1]);
-		ch.joinNewUser(user);
-		sendClientMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), ch.getUserList()));
-		sendClientMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + ch.getChannelName()));
-		sendMessageBroadcast(1, ch, user, "JOIN :" + ch.getChannelName());
-	} else {	// 채널을 새로 생성한다.
-		sendClientMessage(user, " JOIN " + parameters[1]);
-		Channel ch = Channel(user, parameters[1]);
-		_channelList.push_back(ch);
-		sendClientMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), ch.getUserList()));
-		sendClientMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + ch.getChannelName()));
+bool		Server::isChannel(std::string channelName) {
+	if (channelName[0] != '&' && channelName[0] != '#' && channelName[0] != '+' && channelName[0] != '!')
+		return false;
+	std::vector<Channel>::iterator	iter;
+	for (iter = _channelList.begin(); iter < _channelList.end(); iter++) {
+		if ((*iter).getChannelName().compare(channelName) == 0)
+			return true;
 	}
+	return false;
 }
 
 Channel		&Server::findChannel(std::string channelName) {
@@ -36,16 +26,54 @@ Channel		&Server::findChannel(std::string channelName) {
 	throw std::runtime_error(Error(ERR_NOSUCHCHANNEL, channelName));
 }
 
-bool		Server::isChannel(std::string channelName) {
-	if (channelName[0] != '&' && channelName[0] != '#' && channelName[0] != '+' && channelName[0] != '!')
-		return false;
-	std::vector<Channel>::iterator	iter;
-	for (iter = _channelList.begin(); iter < _channelList.end(); iter++) {
-		if ((*iter).getChannelName().compare(channelName) == 0)
+bool		Server::isServerUser(std::string nickname) {
+
+	std::vector<User>::iterator	iter;
+
+	for (iter = _s_userList.begin(); iter < _s_userList.end(); iter++) {
+		if ((*iter).getNickname().compare(nickname) == 0)
 			return true;
 	}
 	return false;
 }
+
+User		&Server::findUser(std::string nickname) {
+	std::vector<User>::iterator it;
+
+	for (it = _s_userList.begin(); it < _s_userList.end(); it++) {
+		std::cerr << "name: " << (*it).getNickname() << "\n";
+		if ((*it).getNickname().compare(nickname) == 0) {
+			std::cerr << "same name : " << (*it).getNickname() << "\n";
+			return *it;
+		}
+	}
+	throw std::runtime_error(Error(ERR_NOSUCHNICK, nickname));
+}
+
+
+
+void	Server::commandJOIN(User &user, std::vector<std::string> &parameters) {
+	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
+
+	if (parameters.size() < 2) throw std::runtime_error(Error(ERR_NEEDMOREPARAMS, CMD_JOIN));
+
+	if (isChannel(parameters[1])) { //채널에 가입된다.
+		sendClientMessage(user, " JOIN " + parameters[1]);
+		Channel &ch = findChannel(parameters[1]);
+		ch.joinNewUser(user);
+		sendClientMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), ch.getUserList()));
+		sendClientMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + ch.getChannelName()));
+		sendMessageBroadcast(1, ch, user, "JOIN :" + ch.getChannelName());
+
+	} else {	// 채널을 새로 생성한다.
+		sendClientMessage(user, " JOIN " + parameters[1]);
+		Channel ch = Channel(user, parameters[1]);
+		_channelList.push_back(ch);
+		sendClientMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), ch.getUserList()));
+		sendClientMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + ch.getChannelName()));
+	}
+}
+
 
 //관리자만 사용할 수 있다.
 void		Server::commandTOPIC(User &user, std::vector<std::string>& parameters) {
@@ -76,17 +104,21 @@ void		Server::commandTOPIC(User &user, std::vector<std::string>& parameters) {
 
 void		Server::commandMSG(User &user, std::vector<std::string>& parameters) {
 	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
-	sendClientMessage(user,  + " PRIVMSG " + parameters[1] + " :" + parameters[2]);
-// 	if (isChannel(parameters[1])) {
-// 		Channel &ch = findChannel(parameters[1]);
-// 	} else if (isUser(parameters[1])) {
+	
+	if (isChannel(parameters[1])) {
+		Channel &ch = findChannel(parameters[1]);
+		// sendClientMessage(user,  + "PRIVMSG " + parameters[1] + " " + parameters[2]);
+		sendMessageBroadcast(1, ch, user, "PRIVMSG " + ch.getChannelName() + " " + parameters[2]);
 
-// 	} else {
-// 		// 채널도 사용자도 아닌 에러
-// 	}
+	} else if (isServerUser(parameters[1])) {
+		User	&receiver = findUser(parameters[1]);
+		std::cerr << "\nhwewew\n";
+		sendMessageUnicast(user, receiver, "PRIVMSG " + receiver.getNickname() + " " + parameters[2]);
+		// 여기도 공백들어오는 메세지 추가하기 
 
-// (void)user;
-// (void)parameters;
+	} else {
+		// 채널도 사용자도 아닌 에러
+	}
 
 }
 
