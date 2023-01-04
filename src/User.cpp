@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:50:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/04 05:47:33 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/04 15:45:23 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ User::User(const User& instance) {
 User&	User::operator=(const User& instance) {
 	std::cout << "copied user: " << instance.getNickname() << "\n";
 
-	_clientSocket = instance.getSocketDesc();
+	setSocketFD(instance.getSocketFD());
 	_clientAddress = new sockaddr_in(*instance.getAddressPtr());
 	_clientAddressSize = new socklen_t(*instance.getAddressSizePtr());
 	_nickname = instance.getNickname();
@@ -40,8 +40,8 @@ User&	User::operator=(const User& instance) {
 	return *this;
 }
 
-int	User::getSocketDesc() const {
-	return _clientSocket;
+std::vector<struct pollfd>::iterator	User::getSocketFD() const {
+	return _clientFDIterator;
 }
 
 struct sockaddr_in*	User::getAddressPtr() const {
@@ -80,8 +80,8 @@ void	User::setHostname(std::string hostname) {
 	_hostname = hostname;
 }
 
-void	User::setSocketDesc(int clientSocket) {
-	_clientSocket = clientSocket;
+void	User::setSocketFD(std::vector<struct pollfd>::iterator fdIter) {
+	_clientFDIterator = fdIter;
 }
 
 void	User::setIsVerified(short what) {
