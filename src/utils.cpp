@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:41:37 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/04 05:28:26 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/04 16:58:30 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ bool	ft_isValidNickname(const std::string& str) {
 std::string ft_getStringAfterColon(std::vector<std::string> parameter) {
 	std::vector<std::string>::iterator iter;
 	std::string returnStr = "";
+	std::string	ret;
 	bool flag = false;
 
 	for (iter = parameter.begin(); iter < parameter.end(); iter++)
@@ -67,7 +68,13 @@ std::string ft_getStringAfterColon(std::vector<std::string> parameter) {
 		if (flag)
 			returnStr += " " + *iter;
 	}
-	return returnStr.substr(1, returnStr.length() - 1);
+	try {
+		ret = returnStr.substr(1, returnStr.length() - 1);
+		return (ret);
+	}
+	catch (std::exception &e) {
+		return ("");
+	}
 }
 
 int	ft_checkPollReturnEvent(short revents) {
