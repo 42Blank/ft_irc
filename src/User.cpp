@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:50:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/04 16:02:27 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/04 16:27:40 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ User&	User::operator=(const User& instance) {
 	_nickname = instance.getNickname();
 	_username = instance.getUsername();
 	_hostname = instance.getHostname();
+	_isDisconnected = instance.getIsDisconnected();
 	return *this;
 }
 
@@ -68,6 +69,10 @@ short	User::getIsVerified() const {
 	return _isVerified;
 }
 
+bool	User::getIsDisconnected() const {
+	return _isDisconnected;
+}
+
 void	User::setNickname(std::string nickname) {
 	_nickname = nickname;
 }
@@ -86,6 +91,10 @@ void	User::setSocketFdIterator(fdIter fdIter) {
 
 void	User::setIsVerified(short what) {
 	_isVerified |= what;
+}
+
+void	User::setIsDisconnected(bool isDisconnected) {
+	_isDisconnected = isDisconnected;
 }
 
 std::ostream& operator<<(std::ostream& out, const User& instance) {
