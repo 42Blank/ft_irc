@@ -88,7 +88,7 @@ void	Server::sendClientMessage(User& user, std::string str) {
 	std::string strToSend = ":" + user.getNickname() + "!" + user.getNickname()  + "@127.0.0.1 " + str + "\r\n";
 	// std::string strToSend = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getHostname() + str + "\r\n";
 	// std::string strToSend = ":127.0.0.1 " + str + "\r\n";
-	// std::cout << "msg1\n";
+	std::cout << "msg1\n";
 	std::cout << strToSend;
 	if (send(user.getSocketDesc(), (strToSend).c_str(), strToSend.length(), 0) == -1)
 		throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
@@ -185,7 +185,7 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 		std::vector<std::string>	parameters = ft_split(*cmdIter, ' ');
 		std::vector<std::string>::iterator it = parameters.begin();
 		
-		std::cout << "recv from client : " ;
+		std::cout << "\nrecv from client : " ;
 		while (it != parameters.end()) {
 			std::cout << *it << " ";
 			++it;
