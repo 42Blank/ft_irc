@@ -11,16 +11,17 @@ void	Server::commandJOIN(User &user, std::vector<std::string> &parameters) {
 
 	if (isChannel(parameters[1])) { //채널에 가입된다.
 		sendClientMessage(user, " JOIN " + parameters[1]);
-		Channel &channel = findChannel(parameters[1]);
-		channel.joinNewUser(user);
-		sendClientMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), channel.getUserList()));
-		sendClientMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + channel.getChannelName()));
-	} else {
+		Channel &ch = findChannel(parameters[1]);
+		ch.joinNewUser(user);
+		sendClientMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), ch.getUserList()));
+		sendClientMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + ch.getChannelName()));
+		sendMessageBroadcast(1, ch, user, "JOIN :" + ch.getChannelName());
+	} else {	// 채널을 새로 생성한다.
 		sendClientMessage(user, " JOIN " + parameters[1]);
-		Channel channel = Channel(user, parameters[1]);
-		_channelList.push_back(channel);
-		sendClientMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), channel.getUserList()));
-		sendClientMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + channel.getChannelName()));
+		Channel ch = Channel(user, parameters[1]);
+		_channelList.push_back(ch);
+		sendClientMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), ch.getUserList()));
+		sendClientMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + ch.getChannelName()));
 	}
 }
 
