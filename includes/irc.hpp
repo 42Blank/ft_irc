@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   irc.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 13:44:22 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/04 05:26:11 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/04 15:52:52 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <sstream>
 # include <unistd.h>
 # include <exception>
+# include <algorithm>
 
 # include <sys/socket.h>
 # include <sys/types.h>
@@ -42,8 +43,11 @@
 # define CMD_PART "PART"
 # define CMD_PING "PING"
 # define CMD_PONG "PONG"
+# define CMD_QUIT "QUIT"
 
 # define NICK_AVAILABLE_CHAR "[]\\`_^{}|"
+
+typedef typename std::vector<struct pollfd>::iterator fdIter;
 
 std::vector<std::string>	ft_split(std::string input, char delimiter);
 void						ft_replaceStr(std::string& str, std::string src, std::string des);
