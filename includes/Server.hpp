@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/04 13:10:09 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/04 16:56:36 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,12 @@ class Server {
 		void		sendClientMessage(User& user, std::string str);
 		void		sendClientMessage2(User& user, std::string str);
 
-		void		receiveFirstClientMessage(int clientSocket);
+		void		receiveFirstClientMessage(fdIter iter);
 		void		receiveClientMessage(int clientSocket);
 		std::string	concatMessage(int clientSocket);
 		void		parseMessageStream(User& user, const std::string& fullMsg);
-		void		removeClient(struct pollfd fd);
+		void		setUserDisconnectByFdIter(fdIter fdIter);
+		void		disconnectClients();
 
 		void		commandCAP(User& user, std::vector<std::string>& parameters);
 		void		commandPASS(User& user, std::vector<std::string>& parameters);
