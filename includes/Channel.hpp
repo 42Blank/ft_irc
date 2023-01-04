@@ -24,6 +24,10 @@ class Channel {
 
 		std::string			getTopic();
 		std::string			getUserList();
+		// std::vector<User>	getRealAllUserList();
+		std::vector<User>	getOperatorVector();
+		std::vector<User>	getNormalUserVector();
+
 		std::string			getChannelName();
 		std::string			getModeInServer();
 

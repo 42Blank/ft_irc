@@ -4,26 +4,15 @@
 
 #include <iostream>
 
-void	Server::commandJOIN(User &user, std::vector<std::string> &parameters) {
-	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
-
-	if (parameters.size() < 2) throw std::runtime_error(Error(ERR_NEEDMOREPARAMS, CMD_JOIN));
-
-	if (isChannel(parameters[1])) { //채널에 가입된다.
-		sendClientMessage(user, " JOIN :" + parameters[1]);
-		Channel &channel = findChannel(parameters[1]);
-		channel.joinNewUser(user);
-		std::cerr << "send join channel\n";
-		sendClientMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), channel.getUserList()));
-		sendClientMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + channel.getChannelName()));
-	} else {
-		sendClientMessage(user, " JOIN :" + parameters[1]);
-		Channel channel = Channel(user, parameters[1]);
-		_channelList.push_back(channel);
-		std::cerr << "make new channel\n";
-		sendClientMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), channel.getUserList()));
-		sendClientMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + channel.getChannelName()));
+bool		Server::isChannel(std::string channelName) {
+	if (channelName[0] != '&' && channelName[0] != '#' && channelName[0] != '+' && channelName[0] != '!')
+		return false;
+	std::vector<Channel>::iterator	iter;
+	for (iter = _channelList.begin(); iter < _channelList.end(); iter++) {
+		if ((*iter).getChannelName().compare(channelName) == 0)
+			return true;
 	}
+	return false;
 }
 
 Channel		&Server::findChannel(std::string channelName) {
@@ -37,16 +26,54 @@ Channel		&Server::findChannel(std::string channelName) {
 	throw std::runtime_error(Error(ERR_NOSUCHCHANNEL, channelName));
 }
 
-bool		Server::isChannel(std::string channelName) {
-	if (channelName[0] != '&' && channelName[0] != '#' && channelName[0] != '+' && channelName[0] != '!')
-		return false;
-	std::vector<Channel>::iterator	iter;
-	for (iter = _channelList.begin(); iter < _channelList.end(); iter++) {
-		if ((*iter).getChannelName().compare(channelName) == 0)
+bool		Server::isServerUser(std::string nickname) {
+
+	std::vector<User>::iterator	iter;
+
+	for (iter = _s_userList.begin(); iter < _s_userList.end(); iter++) {
+		if ((*iter).getNickname().compare(nickname) == 0)
 			return true;
 	}
 	return false;
 }
+
+User		&Server::findUser(std::string nickname) {
+	std::vector<User>::iterator it;
+
+	for (it = _s_userList.begin(); it < _s_userList.end(); it++) {
+		std::cerr << "name: " << (*it).getNickname() << "\n";
+		if ((*it).getNickname().compare(nickname) == 0) {
+			std::cerr << "same name : " << (*it).getNickname() << "\n";
+			return *it;
+		}
+	}
+	throw std::runtime_error(Error(ERR_NOSUCHNICK, nickname));
+}
+
+
+
+void	Server::commandJOIN(User &user, std::vector<std::string> &parameters) {
+	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
+
+	if (parameters.size() < 2) throw std::runtime_error(Error(ERR_NEEDMOREPARAMS, CMD_JOIN));
+
+	if (isChannel(parameters[1])) { //채널에 가입된다.
+		sendClientMessage(user, " JOIN " + parameters[1]);
+		Channel &ch = findChannel(parameters[1]);
+		ch.joinNewUser(user);
+		sendClientMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), ch.getUserList()));
+		sendClientMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + ch.getChannelName()));
+		sendMessageBroadcast(1, ch, user, "JOIN :" + ch.getChannelName());
+
+	} else {	// 채널을 새로 생성한다.
+		sendClientMessage(user, " JOIN " + parameters[1]);
+		Channel ch = Channel(user, parameters[1]);
+		_channelList.push_back(ch);
+		sendClientMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), ch.getUserList()));
+		sendClientMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + ch.getChannelName()));
+	}
+}
+
 
 //관리자만 사용할 수 있다.
 void		Server::commandTOPIC(User &user, std::vector<std::string>& parameters) {
@@ -56,44 +83,42 @@ void		Server::commandTOPIC(User &user, std::vector<std::string>& parameters) {
 	std::string channelName = parameters[1];
 	if (!isChannel(channelName)) throw std::runtime_error(Error(ERR_NOSUCHCHANNEL, channelName));
 
-	// if (parameters.size() == )
-
 	std::string	topic;
 	std::vector<std::string>::iterator	iter;
+	///////////여기 공백들어가는 ft_split 어떻게 쓰는지 물어보기 공백뒤 토픽 짤림.
 	for (iter = parameters.begin() + 2; iter < parameters.end(); iter++) {
 		topic = topic + *iter;
 	}
+	topic = parameters[2];
 
 	Channel &ch = findChannel(parameters[1]);
 	if (ch.isOperator(user.getNickname())) {
 		ch.setTopic(topic);
-		sendClientMessage(user, Reply(RPL_TOPIC, user.getNickname() + " " + ch.getChannelName(), ch.getTopic()));
+		sendClientMessage(user, " TOPIC " + parameters[1] + " " + parameters[2]);
+		// sendClientMessage(user, Reply(RPL_TOPIC, user.getNickname() + " " + ch.getChannelName(), ch.getTopic()));
+		sendMessageBroadcast(1, ch, user, "TOPIC " + ch.getChannelName() + " " + ch.getTopic());
 	} else {
 		throw std::runtime_error(Error(ERR_CHANOPRIVSNEEDED, channelName));
 	}
-	////////////debug
-	Channel &ch1 = findChannel(parameters[1]);
-	std::cerr << ch1.getTopic() << "\n";
-
 }
 
 void		Server::commandMSG(User &user, std::vector<std::string>& parameters) {
 	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
+	
+	if (isChannel(parameters[1])) {
+		Channel &ch = findChannel(parameters[1]);
+		// sendClientMessage(user,  + "PRIVMSG " + parameters[1] + " " + parameters[2]);
+		sendMessageBroadcast(1, ch, user, "PRIVMSG " + ch.getChannelName() + " " + parameters[2]);
 
+	} else if (isServerUser(parameters[1])) {
+		User	&receiver = findUser(parameters[1]);
+		std::cerr << "\nhwewew\n";
+		sendMessageUnicast(user, receiver, "PRIVMSG " + receiver.getNickname() + " " + parameters[2]);
+		// 여기도 공백들어오는 메세지 추가하기 
 
-	sendClientMessage(user,  + " PRIVMSG " + parameters[1] + " :" + parameters[2]);
-// 	if (isChannel(parameters[1])) {
-// 		Channel &ch = findChannel(parameters[1]);
-
-
-// 	} else if (isUser(parameters[1])) {
-
-// 	} else {
-// 		// 채널도 사용자도 아닌 에러
-// 	}
-
-// (void)user;
-// (void)parameters;
+	} else {
+		// 채널도 사용자도 아닌 에러
+	}
 
 }
 
@@ -110,7 +135,6 @@ void		Server::commandMODE(User &user, std::vector<std::string>& parameters) {
 	if (parameters.size() == 2) {
 		if (isChannel(parameters[1])) {
 			Channel	&ch = findChannel(parameters[1]);
-			std::cout << "sdfn\n";
 			sendClientMessage(user, Reply(RPL_CHANNELMODEIS, user.getNickname(), ch.getChannelName() + " :" + ch.getModeInServer()));
 		} else {
 			// 사용자는 타 사용자의 모드를 볼 수 없다. 
@@ -128,8 +152,6 @@ void		Server::commandMODE(User &user, std::vector<std::string>& parameters) {
 		}
 		sendClientMessage(user, "MODE " + user.getNickname() + " :" + parameters[2]);
 	}
-
-
 }
 
 void		Server::commandPART(User &user, std::vector<std::string>& parameters) {
@@ -138,17 +160,16 @@ void		Server::commandPART(User &user, std::vector<std::string>& parameters) {
 	if (isChannel(parameters[1])) {	// 채널이면
 		Channel	&ch = findChannel(parameters[1]);
 		if (ch.isUser(user.getNickname())) { // 유저가 있으면
-			sendClientMessage(user, "PART " + ch.getChannelName() + ft_getStringAfterColon(parameters));
+			sendMessageBroadcast(0, ch, user, "PART :" + ch.getChannelName());
 			ch.deleteNormalUser(user.getNickname());
 		} else if (ch.isOperator(user.getNickname())) {
-			sendClientMessage(user, "PART " + ch.getChannelName() + ft_getStringAfterColon(parameters));
+			sendMessageBroadcast(0, ch, user, "PART :" + ch.getChannelName());
 			ch.deleteOperatorUser(user.getNickname());
 		} else {
 			throw std::runtime_error(Error(ERR_NOTONCHANNEL));
 		}
 	}
 }
-
 
 void		Server::commandNAMES(User &user, std::vector<std::string>& parameters) {
 	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
@@ -157,4 +178,3 @@ void		Server::commandNAMES(User &user, std::vector<std::string>& parameters) {
 	sendClientMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), ch.getUserList()));
 	sendClientMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + ch.getChannelName()));
 }
-

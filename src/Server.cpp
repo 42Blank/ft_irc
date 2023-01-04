@@ -86,13 +86,69 @@ void	Server::serverOff(void) {
 
 void	Server::sendClientMessage(User& user, std::string str) {
 	std::string strToSend = ":" + user.getNickname() + "!" + user.getNickname()  + "@127.0.0.1 " + str + "\r\n";
-	// std::string strToSend = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getHostname() + str + "\r\n";
 	// std::string strToSend = ":127.0.0.1 " + str + "\r\n";
-	std::cout << "msg1\n";
+	std::cout << "sendClientMessage\n";
 	std::cout << strToSend;
 	if (send(user.getSocketDesc(), (strToSend).c_str(), strToSend.length(), 0) == -1)
 		throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
 }
+
+// 이건 채널에서 전체 메세지를 보내거나 채널에서 어떤 행동을 했을 때 사용하는 것 -> 채널의 userList가 있어야 한다. 
+void	Server::sendMessageBroadcast(int mode, Channel& ch, User& sender, std::string str) {
+
+	std::string strToSend = ":" + sender.getNickname() + "!" + sender.getNickname()  + "@127.0.0.1 " + str + "\r\n";
+	std::vector<User>::iterator it;
+	// std::cerr << "\nas\n";
+	// std::vector<User> &ch_userList = ch.getRealAllUserList();
+	std::vector<User> operUsers = ch.getOperatorVector();
+	std::vector<User> normUsers = ch.getNormalUserVector();
+	// std::cerr << "\nas\n";
+	if (mode == 0) {	// 모두에게 보내기
+		for (it = operUsers.begin(); it != operUsers.end(); it++) {
+			std::cout << "sendMessageBroadcast to all\n";
+			std::cout << strToSend;
+			if (send((*it).getSocketDesc(), (strToSend).c_str(), strToSend.length(), 0) == -1)
+				throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
+		}
+		for (it = normUsers.begin(); it != normUsers.end(); it++) {
+			std::cout << "sendMessageBroadcast to all\n";
+			std::cout << strToSend;
+			if (send((*it).getSocketDesc(), (strToSend).c_str(), strToSend.length(), 0) == -1)
+				throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
+		}
+
+	} else {	// sender 제외 모두 보내기 
+		for (it = operUsers.begin(); it != operUsers.end(); it++) {
+			if ((*it).getNickname().compare(sender.getNickname()) == 0)
+				continue;
+			std::cout << "sendMessageBroadcast to all except sender\n";
+			std::cout << strToSend;
+			if (send((*it).getSocketDesc(), (strToSend).c_str(), strToSend.length(), 0) == -1)
+				throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
+		}
+		for (it = normUsers.begin(); it != normUsers.end(); it++) {
+			if ((*it).getNickname().compare(sender.getNickname()) == 0)
+				continue;
+			std::cout << "sendMessageBroadcast to all except sender\n";
+			std::cout << strToSend;
+			if (send((*it).getSocketDesc(), (strToSend).c_str(), strToSend.length(), 0) == -1)
+				throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
+		}
+	}
+}
+
+// 이건 개인 메세지 보낼 때라서 서버의 userList만 있으면 된다. 
+void	Server::sendMessageUnicast(User& sender, User& receiver, std::string str) {
+
+	std::string strToSend = ":" + sender.getNickname() + "!" + sender.getNickname()  + "@127.0.0.1 " + str + "\r\n";
+	
+	std::cout << "\nsendMessageUnicast\n";
+	std::cout << strToSend;
+	std::cout << "\n receiver socket : " << receiver.getSocketDesc() << "\n";
+	if (send(receiver.getSocketDesc(), (strToSend).c_str(), strToSend.length(), 0) == -1)
+		throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
+}
+
 
 void	Server::acceptClient(void) {
 	struct sockaddr_in	client_addr;
@@ -222,16 +278,6 @@ int	Server::getUserIndexByFd(int fd) {
 	return (-1);
 }
 
-bool		Server::isServerUser(std::string nickname) {
-
-	std::vector<User>::iterator	iter;
-
-	for (iter = _s_userList.begin(); iter < _s_userList.end(); iter++) {
-		if ((*iter).getNickname().compare(nickname) == 0)
-			return true;
-	}
-	return false;
-}
 
 ////////////////////////////////////////// FOR DEBUG
 

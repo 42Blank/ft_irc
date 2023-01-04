@@ -62,9 +62,16 @@ class Server {
 		void		commandMSG(User &user, std::vector<std::string>& parameters);
 		void		commandMODE(User &user, std::vector<std::string>& parameters);
 		void		commandPART(User &user, std::vector<std::string>& parameters);
+		
+		// sender and receiver 
+		void		sendMessageBroadcast(int mode, Channel& ch, User& sender, std::string str);
+		void		sendMessageUnicast(User& sender, User& receiver, std::string str);
 
 		bool		isChannel(std::string channelName);
 		Channel		&findChannel(std::string channelName);
+		bool		isServerUser(std::string nickname);
+		User		&findUser(std::string nickname);
+		
 		int			getUserIndexByFd(int fd);
 		void		checkIsVerified(User& user);
 
@@ -74,7 +81,6 @@ class Server {
 
 		void		serverOn(void);
 		void		serverOff(void);
-		bool		isServerUser(std::string nickname);
 		
 		// for debug
 		void		testUser(void);
