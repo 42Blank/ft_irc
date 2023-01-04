@@ -13,14 +13,12 @@ void	Server::commandJOIN(User &user, std::vector<std::string> &parameters) {
 		sendClientMessage(user, " JOIN " + parameters[1]);
 		Channel &channel = findChannel(parameters[1]);
 		channel.joinNewUser(user);
-		std::cerr << "send join channel\n";
 		sendClientMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), channel.getUserList()));
 		sendClientMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + channel.getChannelName()));
 	} else {
 		sendClientMessage(user, " JOIN " + parameters[1]);
 		Channel channel = Channel(user, parameters[1]);
 		_channelList.push_back(channel);
-		std::cerr << "make new channel\n";
 		sendClientMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), channel.getUserList()));
 		sendClientMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + channel.getChannelName()));
 	}
@@ -59,14 +57,16 @@ void		Server::commandTOPIC(User &user, std::vector<std::string>& parameters) {
 	// if (parameters.size() == )
 
 	std::string	topic;
-	std::vector<std::string>::iterator	iter;
-	for (iter = parameters.begin() + 2; iter < parameters.end(); iter++) {
-		topic = topic + *iter;
-	}
+	// std::vector<std::string>::iterator	iter;
+	// for (iter = parameters.begin() + 2; iter < parameters.end(); iter++) {
+	// 	topic = topic + *iter;
+	// }
+	topic = parameters[2];
 
 	Channel &ch = findChannel(parameters[1]);
 	if (ch.isOperator(user.getNickname())) {
 		ch.setTopic(topic);
+		sendClientMessage(user, " TOPIC " + parameters[1] + " " + parameters[2]);
 		sendClientMessage(user, Reply(RPL_TOPIC, user.getNickname() + " " + ch.getChannelName(), ch.getTopic()));
 	} else {
 		throw std::runtime_error(Error(ERR_CHANOPRIVSNEEDED, channelName));
@@ -79,13 +79,9 @@ void		Server::commandTOPIC(User &user, std::vector<std::string>& parameters) {
 
 void		Server::commandMSG(User &user, std::vector<std::string>& parameters) {
 	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
-
-
 	sendClientMessage(user,  + " PRIVMSG " + parameters[1] + " :" + parameters[2]);
 // 	if (isChannel(parameters[1])) {
 // 		Channel &ch = findChannel(parameters[1]);
-
-
 // 	} else if (isUser(parameters[1])) {
 
 // 	} else {
@@ -110,7 +106,6 @@ void		Server::commandMODE(User &user, std::vector<std::string>& parameters) {
 	if (parameters.size() == 2) {
 		if (isChannel(parameters[1])) {
 			Channel	&ch = findChannel(parameters[1]);
-			std::cout << "sdfn\n";
 			sendClientMessage(user, Reply(RPL_CHANNELMODEIS, user.getNickname(), ch.getChannelName() + " :" + ch.getModeInServer()));
 		} else {
 			// 사용자는 타 사용자의 모드를 볼 수 없다. 
@@ -128,8 +123,6 @@ void		Server::commandMODE(User &user, std::vector<std::string>& parameters) {
 		}
 		sendClientMessage(user, "MODE " + user.getNickname() + " :" + parameters[2]);
 	}
-
-
 }
 
 void		Server::commandPART(User &user, std::vector<std::string>& parameters) {
@@ -138,17 +131,16 @@ void		Server::commandPART(User &user, std::vector<std::string>& parameters) {
 	if (isChannel(parameters[1])) {	// 채널이면
 		Channel	&ch = findChannel(parameters[1]);
 		if (ch.isUser(user.getNickname())) { // 유저가 있으면
-			sendClientMessage(user, "PART :" + ch.getChannelName());
+			sendMessageBroadcast(0, ch, user, "PART :" + ch.getChannelName());
 			ch.deleteNormalUser(user.getNickname());
 		} else if (ch.isOperator(user.getNickname())) {
-			sendClientMessage(user, "PART :" + ch.getChannelName());
+			sendMessageBroadcast(0, ch, user, "PART :" + ch.getChannelName());
 			ch.deleteOperatorUser(user.getNickname());
 		} else {
 			throw std::runtime_error(Error(ERR_NOTONCHANNEL));
 		}
 	}
 }
-
 
 void		Server::commandNAMES(User &user, std::vector<std::string>& parameters) {
 	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
@@ -157,4 +149,3 @@ void		Server::commandNAMES(User &user, std::vector<std::string>& parameters) {
 	sendClientMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), ch.getUserList()));
 	sendClientMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + ch.getChannelName()));
 }
-
