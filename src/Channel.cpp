@@ -4,7 +4,7 @@
 // 여기 유저 nickname만 받아서 Channel user list에 넣으면 안될지 고민 중
 Channel::Channel(User &user, std::string name) {
 	_operator = user;
-	_c_userList.push_back(user);
+	// _c_userList.push_back(user);
 	_channelName = name;
 }
 
@@ -22,9 +22,10 @@ std::string			Channel::getUserList() {
 	std::string	userList;
 	std::vector<User>::iterator	iter;
 
-	userList = "= " + _channelName + " :@" + _operator.getNickname() + " ";
+	userList = "= " + _channelName + " :";
 	for (iter = _c_userList.begin(); iter < _c_userList.end(); iter++)
-		userList += "+" + (*iter).getNickname() + " ";
+		userList += ((*iter).getNickname() + " ");
+	userList += "@" + _operator.getNickname();
 	return userList;
 }
 
