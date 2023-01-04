@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/03 02:38:49 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/04 04:51:09 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,15 @@ class Server {
 		struct timeval				_timeout;
 		fd_set						_reads;
 		std::vector<struct pollfd>	_poll_fds;
-		std::vector<User>			_userList;
+		std::vector<User>			_s_userList;
 		std::vector<Channel>		_channelList;
+
+		void		acceptClient(void);
 
 		void		sendClientMessage(User& user, std::string str);
 		void		sendClientMessage2(User& user, std::string str);
 
-		void		receiveFirstClientMessage(void);
+		void		receiveFirstClientMessage(int clientSocket);
 		void		receiveClientMessage(int clientSocket);
 		std::string	concatMessage(int clientSocket);
 		void		parseMessageStream(User& user, const std::string& fullMsg);

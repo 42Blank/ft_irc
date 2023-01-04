@@ -4,7 +4,7 @@
 // 여기 유저 nickname만 받아서 Channel user list에 넣으면 안될지 고민 중
 Channel::Channel(User &user, std::string name) {
 	_operator = user;
-	_userList.push_back(user);
+	_c_userList.push_back(user);
 	_channelName = name;
 }
 
@@ -23,7 +23,7 @@ std::string			Channel::getUserList() {
 	std::vector<User>::iterator	iter;
 
 	userList = "= " + _channelName + " :@" + _operator.getNickname() + " ";
-	for (iter = _userList.begin(); iter < _userList.end(); iter++)
+	for (iter = _c_userList.begin(); iter < _c_userList.end(); iter++)
 		userList += "+" + (*iter).getNickname() + " ";
 	return userList;
 }
@@ -38,7 +38,7 @@ void				Channel::setTopic(std::string topic) {
 
 // 새로운 유저가 조인하면 이 메서드를 통해서 채널의 userList에 추가한다.
 void	Channel::joinNewUser(User user) {
-	_userList.push_back(user);
+	_c_userList.push_back(user);
 }
 
 // 관리자인지 확인하는 메서드
@@ -53,7 +53,7 @@ bool	Channel::isUser(std::string nickname) {
 
 	std::vector<User>::iterator	iter;
 
-	for (iter = _userList.begin(); iter < _userList.end(); iter++) {
+	for (iter = _c_userList.begin(); iter < _c_userList.end(); iter++) {
 		if ((*iter).getNickname().compare(nickname) == 0)
 			return true;
 	}
@@ -63,9 +63,9 @@ bool	Channel::isUser(std::string nickname) {
 void	Channel::deleteNormalUser(std::string nickname){
 	std::vector<User>::iterator	iter;
 
-	for (iter = _userList.begin(); iter < _userList.end(); iter++) {
+	for (iter = _c_userList.begin(); iter < _c_userList.end(); iter++) {
 		if ((*iter).getNickname().compare(nickname) == 0)
-			_userList.erase(iter);
+			_c_userList.erase(iter);
 	}
 }
 

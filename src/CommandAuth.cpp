@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandAuth.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 21:49:06 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/03 01:50:17 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/04 05:07:37 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	Server::commandNICK(User& user, std::vector<std::string>& parameters) {
 
 	user.setNickname(nickname);
 
-	for (iter = _userList.begin(); iter < _userList.end(); iter++) {
+	for (iter = _s_userList.begin(); iter < _s_userList.end(); iter++) {
 		if ((*iter).getNickname() == nickname) throw std::runtime_error(Error(ERR_NICKNAMEINUSE, nickname));
 	}
 	user.setIsVerified(NICK_VERIFIED);

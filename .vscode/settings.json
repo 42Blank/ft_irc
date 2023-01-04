@@ -61,6 +61,11 @@
     "typeinfo": "cpp",
     "unordered_map": "cpp",
     "variant": "cpp",
-    "algorithm": "cpp"
+    "algorithm": "cpp",
+    "__functional_base": "cpp",
+    "bit": "cpp",
+    "functional": "cpp",
+    "iterator": "cpp",
+    "utility": "cpp"
   }
 }

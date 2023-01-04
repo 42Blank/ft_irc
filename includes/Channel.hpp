@@ -11,7 +11,7 @@ class Channel {
 		std::string		_channelName;
 		User			_operator;	// user의 nickname 저장
 		std::string		_topic;
-		std::vector<User>	_userList;
+		std::vector<User>	_c_userList;
 
 	public:
 		Channel(User &user, std::string name);

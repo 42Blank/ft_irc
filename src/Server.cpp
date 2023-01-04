@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/04 02:37:14 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/04 05:08:17 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,15 @@ void	Server::serverOn(void) {
 	if (listen(_serverSocket, 5) < 0)	// 연결요청 대기상태
 		throw std::runtime_error(Error(ERR_SERVEROPENFAILED, "listen"));
 	while (true) {
+		// // 테스트용 코드
+		// std::cout << "UserList checking" << std::endl;
+		// for (std::vector<User>::iterator iter = _s_userList.begin(); iter < _s_userList.end(); iter++)
+		// 	std::cout << "Nickname : " << (*iter).getNickname() << std::endl;
+		// std::cout << "pollfds size : " << _poll_fds.size() << '\n';
 		if (poll(_poll_fds.data(), _poll_fds.size(), 1000) == 0)
 			continue ;
 		if (_poll_fds[0].revents & POLLIN) { // _poll_fds[0] -> 서버 fd에 POLLIN event발생
-			receiveFirstClientMessage();
+			acceptClient();
 			continue;
 		}
 		for (iter = _poll_fds.begin() + 1; iter < _poll_fds.end(); iter++) {
@@ -59,8 +64,14 @@ void	Server::serverOn(void) {
 				removeClient(iter);
 				continue ;
 			}
-			else if (iter->revents & POLLIN)
-				receiveClientMessage(iter->fd);
+			else if (iter->revents & POLLIN) {
+				if (getUserIndexByFd(iter->fd) == -1) {
+					std::cout << "\n\n@@@@Welcome process called@@@@" << "\n\n";
+					receiveFirstClientMessage(iter->fd);
+				}
+				else
+					receiveClientMessage(iter->fd);
+			}
 			ft_checkPollReturnEvent(iter->revents);
 		}
 	}
@@ -92,22 +103,43 @@ void	Server::sendClientMessage2(User& user, std::string str) {
 		throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
 }
 
-void	Server::receiveFirstClientMessage(void) {
-	struct pollfd client_pollfd;
-	User user;
+void	Server::acceptClient(void) {
+	struct sockaddr_in	client_addr;
+	int					clientSocket;
+	struct pollfd		client_pollfd;
+	size_t	client_len = sizeof(client_addr);
 
 	try {
-		int	clientSocket = accept(_serverSocket, (struct sockaddr*)user.getAddressPtr(), user.getAddressSizePtr());
+		clientSocket = accept(_serverSocket, (struct sockaddr *)&client_addr, (socklen_t *)&client_len);
 		if (clientSocket < 0)
 			throw std::runtime_error(Error(ERR_CLIENTCONNECTFAILED));
 		fcntl(clientSocket, F_SETFL, O_NONBLOCK);
-		user.setSocketDesc(clientSocket);
-		std::string fullMsg = concatMessage(user.getSocketDesc());
-		parseMessageStream(user, fullMsg);
 		client_pollfd.fd = clientSocket;
 		client_pollfd.events = POLLIN;
 		_poll_fds.push_back(client_pollfd);
-		_userList.push_back(user);
+	}
+	catch (std::exception &e) {
+		std::cout << e.what() << "\n";
+		close(clientSocket);
+	}
+}
+
+void	Server::receiveFirstClientMessage(int clientSocket) {
+	// struct pollfd client_pollfd;
+	User user;
+
+	try {
+		// int	clientSocket = accept(_serverSocket, (struct sockaddr*)user.getAddressPtr(), user.getAddressSizePtr());
+		// if (clientSocket < 0)
+		// 	throw std::runtime_error(Error(ERR_CLIENTCONNECTFAILED));
+		// // fcntl(clientSocket, F_SETFL, O_NONBLOCK);
+		user.setSocketDesc(clientSocket);
+		std::string fullMsg = concatMessage(user.getSocketDesc());
+		parseMessageStream(user, fullMsg);
+		// client_pollfd.fd = clientSocket;
+		// client_pollfd.events = POLLIN;
+		// _poll_fds.push_back(client_pollfd);
+		_s_userList.push_back(user);
 	}	catch (std::exception &e) {
 		std::cout << e.what() << "\n";
 		close(user.getSocketDesc()); // 위의 절차 중 하나라도 실패 시에는 유저 통신 끊어야함
@@ -118,7 +150,7 @@ void	Server::receiveClientMessage(int clientSocket) {
 	try {
 		std::string	fullMsg = concatMessage(clientSocket);
 		int			userIdx = getUserIndexByFd(clientSocket);
-		parseMessageStream(_userList[userIdx], fullMsg);
+		parseMessageStream(_s_userList[userIdx], fullMsg);
 	} catch (std::exception &e) {
 		std::cout << e.what() << "\n";
 	}
@@ -175,7 +207,7 @@ void	Server::removeClient(std::vector<struct pollfd>::iterator fdIter) {
 	try  {
 		close((*fdIter).fd);
 		int	idx = getUserIndexByFd((*fdIter).fd);
-		_userList.erase(_userList.begin() + idx);
+		_s_userList.erase(_s_userList.begin() + idx);
 		_poll_fds.erase(fdIter);
 	}
 	catch (std::exception &e) {
@@ -188,12 +220,12 @@ int	Server::getUserIndexByFd(int fd) {
 	int							index;
 
 	index = 0;
-	for (iter = _userList.begin(); iter < _userList.end(); iter++) {
+	for (iter = _s_userList.begin(); iter < _s_userList.end(); iter++) {
 		if (fd == (*iter).getSocketDesc())
 			return (index);
 		index++;
 	}
-	throw std::runtime_error(Error(ERR_CANNOTFINDUSERFD));
+	// throw std::runtime_error(Error(ERR_CANNOTFINDUSERFD));
 	return (-1);
 }
 
@@ -202,7 +234,7 @@ int	Server::getUserIndexByFd(int fd) {
 void		Server::testUser(void) {
 	std::vector<User>::iterator	iter;
 
-	for (iter = _userList.begin(); iter < _userList.end(); iter++) {
+	for (iter = _s_userList.begin(); iter < _s_userList.end(); iter++) {
 		std::cout << (*iter) << '\n';
 	}
 }
