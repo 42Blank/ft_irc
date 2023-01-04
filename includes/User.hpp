@@ -26,6 +26,7 @@ class User {
 		// bool						_isAdmin;
 		std::vector<std::string>	_channelList;
 		short						_isVerified;
+		std::string					_modeInServer;
 		// & passVerified; => 0001
 		// & nickVerified; => 0010
 		// & userVerified; => 0100
@@ -45,6 +46,7 @@ class User {
 		std::string			getUsername() const;
 		std::string			getHostname() const;
 		short				getIsVerified() const;
+		std::string			getModeInServer() const;
 		// bool				getIsAdmin() const;
 
 		void				setNickname(std::string nickname);
@@ -52,6 +54,7 @@ class User {
 		void				setHostname(std::string hostname);
 		void				setSocketDesc(int clientSocket);
 		void				setIsVerified(short what);
+		void				setModeInServer(std::string mode);
 };
 
 std::ostream&	operator<<(std::ostream& out, const User& instance);

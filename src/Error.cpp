@@ -13,6 +13,7 @@
 # include "../includes/Reply.hpp"
 
 static std::string	getErrorMessage(std::string code) {
+	if (code == ERR_NOSUCHNICK) return " :No such nick/channel";
 	if (code == ERR_NOSUCHSERVER) return " :No such server";
 	if (code == ERR_NOSUCHCHANNEL) return " :No such channel";
 	if (code == ERR_NOORIGIN) return " :No origin specified";
@@ -26,6 +27,8 @@ static std::string	getErrorMessage(std::string code) {
 	if (code == ERR_NEEDMOREPARAMS) return " :Not enough parameters";
 	if (code == ERR_PASSWDMISMATCH) return " :Password incorrect";
 	if (code == ERR_CHANOPRIVSNEEDED) return " :You're not channel operator";
+
+	if (code == ERR_USERSDONTMATCH) return " :Can't view modes for other users";
 
 	if (code == ERR_SERVEROPENFAILED) return " :Failed to open server";
 	if (code == ERR_CLIENTCONNECTFAILED) return " :Failed to connect with client";

@@ -68,6 +68,11 @@ short	User::getIsVerified() const {
 	return _isVerified;
 }
 
+std::string	User::getModeInServer() const {
+	return _modeInServer;
+}
+
+
 void	User::setNickname(std::string nickname) {
 	_nickname = nickname;
 }
@@ -87,6 +92,11 @@ void	User::setSocketDesc(int clientSocket) {
 void	User::setIsVerified(short what) {
 	_isVerified |= what;
 }
+
+void	User::setModeInServer(std::string mode) {
+	_modeInServer = mode;
+}
+
 
 std::ostream& operator<<(std::ostream& out, const User& instance) {
 	out << "User: [" << instance.getNickname() << "] (" << instance.getUsername() << ")";
