@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/04 07:13:45 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/04 13:12:30 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ void	Server::serverOn(void) {
 		}
 		for (iter = _poll_fds.begin() + 1; iter < _poll_fds.end(); iter++) {
 			if (iter->revents & POLLHUP) { // 현재 클라이언트 연결 끊김
-				removeClient(iter);
+				removeClient(*iter);
+				_poll_fds.erase(iter);
 				continue ;
 			}
 			else if (iter->revents & POLLIN) {
@@ -73,7 +74,8 @@ void	Server::serverOn(void) {
 					receiveClientMessage(iter->fd);
 			}
 			if (ft_checkPollReturnEvent(iter->revents) == POLLNVAL) {
-				removeClient(iter);
+				removeClient(*iter);
+				_poll_fds.erase(iter);
 			}
 		}
 	}
@@ -184,7 +186,7 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 	for (cmdIter = commands.begin(); cmdIter != commands.end(); cmdIter++) {
 		std::vector<std::string>	parameters = ft_split(*cmdIter, ' ');
 		std::vector<std::string>::iterator it = parameters.begin();
-		
+
 		std::cout << "recv from client : " ;
 		while (it != parameters.end()) {
 			std::cout << *it << " ";
@@ -205,13 +207,12 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 	}
 }
 
-void	Server::removeClient(std::vector<struct pollfd>::iterator fdIter) {
+void	Server::removeClient(struct pollfd fd) {
 	try  {
-		close((*fdIter).fd);
-		int	idx = getUserIndexByFd((*fdIter).fd);
+		close(fd.fd);
+		int	idx = getUserIndexByFd(fd.fd);
 		if (idx != -1)
 			_s_userList.erase(_s_userList.begin() + idx);
-		_poll_fds.erase(fdIter);
 	}
 	catch (std::exception &e) {
 		std::cout << e.what() << "\n";
