@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:41:37 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/03 02:55:56 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/04 05:28:26 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ std::string ft_getStringAfterColon(std::vector<std::string> parameter) {
 	return returnStr.substr(1, returnStr.length() - 1);
 }
 
-void	ft_checkPollReturnEvent(short revents) {
+int	ft_checkPollReturnEvent(short revents) {
 	if (revents & POLLIN)
 		std::cout << "POLLIN\n";
 	if (revents & POLLRDNORM)
@@ -89,8 +89,11 @@ void	ft_checkPollReturnEvent(short revents) {
 		std::cout << "POLLERR\n";
 	if (revents & POLLHUP)
 		std::cout << "POLLHUP\n";
-	if (revents & POLLNVAL)
+	if (revents & POLLNVAL) {
 		std::cout << "POLLNVAL\n";
+		return (POLLNVAL);
+	}
+	return (0);
 }
 
 bool	ft_checkIsCommandValid(std::string command, bool isVerified) {

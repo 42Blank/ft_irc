@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/04 05:08:17 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/04 07:13:45 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,9 @@ void	Server::serverOn(void) {
 				else
 					receiveClientMessage(iter->fd);
 			}
-			ft_checkPollReturnEvent(iter->revents);
+			if (ft_checkPollReturnEvent(iter->revents) == POLLNVAL) {
+				removeClient(iter);
+			}
 		}
 	}
 }
@@ -95,7 +97,7 @@ void	Server::sendClientMessage(User& user, std::string str) {
 void	Server::sendClientMessage2(User& user, std::string str) {
 	// std::string strToSend = ":" + user.getNickname() + "!" + user.getNickname()  + "@127.0.0.1 " + str + "\r\n";
 	std::cout << "hostname : " + user.getHostname() << "\n";
-	std::string strToSend = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getHostname() + str + "\r\n";
+	std::string strToSend = " :" + user.getNickname() + "!" + user.getUsername() + "@" + user.getHostname() + str + "\r\n";
 	// std::string strToSend = ":127.0.0.1 " + str + "\r\n";
 	std::cout << "msg2\n";
 	std::cout << strToSend;
@@ -150,6 +152,7 @@ void	Server::receiveClientMessage(int clientSocket) {
 	try {
 		std::string	fullMsg = concatMessage(clientSocket);
 		int			userIdx = getUserIndexByFd(clientSocket);
+
 		parseMessageStream(_s_userList[userIdx], fullMsg);
 	} catch (std::exception &e) {
 		std::cout << e.what() << "\n";
@@ -163,6 +166,7 @@ std::string	Server::concatMessage(int clientSocket) {
 	while ((message_length = recv(clientSocket, _message, BUF_SIZE, 0)) != 0) {
 		if (message_length < 0) continue;
 		_message[message_length] = 0;
+		std::cout << "JASONG DEBUG - recv message : " << _message << '\n';
 		fullMsg += _message;
 		if (fullMsg.length() >= 2 && fullMsg.substr(fullMsg.length() - 2) == "\r\n") break;
 	}
@@ -186,8 +190,6 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 			std::cout << *it << " ";
 			++it;
 		}
-		std::cout << std::endl;
-
 		if (parameters[0] == CMD_CAP) commandCAP(user, parameters);
 		else if (parameters[0] == CMD_PASS) commandPASS(user, parameters);
 		else if (parameters[0] == CMD_NICK) commandNICK(user, parameters);
@@ -207,7 +209,8 @@ void	Server::removeClient(std::vector<struct pollfd>::iterator fdIter) {
 	try  {
 		close((*fdIter).fd);
 		int	idx = getUserIndexByFd((*fdIter).fd);
-		_s_userList.erase(_s_userList.begin() + idx);
+		if (idx != -1)
+			_s_userList.erase(_s_userList.begin() + idx);
 		_poll_fds.erase(fdIter);
 	}
 	catch (std::exception &e) {

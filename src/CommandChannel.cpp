@@ -112,8 +112,8 @@ void		Server::commandPART(User &user, std::vector<std::string>& parameters) {
 	if (isChannel(parameters[1])) {	// 채널이면
 		Channel	&ch = findChannel(parameters[1]);
 		if (ch.isUser(user.getNickname())) { // 유저가 있으면
-			sendClientMessage(user, "PART " + ch.getChannelName());
-			sendClientMessage2(user, "PART " + ch.getChannelName());
+			sendClientMessage(user, "PART " + ch.getChannelName() + " :I lost");
+			sendClientMessage(user, "WINDOW CLOSE");
 			ch.deleteNormalUser(user.getNickname());
 		} else {
 			throw std::runtime_error(Error(ERR_NOTONCHANNEL));
