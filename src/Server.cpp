@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/04 16:56:36 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/04 17:16:53 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,13 +86,6 @@ void	Server::sendClientMessage(User& user, std::string str) {
 		throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
 }
 
-void	Server::sendClientMessage2(User& user, std::string str) {
-	int	fd = user.getSocketFdIterator()->fd;
-	std::string strToSend = " :" + user.getNickname() + "!" + user.getUsername() + "@" + user.getHostname() + str + "\r\n";
-	if (send(fd, (strToSend).c_str(), strToSend.length(), 0) == -1)
-		throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
-}
-
 void	Server::acceptClient(void) {
 	struct sockaddr_in	client_addr;
 	int					clientSocket;
@@ -166,7 +159,6 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 		std::vector<std::string>	parameters = ft_split(*cmdIter, ' ');
 		std::vector<std::string>::iterator it = parameters.begin();
 
-		std::cout << "recv from client : " ;
 		while (it != parameters.end()) {
 			std::cout << *it << " ";
 			++it;
@@ -177,11 +169,13 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 		else if (parameters[0] == CMD_USER) commandUSER(user, parameters);
 		else if (parameters[0] == CMD_PING) commandPING(user, parameters);
 		else if (parameters[0] == CMD_PONG) commandPONG(user, parameters);
+		else if (parameters[0] == CMD_MODE) commandMODE(user, parameters);
 		else if (parameters[0] == CMD_JOIN) commandJOIN(user, parameters);
 		else if (parameters[0] == CMD_MSG) commandMSG(user, parameters);
 		else if (parameters[0] == CMD_TOPIC) commandTOPIC(user, parameters);
 		else if (parameters[0] == CMD_NAMES) commandNAMES(user, parameters);
 		else if (parameters[0] == CMD_PART) commandPART(user, parameters);
+		else if (parameters[0] == CMD_QUIT) commandQUIT(user, parameters);
 		else sendClientMessage(user, Error(ERR_UNKNOWNCOMMAND, parameters[0]));
 	}
 }
@@ -222,6 +216,17 @@ int	Server::getUserIndexByFd(int fd) {
 	}
 	// throw std::runtime_error(Error(ERR_CANNOTFINDUSERFD));
 	return (-1);
+}
+
+bool		Server::isServerUser(std::string nickname) {
+
+	std::vector<User>::iterator	iter;
+
+	for (iter = _s_userList.begin(); iter < _s_userList.end(); iter++) {
+		if ((*iter).getNickname().compare(nickname) == 0)
+			return true;
+	}
+	return false;
 }
 
 ////////////////////////////////////////// FOR DEBUG

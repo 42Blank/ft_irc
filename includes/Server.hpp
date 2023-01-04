@@ -43,7 +43,6 @@ class Server {
 		void		acceptClient(void);
 
 		void		sendClientMessage(User& user, std::string str);
-		void		sendClientMessage2(User& user, std::string str);
 
 		void		receiveFirstClientMessage(fdIter iter);
 		void		receiveClientMessage(int clientSocket);
@@ -62,6 +61,7 @@ class Server {
 		void		commandTOPIC(User &user, std::vector<std::string>& parameters);
 		void		commandNAMES(User &user, std::vector<std::string>& parameters);
 		void		commandMSG(User &user, std::vector<std::string>& parameters);
+		void		commandMODE(User &user, std::vector<std::string>& parameters);
 		void		commandPART(User &user, std::vector<std::string>& parameters);
 		void		commandQUIT(User& user, std::vector<std::string>& parameters);
 
@@ -76,6 +76,9 @@ class Server {
 
 		void		serverOn(void);
 		void		serverOff(void);
+		bool		isServerUser(std::string nickname);
+		
+		// for debug
 		void		testUser(void);
 };
 

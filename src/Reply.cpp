@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 19:31:32 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/04 12:53:45 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/04 17:15:25 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ std::string	Reply(std::string repCode, std::string param1, std::string param2) {
 }
 
 static std::string	getErrorMessage(std::string code) {
+	if (code == ERR_NOSUCHNICK) return " :No such nick/channel";
 	if (code == ERR_NOSUCHSERVER) return " :No such server";
 	if (code == ERR_NOSUCHCHANNEL) return " :No such channel";
 	if (code == ERR_NOORIGIN) return " :No origin specified";
@@ -45,6 +46,7 @@ static std::string	getErrorMessage(std::string code) {
 	if (code == ERR_PASSWDMISMATCH) return " :Password incorrect";
 	if (code == ERR_CHANOPRIVSNEEDED) return " :You're not channel operator";
 
+	if (code == ERR_USERSDONTMATCH) return " :Can't view modes for other users";
 	if (code == ERR_SERVEROPENFAILED) return " :Failed to open server";
 	if (code == ERR_CLIENTCONNECTFAILED) return " :Failed to connect with client";
 	if (code == ERR_CANNOTFINDUSERFD) return " :Cannot find user by fd";

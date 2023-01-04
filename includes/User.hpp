@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 15:55:05 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/04 16:27:58 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/04 17:14:36 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ class User {
 		std::vector<std::string>	_channelList;
 		short						_isVerified;
 		bool						_isDisconnected;
-
+		std::string					_modeInServer;
 	public:
 		User();
 		User(const User& instance);
@@ -41,6 +41,7 @@ class User {
 		std::string			getHostname() const;
 		short				getIsVerified() const;
 		bool				getIsDisconnected() const;
+		std::string			getModeInServer() const;
 
 		void				setNickname(std::string nickname);
 		void				setUsername(std::string username);
@@ -48,6 +49,7 @@ class User {
 		void				setIsVerified(short what);
 		void				setSocketFdIterator(fdIter fdIter);
 		void				setIsDisconnected(bool isDisconnected);
+		void				setModeInServer(std::string mode);
 };
 
 std::ostream&	operator<<(std::ostream& out, const User& instance);

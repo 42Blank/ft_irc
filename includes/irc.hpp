@@ -36,6 +36,7 @@
 # define CMD_PASS "PASS"
 # define CMD_NICK "NICK"
 # define CMD_USER "USER"
+# define CMD_MODE "MODE"
 # define CMD_JOIN "JOIN"
 # define CMD_TOPIC "TOPIC"
 # define CMD_NAMES "NAMES"
