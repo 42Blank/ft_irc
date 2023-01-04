@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/04 17:16:53 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/04 17:39:59 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void	Server::serverOff(void) {
 void	Server::sendClientMessage(User& user, std::string str) {
 	int	fd = user.getSocketFdIterator()->fd;
 	std::string strToSend = ":" + user.getNickname() + "!" + user.getNickname()  + "@127.0.0.1 " + str + "\r\n";
+	std::cout << "Sending [" << strToSend << "]\n";
 	if (send(fd, (strToSend).c_str(), strToSend.length(), 0) == -1)
 		throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
 }
@@ -157,12 +158,7 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 
 	for (cmdIter = commands.begin(); cmdIter != commands.end(); cmdIter++) {
 		std::vector<std::string>	parameters = ft_split(*cmdIter, ' ');
-		std::vector<std::string>::iterator it = parameters.begin();
 
-		while (it != parameters.end()) {
-			std::cout << *it << " ";
-			++it;
-		}
 		if (parameters[0] == CMD_CAP) commandCAP(user, parameters);
 		else if (parameters[0] == CMD_PASS) commandPASS(user, parameters);
 		else if (parameters[0] == CMD_NICK) commandNICK(user, parameters);
@@ -184,7 +180,9 @@ void	Server::setUserDisconnectByFdIter(fdIter fdIter) {
 	std::vector<User>::iterator userIter;
 
 	for (userIter = _s_userList.begin(); userIter < _s_userList.end(); userIter++) {
+		std::cout << "USER ITER [" << userIter->getNickname() << "]\n";
 		if (!(userIter->getSocketFdIterator() == fdIter)) continue;
+		std::cout << "[" << userIter->getNickname() << "] WILL BE DELETED\n";
 		userIter->setIsDisconnected(true);
 		return;
 	}
@@ -192,14 +190,16 @@ void	Server::setUserDisconnectByFdIter(fdIter fdIter) {
 
 void	Server::disconnectClients() {
 	std::vector<User>::iterator iter = _s_userList.begin();
+	fdIter	fdIter;
 
 	while (iter < _s_userList.end()) {
 		if (!iter->getIsDisconnected()) {
 			iter++;
 			continue;
 		}
-		close(iter->getSocketFdIterator()->fd);
-		_poll_fds.erase(iter->getSocketFdIterator());
+		fdIter = iter->getSocketFdIterator();
+		close(fdIter->fd);
+		_poll_fds.erase(fdIter);
 		iter = _s_userList.erase(iter);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:50:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/04 17:17:35 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/04 17:21:50 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,3 +108,4 @@ void	User::setModeInServer(std::string mode) {
 std::ostream& operator<<(std::ostream& out, const User& instance) {
 	out << "User: [" << instance.getNickname() << "] (" << instance.getUsername() << ")";
 	return out;
+}
