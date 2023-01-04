@@ -61,6 +61,7 @@ class Server {
 		void		commandTOPIC(User &user, std::vector<std::string>& parameters);
 		void		commandNAMES(User &user, std::vector<std::string>& parameters);
 		void		commandMSG(User &user, std::vector<std::string>& parameters);
+		void		commandMODE(User &user, std::vector<std::string>& parameters);
 		void		commandPART(User &user, std::vector<std::string>& parameters);
 
 		bool		isChannel(std::string channelName);
