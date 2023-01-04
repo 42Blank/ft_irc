@@ -22,10 +22,8 @@ void	Channel::joinNewUser(User user) {
 bool	Channel::isOperator(std::string nickname) {
 	std::vector<User>::iterator iter;
 	for (iter = _operator.begin(); iter < _operator.end(); iter++) {	
-		if (((*iter).getNickname().compare(nickname)) == 0) {
-			std::cerr << nickname  + " is operator\n";
+		if (((*iter).getNickname().compare(nickname)) == 0)
 			return true;
-		}
 	}
 	return false;
 }
@@ -56,13 +54,6 @@ std::string			Channel::getUserList() {
 		userList += ("@" + (*iter).getNickname() + " ");
 	return userList;
 }
-
-// std::vector<User>	Channel::getRealAllUserList() {
-// 	std::vector<User> allUserList = _operator;
-	
-// 	allUserList.insert(allUserList.end(), _c_userList.begin(), _c_userList.end());
-// 	return allUserList;
-// }
 
 std::vector<User>	Channel::getOperatorVector() {
 	return _operator;

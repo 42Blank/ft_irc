@@ -97,22 +97,18 @@ void	Server::sendClientMessage(User& user, std::string str) {
 void	Server::sendMessageBroadcast(int mode, Channel& ch, User& sender, std::string str) {
 
 	std::string strToSend = ":" + sender.getNickname() + "!" + sender.getNickname()  + "@127.0.0.1 " + str + "\r\n";
+	std::cout << "sendMessageBroadcast\n";
+	std::cout << strToSend;
+
 	std::vector<User>::iterator it;
-	// std::cerr << "\nas\n";
-	// std::vector<User> &ch_userList = ch.getRealAllUserList();
 	std::vector<User> operUsers = ch.getOperatorVector();
 	std::vector<User> normUsers = ch.getNormalUserVector();
-	// std::cerr << "\nas\n";
 	if (mode == 0) {	// 모두에게 보내기
 		for (it = operUsers.begin(); it != operUsers.end(); it++) {
-			std::cout << "sendMessageBroadcast to all\n";
-			std::cout << strToSend;
 			if (send((*it).getSocketDesc(), (strToSend).c_str(), strToSend.length(), 0) == -1)
 				throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
 		}
 		for (it = normUsers.begin(); it != normUsers.end(); it++) {
-			std::cout << "sendMessageBroadcast to all\n";
-			std::cout << strToSend;
 			if (send((*it).getSocketDesc(), (strToSend).c_str(), strToSend.length(), 0) == -1)
 				throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
 		}
@@ -121,16 +117,12 @@ void	Server::sendMessageBroadcast(int mode, Channel& ch, User& sender, std::stri
 		for (it = operUsers.begin(); it != operUsers.end(); it++) {
 			if ((*it).getNickname().compare(sender.getNickname()) == 0)
 				continue;
-			std::cout << "sendMessageBroadcast to all except sender\n";
-			std::cout << strToSend;
 			if (send((*it).getSocketDesc(), (strToSend).c_str(), strToSend.length(), 0) == -1)
 				throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
 		}
 		for (it = normUsers.begin(); it != normUsers.end(); it++) {
 			if ((*it).getNickname().compare(sender.getNickname()) == 0)
 				continue;
-			std::cout << "sendMessageBroadcast to all except sender\n";
-			std::cout << strToSend;
 			if (send((*it).getSocketDesc(), (strToSend).c_str(), strToSend.length(), 0) == -1)
 				throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
 		}
@@ -144,7 +136,6 @@ void	Server::sendMessageUnicast(User& sender, User& receiver, std::string str) {
 	
 	std::cout << "\nsendMessageUnicast\n";
 	std::cout << strToSend;
-	std::cout << "\n receiver socket : " << receiver.getSocketDesc() << "\n";
 	if (send(receiver.getSocketDesc(), (strToSend).c_str(), strToSend.length(), 0) == -1)
 		throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
 }
@@ -230,7 +221,7 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 		std::vector<std::string>	parameters = ft_split(*cmdIter, ' ');
 		std::vector<std::string>::iterator it = parameters.begin();
 		
-		std::cout << "\nrecv from client : " ;
+		// std::cout << "\nrecv from client : " ;
 		while (it != parameters.end()) {
 			std::cout << *it << " ";
 			++it;
