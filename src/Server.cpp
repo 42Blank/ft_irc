@@ -94,17 +94,6 @@ void	Server::sendClientMessage(User& user, std::string str) {
 		throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
 }
 
-void	Server::sendClientMessage2(User& user, std::string str) {
-	// std::string strToSend = ":" + user.getNickname() + "!" + user.getNickname()  + "@127.0.0.1 " + str + "\r\n";
-	std::cout << "hostname : " + user.getHostname() << "\n";
-	std::string strToSend = " :" + user.getNickname() + "!" + user.getUsername() + "@" + user.getHostname() + " " + str + "\r\n";
-	// std::string strToSend = ":127.0.0.1 " + str + "\r\n";
-	std::cout << "msg2\n";
-	std::cout << strToSend;
-	if (send(user.getSocketDesc(), (strToSend).c_str(), strToSend.length(), 0) == -1)
-		throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
-}
-
 void	Server::acceptClient(void) {
 	struct sockaddr_in	client_addr;
 	int					clientSocket;

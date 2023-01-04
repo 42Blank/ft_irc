@@ -43,7 +43,6 @@ class Server {
 		void		acceptClient(void);
 
 		void		sendClientMessage(User& user, std::string str);
-		void		sendClientMessage2(User& user, std::string str);
 
 		void		receiveFirstClientMessage(int clientSocket);
 		void		receiveClientMessage(int clientSocket);
