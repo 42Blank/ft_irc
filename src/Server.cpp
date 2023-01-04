@@ -233,6 +233,17 @@ int	Server::getUserIndexByFd(int fd) {
 	return (-1);
 }
 
+bool		Server::isServerUser(std::string nickname) {
+
+	std::vector<User>::iterator	iter;
+
+	for (iter = _s_userList.begin(); iter < _s_userList.end(); iter++) {
+		if ((*iter).getNickname().compare(nickname) == 0)
+			return true;
+	}
+	return false;
+}
+
 ////////////////////////////////////////// FOR DEBUG
 
 void		Server::testUser(void) {

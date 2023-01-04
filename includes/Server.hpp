@@ -75,6 +75,9 @@ class Server {
 
 		void		serverOn(void);
 		void		serverOff(void);
+		bool		isServerUser(std::string nickname);
+		
+		// for debug
 		void		testUser(void);
 };
 
