@@ -55,27 +55,23 @@ void		Server::commandTOPIC(User &user, std::vector<std::string>& parameters) {
 	std::string channelName = parameters[1];
 	if (!isChannel(channelName)) throw std::runtime_error(Error(ERR_NOSUCHCHANNEL, channelName));
 
-	// if (parameters.size() == )
-
 	std::string	topic;
-	// std::vector<std::string>::iterator	iter;
-	// for (iter = parameters.begin() + 2; iter < parameters.end(); iter++) {
-	// 	topic = topic + *iter;
-	// }
+	std::vector<std::string>::iterator	iter;
+	///////////여기 공백들어가는 ft_split 어떻게 쓰는지 물어보기 공백뒤 토픽 짤림.
+	for (iter = parameters.begin() + 2; iter < parameters.end(); iter++) {
+		topic = topic + *iter;
+	}
 	topic = parameters[2];
 
 	Channel &ch = findChannel(parameters[1]);
 	if (ch.isOperator(user.getNickname())) {
 		ch.setTopic(topic);
 		sendClientMessage(user, " TOPIC " + parameters[1] + " " + parameters[2]);
-		sendClientMessage(user, Reply(RPL_TOPIC, user.getNickname() + " " + ch.getChannelName(), ch.getTopic()));
+		// sendClientMessage(user, Reply(RPL_TOPIC, user.getNickname() + " " + ch.getChannelName(), ch.getTopic()));
+		sendMessageBroadcast(1, ch, user, "TOPIC " + ch.getChannelName() + " " + ch.getTopic());
 	} else {
 		throw std::runtime_error(Error(ERR_CHANOPRIVSNEEDED, channelName));
 	}
-	////////////debug
-	Channel &ch1 = findChannel(parameters[1]);
-	std::cerr << ch1.getTopic() << "\n";
-
 }
 
 void		Server::commandMSG(User &user, std::vector<std::string>& parameters) {
