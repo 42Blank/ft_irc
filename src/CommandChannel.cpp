@@ -104,11 +104,11 @@ void		Server::commandMSG(User &user, std::vector<std::string>& parameters) {
 	
 	if (isChannel(parameters[1])) {
 		Channel &ch = findChannel(parameters[1]);
-		sendMessageBroadcast(1, ch, user, "PRIVMSG " + ch.getChannelName() + " " + parameters[2]);
+		sendMessageBroadcast(1, ch, user, "PRIVMSG " + ch.getChannelName() + " " + ft_getStringAfterColon(parameters));
 
 	} else if (isServerUser(parameters[1])) {
 		User	&receiver = findUser(parameters[1]);
-		sendMessageUnicast(user, receiver, "PRIVMSG " + receiver.getNickname() + " " + parameters[2]);
+		sendMessageUnicast(user, receiver, "PRIVMSG " + receiver.getNickname() + " " + ft_getStringAfterColon(parameters));
 		// 여기도 공백들어오는 메세지 추가하기 
 
 	} else {
