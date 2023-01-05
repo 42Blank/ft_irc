@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/05 22:10:00 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/06 01:03:09 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ class Server {
 		void		receiveClientMessage(int clientSocket);
 		std::string	concatMessage(int clientSocket);
 		void		parseMessageStream(User& user, const std::string& fullMsg);
-		void		setUserDisconnectByFdIndex(int fdIndex);
+		void		setUserDisconnectByFd(int client_fd);
 		void		disconnectClients();
 
 		void		commandCAP(User& user, std::vector<std::string>& parameters);
@@ -66,14 +66,16 @@ class Server {
 		void		commandMODE(User &user, std::vector<std::string>& parameters);
 		void		commandPART(User &user, std::vector<std::string>& parameters);
 		void		commandQUIT(User& user, std::vector<std::string>& parameters);
-		void		commandKICK(User &user, std::vector<std::string>& parameters);
-		
+		void		commandKICK(User& user, std::vector<std::string>& parameters);
+
+
 		bool		isChannel(std::string channelName);
 		Channel		&findChannel(std::string channelName);
 		bool		isServerUser(std::string nickname);
+		bool		isServerUser(int socketFd);
 		User		&findUser(std::string nickname);
+		User		&getUserByFd(int fd);
 
-		int			getUserIndexByFd(int fd);
 		void		checkIsVerified(User& user);
 
 	public:
