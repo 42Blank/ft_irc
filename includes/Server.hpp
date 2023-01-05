@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/05 12:13:51 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/05 13:55:22 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,9 @@ class Server {
 		void		acceptClient(void);
 
 		void		sendClientMessage(User& user, std::string str);
+		// sender and receiver
+		void		sendMessageBroadcast(int mode, Channel& ch, User& sender, std::string str);
+		void		sendMessageUnicast(User& sender, User& receiver, std::string str);
 
 		void		receiveFirstClientMessage(int fdIndex);
 		void		receiveClientMessage(int clientSocket);
@@ -65,8 +68,12 @@ class Server {
 		void		commandPART(User &user, std::vector<std::string>& parameters);
 		void		commandQUIT(User& user, std::vector<std::string>& parameters);
 
+
 		bool		isChannel(std::string channelName);
 		Channel		&findChannel(std::string channelName);
+		bool		isServerUser(std::string nickname);
+		User		&findUser(std::string nickname);
+
 		int			getUserIndexByFd(int fd);
 		void		checkIsVerified(User& user);
 
@@ -77,6 +84,7 @@ class Server {
 		void		serverOn(void);
 		void		serverOff(void);
 		bool		isServerUser(std::string nickname);
+
 
 		// for debug
 		void		testUser(void);
