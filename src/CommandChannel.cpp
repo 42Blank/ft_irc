@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 17:53:57 by san               #+#    #+#             */
-/*   Updated: 2023/01/06 07:10:31 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/06 07:54:56 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,9 @@ void		Server::commandMSG(User &user, std::vector<std::string>& parameters) {
 
 	if (isChannel(name)) {
 		Channel &ch = findChannel(name);
-		sendMessageBroadcast(1, ch, user, "PRIVMSG " + ch.getChannelName() + " " + ft_getStringAfterColon(parameters));
+
+		if (ch.isUser(user.getNickname()) || ch.isOperator(user.getNickname()))
+			sendMessageBroadcast(1, ch, user, "PRIVMSG " + ch.getChannelName() + " " + ft_getStringAfterColon(parameters));
 		return;
 	}
 	if (isServerUser(name)) {
