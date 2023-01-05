@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:50:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/05 12:10:38 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/05 17:55:19 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,10 @@ std::string	User::getModeInServer() const {
 	return _modeInServer;
 }
 
+std::vector<std::string>	User::getChannelList() const {
+	return _channelList;
+}
+
 void	User::setNickname(std::string nickname) {
 	_nickname = nickname;
 }
@@ -103,6 +107,10 @@ void	User::setIsDisconnected(bool isDisconnected) {
 
 void	User::setModeInServer(std::string mode) {
 	_modeInServer = mode;
+}
+
+void	User::setChannelList(std::vector<std::string> channelList) {
+	_channelList = channelList;
 }
 
 std::ostream& operator<<(std::ostream& out, const User& instance) {

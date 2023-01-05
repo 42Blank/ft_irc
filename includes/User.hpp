@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 15:55:05 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/05 12:10:12 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/05 17:54:11 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,23 +33,25 @@ class User {
 		~User();
 		User&				operator=(const User& instance);
 
-		int					getSocketFdIndex() const;
-		struct sockaddr_in*	getAddressPtr() const;
-		socklen_t*			getAddressSizePtr() const;
-		std::string			getNickname() const;
-		std::string			getUsername() const;
-		std::string			getHostname() const;
-		short				getIsVerified() const;
-		bool				getIsDisconnected() const;
-		std::string			getModeInServer() const;
+		int							getSocketFdIndex() const;
+		struct sockaddr_in*			getAddressPtr() const;
+		socklen_t*					getAddressSizePtr() const;
+		std::string					getNickname() const;
+		std::string					getUsername() const;
+		std::string					getHostname() const;
+		short						getIsVerified() const;
+		bool						getIsDisconnected() const;
+		std::string					getModeInServer() const;
+		std::vector<std::string>	getChannelList() const;
 
-		void				setNickname(std::string nickname);
-		void				setUsername(std::string username);
-		void				setHostname(std::string hostname);
-		void				setIsVerified(short what);
-		void				setSocketFdIndex(int fdIndex);
-		void				setIsDisconnected(bool isDisconnected);
-		void				setModeInServer(std::string mode);
+		void						setNickname(std::string nickname);
+		void						setUsername(std::string username);
+		void						setHostname(std::string hostname);
+		void						setIsVerified(short what);
+		void						setSocketFdIndex(int fdIndex);
+		void						setIsDisconnected(bool isDisconnected);
+		void						setModeInServer(std::string mode);
+		void						setChannelList(std::vector<std::string> channelList);
 };
 
 std::ostream&	operator<<(std::ostream& out, const User& instance);

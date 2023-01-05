@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 04:09:31 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/05 16:53:51 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/05 17:57:27 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,13 @@ void	Server::commandQUIT(User& user, std::vector<std::string>& parameters) {
 	std::string quitUserHostname = user.getHostname();
 	std::string quitUserNickname = user.getNickname();
 	std::string	quitMsg = ft_getStringAfterColon(parameters);
+	std::vector<std::string>::iterator	iter;
+
 	sendMessage(user, ErrorReply(":Closing Link:", quitUserHostname, "(Quit: " + quitUserNickname + ")"));
-	// sendMessageBroadcast()
+	for (iter = user.getChannelList().begin(); iter < user.getChannelList().end(); iter++) {
+		if (!isChannel(*iter)) continue;
+		Channel ch = findChannel(*iter);
+		sendMessageBroadcast(0, ch, user, quitMsg);
+	}
 	user.setIsDisconnected(true);
 }
