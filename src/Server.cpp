@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/06 01:20:15 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/06 01:32:58 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,15 @@ void	Server::serverOn(void) {
 	if (listen(_serverSocket, 5) < 0)	// 연결요청 대기상태
 		throw std::runtime_error(Error(ERR_SERVEROPENFAILED, "listen"));
 	while (true) {
-		if (!poll(_poll_fds.data(), _poll_fds.size(), 1000))
+		if (!poll(_poll_fds.data(), _poll_fds.size(), 1000)) {
+			// test code - 1
+			std::cout << "server waiting\n";
 			continue ;
+		}
 		if (_poll_fds[0].revents & POLLIN) { // _poll_fds[0] -> 서버 fd에 POLLIN event발생
 			acceptClient();
+			// test code - line 1
+			std::cout << "server accept\n";
 			continue;
 		}
 		for (iter = _poll_fds.begin() + 1; iter < _poll_fds.end(); iter++) {
@@ -190,7 +195,7 @@ void	Server::disconnectClients() {
 			continue;
 		}
 		close(userIter->getSocketFd());
-		pollIter = _poll_fds.begin();
+		pollIter = _poll_fds.begin() + 1;
 		while (pollIter < _poll_fds.end()) {
 			if (userIter->getSocketFd() == pollIter->fd) {
 				_poll_fds.erase(_poll_fds.begin());
