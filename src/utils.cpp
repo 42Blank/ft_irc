@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:41:37 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/05 16:57:23 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/05 21:53:59 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,24 +78,24 @@ std::string ft_getStringAfterColon(std::vector<std::string> parameter) {
 }
 
 int	ft_checkPollReturnEvent(short revents) {
-	if (revents & POLLIN)
-		std::cout << "POLLIN\n";
-	if (revents & POLLRDNORM)
-		std::cout << "POLLRDNORM\n";
-	if (revents & POLLRDBAND)
-		std::cout << "POLLRDBAND\n";
-	if (revents & POLLPRI)
-		std::cout << "POLLPRI\n";
-	if (revents & POLLOUT)
-		std::cout << "POLLOUT\n";
-	if (revents & POLLWRNORM)
-		std::cout << "POLLWRNORM\n";
-	if (revents & POLLWRBAND)
-		std::cout << "POLLWRBAND\n";
-	if (revents & POLLERR)
-		std::cout << "POLLERR\n";
-	if (revents & POLLHUP)
-		std::cout << "POLLHUP\n";
+	// if (revents & POLLIN)
+	// 	std::cout << "POLLIN\n";
+	// if (revents & POLLRDNORM)
+	// 	std::cout << "POLLRDNORM\n";
+	// if (revents & POLLRDBAND)
+	// 	std::cout << "POLLRDBAND\n";
+	// if (revents & POLLPRI)
+	// 	std::cout << "POLLPRI\n";
+	// if (revents & POLLOUT)
+	// 	std::cout << "POLLOUT\n";
+	// if (revents & POLLWRNORM)
+	// 	std::cout << "POLLWRNORM\n";
+	// if (revents & POLLWRBAND)
+	// 	std::cout << "POLLWRBAND\n";
+	// if (revents & POLLERR)
+	// 	std::cout << "POLLERR\n";
+	// if (revents & POLLHUP)
+	// 	std::cout << "POLLHUP\n";
 	if (revents & POLLNVAL) {
 		std::cout << "POLLNVAL\n";
 		return (POLLNVAL);

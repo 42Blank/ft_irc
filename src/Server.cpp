@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/05 16:56:45 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/05 21:53:28 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,6 @@ std::string	Server::concatMessage(int clientSocket) {
 	while ((message_length = recv(clientSocket, _message, BUF_SIZE, 0)) != 0) {
 		if (message_length < 0) continue;
 		_message[message_length] = 0;
-		std::cout << "JASONG DEBUG - recv message : " << _message << '\n';
 		fullMsg += _message;
 		if (fullMsg.length() >= 2 && !fullMsg.substr(fullMsg.length() - 2).compare("\r\n")) break;
 	}
