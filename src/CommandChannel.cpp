@@ -9,7 +9,7 @@ bool		Server::isChannel(std::string channelName) {
 		return false;
 	std::vector<Channel>::iterator	iter;
 	for (iter = _channelList.begin(); iter < _channelList.end(); iter++) {
-		if ((*iter).getChannelName().compare(channelName) == 0)
+		if (!(*iter).getChannelName().compare(channelName))
 			return true;
 	}
 	return false;
@@ -19,7 +19,7 @@ Channel		&Server::findChannel(std::string channelName) {
 	std::vector<Channel>::iterator	iterChannel;
 
 	for (iterChannel = _channelList.begin(); iterChannel < _channelList.end(); iterChannel++) {
-		if ((*iterChannel).getChannelName().compare(channelName) == 0) {
+		if (!(*iterChannel).getChannelName().compare(channelName)) {
 			return *iterChannel;
 		}
 	}
@@ -31,7 +31,7 @@ bool		Server::isServerUser(std::string nickname) {
 	std::vector<User>::iterator	iter;
 
 	for (iter = _s_userList.begin(); iter < _s_userList.end(); iter++) {
-		if ((*iter).getNickname().compare(nickname) == 0)
+		if (!(*iter).getNickname().compare(nickname))
 			return true;
 	}
 	return false;
@@ -41,7 +41,7 @@ User		&Server::findUser(std::string nickname) {
 	std::vector<User>::iterator it;
 
 	for (it = _s_userList.begin(); it < _s_userList.end(); it++) {
-		if ((*it).getNickname().compare(nickname) == 0) {
+		if (!(*it).getNickname().compare(nickname)) {
 			return *it;
 		}
 	}
@@ -81,17 +81,9 @@ void		Server::commandTOPIC(User &user, std::vector<std::string>& parameters) {
 	std::string channelName = parameters[1];
 	if (!isChannel(channelName)) throw std::runtime_error(Error(ERR_NOSUCHCHANNEL, channelName));
 
-	std::string	topic;
-	std::vector<std::string>::iterator	iter;
-	///////////여기 공백들어가는 ft_split 어떻게 쓰는지 물어보기 공백뒤 토픽 짤림.
-	for (iter = parameters.begin() + 2; iter < parameters.end(); iter++) {
-		topic = topic + *iter;
-	}
-	topic = parameters[2];
-
 	Channel &ch = findChannel(parameters[1]);
 	if (ch.isOperator(user.getNickname())) {
-		ch.setTopic(topic);
+		ch.setTopic( ft_getStringAfterColon(parameters));
 		sendMessage(user, " TOPIC " + parameters[1] + " " + parameters[2]);
 		sendMessageBroadcast(1, ch, user, "TOPIC " + ch.getChannelName() + " " + ch.getTopic());
 	} else {
@@ -133,7 +125,7 @@ void		Server::commandMODE(User &user, std::vector<std::string>& parameters) {
 			sendMessage(user, Reply(RPL_CHANNELMODEIS, user.getNickname(), ch.getChannelName() + " :" + ch.getModeInServer()));
 		} else {
 			// 사용자는 타 사용자의 모드를 볼 수 없다.
-			if (parameters[1].compare(user.getNickname()) == 0)
+			if (!parameters[1].compare(user.getNickname()))
 				sendMessage(user, Reply(RPL_UMODEIS, user.getNickname() + " :" + user.getModeInServer()));
 			else
 				throw std::runtime_error(Error(ERR_USERSDONTMATCH, user.getNickname()));
