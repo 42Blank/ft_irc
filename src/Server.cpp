@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/04 07:13:45 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/05 16:56:45 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,38 +44,36 @@ Server::~Server(void) {
 
 void	Server::serverOn(void) {
 	std::vector<struct pollfd>::iterator iter;
+	int		idx;
 
 	if (listen(_serverSocket, 5) < 0)	// 연결요청 대기상태
 		throw std::runtime_error(Error(ERR_SERVEROPENFAILED, "listen"));
 	while (true) {
-		// // 테스트용 코드
-		// std::cout << "UserList checking" << std::endl;
-		// for (std::vector<User>::iterator iter = _s_userList.begin(); iter < _s_userList.end(); iter++)
-		// 	std::cout << "Nickname : " << (*iter).getNickname() << std::endl;
-		// std::cout << "pollfds size : " << _poll_fds.size() << '\n';
-		if (poll(_poll_fds.data(), _poll_fds.size(), 1000) == 0)
+		if (!poll(_poll_fds.data(), _poll_fds.size(), 1000))
 			continue ;
 		if (_poll_fds[0].revents & POLLIN) { // _poll_fds[0] -> 서버 fd에 POLLIN event발생
 			acceptClient();
 			continue;
 		}
+		idx = 1;
 		for (iter = _poll_fds.begin() + 1; iter < _poll_fds.end(); iter++) {
 			if (iter->revents & POLLHUP) { // 현재 클라이언트 연결 끊김
-				removeClient(iter);
+				setUserDisconnectByFdIndex(idx);
 				continue ;
 			}
 			else if (iter->revents & POLLIN) {
-				if (getUserIndexByFd(iter->fd) == -1) {
+				if (getUserIndexByFd(iter->fd) < 0) {
 					std::cout << "\n\n@@@@Welcome process called@@@@" << "\n\n";
-					receiveFirstClientMessage(iter->fd);
+					receiveFirstClientMessage(idx);
 				}
 				else
 					receiveClientMessage(iter->fd);
 			}
-			if (ft_checkPollReturnEvent(iter->revents) == POLLNVAL) {
-				removeClient(iter);
-			}
+			if (ft_checkPollReturnEvent(iter->revents) == POLLNVAL)
+				setUserDisconnectByFdIndex(idx);
+			idx++;
 		}
+		disconnectClients();
 	}
 }
 
@@ -83,63 +81,6 @@ void	Server::serverOff(void) {
 	close(_serverSocket);
 	exit(0);
 }
-
-void	Server::sendClientMessage(User& user, std::string str) {
-	std::string strToSend = ":" + user.getNickname() + "!" + user.getNickname()  + "@127.0.0.1 " + str + "\r\n";
-	// std::string strToSend = ":127.0.0.1 " + str + "\r\n";
-	std::cout << "sendClientMessage\n";
-	std::cout << strToSend;
-	if (send(user.getSocketDesc(), (strToSend).c_str(), strToSend.length(), 0) == -1)
-		throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
-}
-
-// 이건 채널에서 전체 메세지를 보내거나 채널에서 어떤 행동을 했을 때 사용하는 것 -> 채널의 userList가 있어야 한다. 
-void	Server::sendMessageBroadcast(int mode, Channel& ch, User& sender, std::string str) {
-
-	std::string strToSend = ":" + sender.getNickname() + "!" + sender.getNickname()  + "@127.0.0.1 " + str + "\r\n";
-	std::cout << "sendMessageBroadcast\n";
-	std::cout << strToSend;
-
-	std::vector<User>::iterator it;
-	std::vector<User> operUsers = ch.getOperatorVector();
-	std::vector<User> normUsers = ch.getNormalUserVector();
-	if (mode == 0) {	// 모두에게 보내기
-		for (it = operUsers.begin(); it != operUsers.end(); it++) {
-			if (send((*it).getSocketDesc(), (strToSend).c_str(), strToSend.length(), 0) == -1)
-				throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
-		}
-		for (it = normUsers.begin(); it != normUsers.end(); it++) {
-			if (send((*it).getSocketDesc(), (strToSend).c_str(), strToSend.length(), 0) == -1)
-				throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
-		}
-
-	} else {	// sender 제외 모두 보내기 
-		for (it = operUsers.begin(); it != operUsers.end(); it++) {
-			if ((*it).getNickname().compare(sender.getNickname()) == 0)
-				continue;
-			if (send((*it).getSocketDesc(), (strToSend).c_str(), strToSend.length(), 0) == -1)
-				throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
-		}
-		for (it = normUsers.begin(); it != normUsers.end(); it++) {
-			if ((*it).getNickname().compare(sender.getNickname()) == 0)
-				continue;
-			if (send((*it).getSocketDesc(), (strToSend).c_str(), strToSend.length(), 0) == -1)
-				throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
-		}
-	}
-}
-
-// 이건 개인 메세지 보낼 때라서 서버의 userList만 있으면 된다. 
-void	Server::sendMessageUnicast(User& sender, User& receiver, std::string str) {
-
-	std::string strToSend = ":" + sender.getNickname() + "!" + sender.getNickname()  + "@127.0.0.1 " + str + "\r\n";
-	
-	std::cout << "\nsendMessageUnicast\n";
-	std::cout << strToSend;
-	if (send(receiver.getSocketDesc(), (strToSend).c_str(), strToSend.length(), 0) == -1)
-		throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
-}
-
 
 void	Server::acceptClient(void) {
 	struct sockaddr_in	client_addr;
@@ -162,25 +103,18 @@ void	Server::acceptClient(void) {
 	}
 }
 
-void	Server::receiveFirstClientMessage(int clientSocket) {
-	// struct pollfd client_pollfd;
-	User user;
+void	Server::receiveFirstClientMessage(int fdIndex) {
+	User	user;
+	int		fd = _poll_fds[fdIndex].fd;
 
 	try {
-		// int	clientSocket = accept(_serverSocket, (struct sockaddr*)user.getAddressPtr(), user.getAddressSizePtr());
-		// if (clientSocket < 0)
-		// 	throw std::runtime_error(Error(ERR_CLIENTCONNECTFAILED));
-		// // fcntl(clientSocket, F_SETFL, O_NONBLOCK);
-		user.setSocketDesc(clientSocket);
-		std::string fullMsg = concatMessage(user.getSocketDesc());
+		user.setSocketFdIndex(fdIndex);
+		std::string fullMsg = concatMessage(fd);
 		parseMessageStream(user, fullMsg);
-		// client_pollfd.fd = clientSocket;
-		// client_pollfd.events = POLLIN;
-		// _poll_fds.push_back(client_pollfd);
 		_s_userList.push_back(user);
 	}	catch (std::exception &e) {
 		std::cout << e.what() << "\n";
-		close(user.getSocketDesc()); // 위의 절차 중 하나라도 실패 시에는 유저 통신 끊어야함
+		close(fd); // 위의 절차 중 하나라도 실패 시에는 유저 통신 끊어야함
 	}
 }
 
@@ -204,7 +138,7 @@ std::string	Server::concatMessage(int clientSocket) {
 		_message[message_length] = 0;
 		std::cout << "JASONG DEBUG - recv message : " << _message << '\n';
 		fullMsg += _message;
-		if (fullMsg.length() >= 2 && fullMsg.substr(fullMsg.length() - 2) == "\r\n") break;
+		if (fullMsg.length() >= 2 && !fullMsg.substr(fullMsg.length() - 2).compare("\r\n")) break;
 	}
 	ft_replaceStr(fullMsg, "\r", " ");
 
@@ -219,49 +153,59 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 
 	for (cmdIter = commands.begin(); cmdIter != commands.end(); cmdIter++) {
 		std::vector<std::string>	parameters = ft_split(*cmdIter, ' ');
-		std::vector<std::string>::iterator it = parameters.begin();
-		
-		// std::cout << "\nrecv from client : " ;
-		while (it != parameters.end()) {
-			std::cout << *it << " ";
-			++it;
-		}
-		if (parameters[0] == CMD_CAP) commandCAP(user, parameters);
-		else if (parameters[0] == CMD_PASS) commandPASS(user, parameters);
-		else if (parameters[0] == CMD_NICK) commandNICK(user, parameters);
-		else if (parameters[0] == CMD_USER) commandUSER(user, parameters);
-		else if (parameters[0] == CMD_PING) commandPING(user, parameters);
-		else if (parameters[0] == CMD_PONG) commandPONG(user, parameters);
-		else if (parameters[0] == CMD_MODE) commandMODE(user, parameters);
-		else if (parameters[0] == CMD_JOIN) commandJOIN(user, parameters);
-		else if (parameters[0] == CMD_MSG) commandMSG(user, parameters);
-		else if (parameters[0] == CMD_TOPIC) commandTOPIC(user, parameters);
-		else if (parameters[0] == CMD_NAMES) commandNAMES(user, parameters);
-		else if (parameters[0] == CMD_PART) commandPART(user, parameters);
-		else sendClientMessage(user, Error(ERR_UNKNOWNCOMMAND, parameters[0]));
+
+		if (!parameters[0].compare(CMD_CAP)) commandCAP(user, parameters);
+		else if (!parameters[0].compare(CMD_PASS)) commandPASS(user, parameters);
+		else if (!parameters[0].compare(CMD_NICK)) commandNICK(user, parameters);
+		else if (!parameters[0].compare(CMD_USER)) commandUSER(user, parameters);
+		else if (!parameters[0].compare(CMD_PING)) commandPING(user, parameters);
+		else if (!parameters[0].compare(CMD_PONG)) commandPONG(user, parameters);
+		else if (!parameters[0].compare(CMD_MODE)) commandMODE(user, parameters);
+		else if (!parameters[0].compare(CMD_JOIN)) commandJOIN(user, parameters);
+		else if (!parameters[0].compare(CMD_MSG)) commandMSG(user, parameters);
+		else if (!parameters[0].compare(CMD_TOPIC)) commandTOPIC(user, parameters);
+		else if (!parameters[0].compare(CMD_NAMES)) commandNAMES(user, parameters);
+		else if (!parameters[0].compare(CMD_PART)) commandPART(user, parameters);
+		else if (!parameters[0].compare(CMD_QUIT)) commandQUIT(user, parameters);
+		else sendMessage(user, Error(ERR_UNKNOWNCOMMAND, parameters[0]));
 	}
 }
 
-void	Server::removeClient(std::vector<struct pollfd>::iterator fdIter) {
-	try  {
-		close((*fdIter).fd);
-		int	idx = getUserIndexByFd((*fdIter).fd);
-		if (idx != -1)
-			_s_userList.erase(_s_userList.begin() + idx);
-		_poll_fds.erase(fdIter);
+void	Server::setUserDisconnectByFdIndex(int fdIndex) {
+	std::vector<User>::iterator userIter;
+
+	for (userIter = _s_userList.begin(); userIter < _s_userList.end(); userIter++) {
+		std::cout << "USER ITER [" << userIter->getNickname() << "]\n";
+		if (userIter->getSocketFdIndex() != fdIndex) continue;
+		std::cout << "[" << userIter->getNickname() << "] WILL BE DELETED\n";
+		userIter->setIsDisconnected(true);
+		return;
 	}
-	catch (std::exception &e) {
-		std::cout << e.what() << "\n";
+}
+
+void	Server::disconnectClients() {
+	std::vector<User>::iterator iter = _s_userList.begin();
+	int	fdIndex;
+
+	while (iter < _s_userList.end()) {
+		if (!iter->getIsDisconnected()) {
+			iter++;
+			continue;
+		}
+		fdIndex = iter->getSocketFdIndex();
+		close(_poll_fds[fdIndex].fd);
+		_poll_fds.erase(_poll_fds.begin() + fdIndex);
+		iter = _s_userList.erase(iter);
 	}
 }
 
 int	Server::getUserIndexByFd(int fd) {
 	std::vector<User>::iterator	iter;
-	int							index;
+	int	index;
 
 	index = 0;
 	for (iter = _s_userList.begin(); iter < _s_userList.end(); iter++) {
-		if (fd == (*iter).getSocketDesc())
+		if (fd == _poll_fds[(*iter).getSocketFdIndex()].fd)
 			return (index);
 		index++;
 	}

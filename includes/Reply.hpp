@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 19:30:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/03 02:40:57 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/04 12:51:57 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,7 @@ std::string	Error(std::string errCode, std::string param1, std::string param2);
 std::string Reply(std::string repCode);
 std::string Reply(std::string repCode, std::string param1);
 std::string Reply(std::string repCode, std::string param1, std::string param2);
+
+std::string	ErrorReply(std::string param1, std::string param2, std::string param3);
 
 # endif

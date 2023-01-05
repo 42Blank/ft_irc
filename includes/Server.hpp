@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/04 04:51:09 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/05 16:36:39 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,16 @@ class Server {
 
 		void		acceptClient(void);
 
-		void		sendClientMessage(User& user, std::string str);
-		// sender and receiver 
+		void		sendMessage(User& user, std::string str);
+		void		sendMessage(User& sender, User& receiver, std::string str);
 		void		sendMessageBroadcast(int mode, Channel& ch, User& sender, std::string str);
-		void		sendMessageUnicast(User& sender, User& receiver, std::string str);
 
-		void		receiveFirstClientMessage(int clientSocket);
+		void		receiveFirstClientMessage(int fdIndex);
 		void		receiveClientMessage(int clientSocket);
 		std::string	concatMessage(int clientSocket);
 		void		parseMessageStream(User& user, const std::string& fullMsg);
-		void		removeClient(std::vector<struct pollfd>::iterator fdIter);
+		void		setUserDisconnectByFdIndex(int fdIndex);
+		void		disconnectClients();
 
 		void		commandCAP(User& user, std::vector<std::string>& parameters);
 		void		commandPASS(User& user, std::vector<std::string>& parameters);
@@ -65,12 +65,14 @@ class Server {
 		void		commandMSG(User &user, std::vector<std::string>& parameters);
 		void		commandMODE(User &user, std::vector<std::string>& parameters);
 		void		commandPART(User &user, std::vector<std::string>& parameters);
-		
+		void		commandQUIT(User& user, std::vector<std::string>& parameters);
+
+
 		bool		isChannel(std::string channelName);
 		Channel		&findChannel(std::string channelName);
 		bool		isServerUser(std::string nickname);
 		User		&findUser(std::string nickname);
-		
+
 		int			getUserIndexByFd(int fd);
 		void		checkIsVerified(User& user);
 
@@ -80,7 +82,7 @@ class Server {
 
 		void		serverOn(void);
 		void		serverOff(void);
-		
+
 		// for debug
 		void		testUser(void);
 };
