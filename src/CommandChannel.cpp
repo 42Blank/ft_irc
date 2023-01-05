@@ -79,13 +79,14 @@ void		Server::commandTOPIC(User &user, std::vector<std::string>& parameters) {
 	if (parameters.size() < 3) throw std::runtime_error(Error(ERR_NEEDMOREPARAMS, CMD_TOPIC));
 
 	std::string channelName = parameters[1];
+	std::string channelTopic = ft_getStringAfterColon(parameters);
 	if (!isChannel(channelName)) throw std::runtime_error(Error(ERR_NOSUCHCHANNEL, channelName));
 
 	Channel &ch = findChannel(parameters[1]);
 	if (ch.isOperator(user.getNickname())) {
-		ch.setTopic( ft_getStringAfterColon(parameters));
-		sendMessage(user, " TOPIC " + parameters[1] + " " + parameters[2]);
-		sendMessageBroadcast(1, ch, user, "TOPIC " + ch.getChannelName() + " " + ch.getTopic());
+		ch.setTopic(channelTopic);
+		sendMessage(user, " TOPIC " + channelName + " " + channelTopic);
+		sendMessageBroadcast(1, ch, user, "TOPIC " + channelName + " " + channelTopic);
 	} else {
 		throw std::runtime_error(Error(ERR_CHANOPRIVSNEEDED, channelName));
 	}
