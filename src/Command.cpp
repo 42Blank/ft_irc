@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 04:09:31 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/05 17:57:27 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/05 23:10:04 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ void	Server::commandQUIT(User& user, std::vector<std::string>& parameters) {
 		if (!isChannel(*iter)) continue;
 		Channel ch = findChannel(*iter);
 		sendMessageBroadcast(0, ch, user, quitMsg);
+		if (ch.isOperator(quitUserNickname)) ch.deleteOperatorUser(quitUserNickname);
+		else ch.deleteNormalUser(quitUserNickname);
 	}
 	user.setIsDisconnected(true);
 }
