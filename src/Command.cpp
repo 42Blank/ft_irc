@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 04:09:31 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/05 23:10:04 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/06 07:20:06 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,13 @@ void	Server::commandQUIT(User& user, std::vector<std::string>& parameters) {
 	std::string quitUserHostname = user.getHostname();
 	std::string quitUserNickname = user.getNickname();
 	std::string	quitMsg = ft_getStringAfterColon(parameters);
-	std::vector<std::string>::iterator	iter;
+	std::vector<std::string> channelList = user.getChannelList();
 
-	sendMessage(user, ErrorReply(":Closing Link:", quitUserHostname, "(Quit: " + quitUserNickname + ")"));
-	for (iter = user.getChannelList().begin(); iter < user.getChannelList().end(); iter++) {
+	sendMessage(user, ErrorReply(":Closing Link:", quitUserHostname, "(Quit: " + quitMsg + ")"));
+	for (std::vector<std::string>::iterator iter = channelList.begin(); iter < channelList.end(); iter++) {
 		if (!isChannel(*iter)) continue;
-		Channel ch = findChannel(*iter);
-		sendMessageBroadcast(0, ch, user, quitMsg);
+		Channel &ch = findChannel(*iter);
+		sendMessageBroadcast(0, ch, user, "QUIT :" + quitMsg);
 		if (ch.isOperator(quitUserNickname)) ch.deleteOperatorUser(quitUserNickname);
 		else ch.deleteNormalUser(quitUserNickname);
 	}
