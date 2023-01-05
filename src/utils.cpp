@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:41:37 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/04 16:58:30 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/05 13:12:05 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,24 +78,24 @@ std::string ft_getStringAfterColon(std::vector<std::string> parameter) {
 }
 
 int	ft_checkPollReturnEvent(short revents) {
-	if (revents & POLLIN)
-		std::cout << "POLLIN\n";
-	if (revents & POLLRDNORM)
-		std::cout << "POLLRDNORM\n";
-	if (revents & POLLRDBAND)
-		std::cout << "POLLRDBAND\n";
-	if (revents & POLLPRI)
-		std::cout << "POLLPRI\n";
-	if (revents & POLLOUT)
-		std::cout << "POLLOUT\n";
-	if (revents & POLLWRNORM)
-		std::cout << "POLLWRNORM\n";
-	if (revents & POLLWRBAND)
-		std::cout << "POLLWRBAND\n";
-	if (revents & POLLERR)
-		std::cout << "POLLERR\n";
-	if (revents & POLLHUP)
-		std::cout << "POLLHUP\n";
+	// if (revents & POLLIN)
+	// 	std::cout << "POLLIN\n";
+	// if (revents & POLLRDNORM)
+	// 	std::cout << "POLLRDNORM\n";
+	// if (revents & POLLRDBAND)
+	// 	std::cout << "POLLRDBAND\n";
+	// if (revents & POLLPRI)
+	// 	std::cout << "POLLPRI\n";
+	// if (revents & POLLOUT)
+	// 	std::cout << "POLLOUT\n";
+	// if (revents & POLLWRNORM)
+	// 	std::cout << "POLLWRNORM\n";
+	// if (revents & POLLWRBAND)
+	// 	std::cout << "POLLWRBAND\n";
+	// if (revents & POLLERR)
+	// 	std::cout << "POLLERR\n";
+	// if (revents & POLLHUP)
+	// 	std::cout << "POLLHUP\n";
 	if (revents & POLLNVAL) {
 		std::cout << "POLLNVAL\n";
 		return (POLLNVAL);

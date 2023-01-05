@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/04 07:13:45 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/05 13:11:55 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,6 @@ void	Server::serverOn(void) {
 	if (listen(_serverSocket, 5) < 0)	// 연결요청 대기상태
 		throw std::runtime_error(Error(ERR_SERVEROPENFAILED, "listen"));
 	while (true) {
-		// // 테스트용 코드
-		// std::cout << "UserList checking" << std::endl;
-		// for (std::vector<User>::iterator iter = _s_userList.begin(); iter < _s_userList.end(); iter++)
-		// 	std::cout << "Nickname : " << (*iter).getNickname() << std::endl;
-		// std::cout << "pollfds size : " << _poll_fds.size() << '\n';
 		if (poll(_poll_fds.data(), _poll_fds.size(), 1000) == 0)
 			continue ;
 		if (_poll_fds[0].revents & POLLIN) { // _poll_fds[0] -> 서버 fd에 POLLIN event발생
@@ -66,7 +61,6 @@ void	Server::serverOn(void) {
 			}
 			else if (iter->revents & POLLIN) {
 				if (getUserIndexByFd(iter->fd) == -1) {
-					std::cout << "\n\n@@@@Welcome process called@@@@" << "\n\n";
 					receiveFirstClientMessage(iter->fd);
 				}
 				else
@@ -202,7 +196,6 @@ std::string	Server::concatMessage(int clientSocket) {
 	while ((message_length = recv(clientSocket, _message, BUF_SIZE, 0)) != 0) {
 		if (message_length < 0) continue;
 		_message[message_length] = 0;
-		std::cout << "JASONG DEBUG - recv message : " << _message << '\n';
 		fullMsg += _message;
 		if (fullMsg.length() >= 2 && fullMsg.substr(fullMsg.length() - 2) == "\r\n") break;
 	}
@@ -219,13 +212,7 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 
 	for (cmdIter = commands.begin(); cmdIter != commands.end(); cmdIter++) {
 		std::vector<std::string>	parameters = ft_split(*cmdIter, ' ');
-		std::vector<std::string>::iterator it = parameters.begin();
 		
-		// std::cout << "\nrecv from client : " ;
-		while (it != parameters.end()) {
-			std::cout << *it << " ";
-			++it;
-		}
 		if (parameters[0] == CMD_CAP) commandCAP(user, parameters);
 		else if (parameters[0] == CMD_PASS) commandPASS(user, parameters);
 		else if (parameters[0] == CMD_NICK) commandNICK(user, parameters);
