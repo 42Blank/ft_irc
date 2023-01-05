@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:41:37 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/05 21:53:59 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/05 21:56:17 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,9 @@ bool	ft_checkIsCommandValid(std::string command, bool isVerified) {
 			!command.compare(CMD_NAMES) ||
 			!command.compare(CMD_PART) ||
 			!command.compare(CMD_PING) ||
-			!command.compare(CMD_PONG) ) return true;
+			!command.compare(CMD_PONG) ||
+			!command.compare(CMD_KICK)
+			) return true;
 	}
 	return false;
 }
