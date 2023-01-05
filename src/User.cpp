@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:50:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/05 11:55:06 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/05 12:10:38 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ User::User(const User& instance) {
 User&	User::operator=(const User& instance) {
 	std::cout << "copied user: " << instance.getNickname() << "\n";
 
-	_clientFD = instance.getSocketFd();
+	_clientFDIndex = instance.getSocketFdIndex();
 	_clientAddress = new sockaddr_in(*instance.getAddressPtr());
 	_clientAddressSize = new socklen_t(*instance.getAddressSizePtr());
 	_nickname = instance.getNickname();
@@ -41,8 +41,8 @@ User&	User::operator=(const User& instance) {
 	return *this;
 }
 
-int	User::getSocketFd() const {
-	return _clientFD;
+int	User::getSocketFdIndex() const {
+	return _clientFDIndex;
 }
 
 struct sockaddr_in*	User::getAddressPtr() const {
@@ -89,8 +89,8 @@ void	User::setHostname(std::string hostname) {
 	_hostname = hostname;
 }
 
-void	User::setSocketFd(int fd) {
-	_clientFD = fd;
+void	User::setSocketFdIndex(int fd) {
+	_clientFDIndex = fd;
 }
 
 void	User::setIsVerified(short what) {
