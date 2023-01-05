@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:50:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/05 17:55:19 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/06 00:47:19 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ User::User(const User& instance) {
 User&	User::operator=(const User& instance) {
 	std::cout << "copied user: " << instance.getNickname() << "\n";
 
-	_clientFDIndex = instance.getSocketFdIndex();
+	_clientFd = instance.getSocketFd();
 	_clientAddress = new sockaddr_in(*instance.getAddressPtr());
 	_clientAddressSize = new socklen_t(*instance.getAddressSizePtr());
 	_nickname = instance.getNickname();
@@ -41,8 +41,8 @@ User&	User::operator=(const User& instance) {
 	return *this;
 }
 
-int	User::getSocketFdIndex() const {
-	return _clientFDIndex;
+int	User::getSocketFd() const {
+	return _clientFd;
 }
 
 struct sockaddr_in*	User::getAddressPtr() const {
@@ -93,8 +93,8 @@ void	User::setHostname(std::string hostname) {
 	_hostname = hostname;
 }
 
-void	User::setSocketFdIndex(int fd) {
-	_clientFDIndex = fd;
+void	User::setSocketFd(int clientFd) {
+	_clientFd = clientFd;
 }
 
 void	User::setIsVerified(short what) {
