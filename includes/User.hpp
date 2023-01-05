@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 15:55:05 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/04 17:14:36 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/05 11:53:56 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <vector>
 class User {
 	private:
-		fdIter						_clientFDIterator; // 클라이언트 소켓 fd
+		int							_clientFD; // 클라이언트 소켓 fd
 		struct sockaddr_in*			_clientAddress; // 클라이언트 소켓 정보
 		socklen_t*					_clientAddressSize; // 클라이언트 소켓 정보 크기
 		std::string					_nickname;
@@ -33,7 +33,7 @@ class User {
 		~User();
 		User&				operator=(const User& instance);
 
-		fdIter				getSocketFdIterator() const;
+		int					getSocketFd() const;
 		struct sockaddr_in*	getAddressPtr() const;
 		socklen_t*			getAddressSizePtr() const;
 		std::string			getNickname() const;
@@ -47,7 +47,7 @@ class User {
 		void				setUsername(std::string username);
 		void				setHostname(std::string hostname);
 		void				setIsVerified(short what);
-		void				setSocketFdIterator(fdIter fdIter);
+		void				setSocketFd(int fd);
 		void				setIsDisconnected(bool isDisconnected);
 		void				setModeInServer(std::string mode);
 };

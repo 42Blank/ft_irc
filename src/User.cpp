@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:50:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/04 17:21:50 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/05 11:55:06 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ User::User(const User& instance) {
 User&	User::operator=(const User& instance) {
 	std::cout << "copied user: " << instance.getNickname() << "\n";
 
-	_clientFDIterator = instance.getSocketFdIterator();
+	_clientFD = instance.getSocketFd();
 	_clientAddress = new sockaddr_in(*instance.getAddressPtr());
 	_clientAddressSize = new socklen_t(*instance.getAddressSizePtr());
 	_nickname = instance.getNickname();
@@ -41,8 +41,8 @@ User&	User::operator=(const User& instance) {
 	return *this;
 }
 
-fdIter	User::getSocketFdIterator() const {
-	return _clientFDIterator;
+int	User::getSocketFd() const {
+	return _clientFD;
 }
 
 struct sockaddr_in*	User::getAddressPtr() const {
@@ -89,8 +89,8 @@ void	User::setHostname(std::string hostname) {
 	_hostname = hostname;
 }
 
-void	User::setSocketFdIterator(fdIter fdIter) {
-	_clientFDIterator = fdIter;
+void	User::setSocketFd(int fd) {
+	_clientFD = fd;
 }
 
 void	User::setIsVerified(short what) {
