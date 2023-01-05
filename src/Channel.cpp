@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Channel.cpp                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/01 10:08:55 by san               #+#    #+#             */
+/*   Updated: 2023/01/05 17:48:50 by jiychoi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../includes/Channel.hpp"
 
@@ -9,9 +20,7 @@ Channel::Channel(User &user, std::string name) {
 	_modeInServer_c = "+nt";
 }
 
-Channel::~Channel() {
-
-}
+Channel::~Channel() {}
 
 // 새로운 유저가 조인하면 이 메서드를 통해서 채널의 userList에 추가한다.
 void	Channel::joinNewUser(User user) {
@@ -43,7 +52,6 @@ std::string			Channel::getTopic() {
 
 // 그냥 유저 닉네임을 모두 출력하도록 함
 std::string			Channel::getUserList() {
-
 	std::string	userList;
 	std::vector<User>::iterator	iter;
 
