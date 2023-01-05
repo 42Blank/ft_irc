@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/04 04:51:09 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/05 21:50:34 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ class Server {
 		void		commandMSG(User &user, std::vector<std::string>& parameters);
 		void		commandMODE(User &user, std::vector<std::string>& parameters);
 		void		commandPART(User &user, std::vector<std::string>& parameters);
+		void		commandKICK(User &user, std::vector<std::string>& parameters);
 		
 		bool		isChannel(std::string channelName);
 		Channel		&findChannel(std::string channelName);

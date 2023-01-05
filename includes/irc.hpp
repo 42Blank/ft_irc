@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 13:44:22 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/04 05:26:11 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/05 21:51:06 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@
 # define CMD_PART "PART"
 # define CMD_PING "PING"
 # define CMD_PONG "PONG"
+# define CMD_KICK "KICK"
 
 # define NICK_AVAILABLE_CHAR "[]\\`_^{}|"
 

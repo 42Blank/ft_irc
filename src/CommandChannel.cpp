@@ -109,8 +109,6 @@ void		Server::commandMSG(User &user, std::vector<std::string>& parameters) {
 	} else if (isServerUser(parameters[1])) {
 		User	&receiver = findUser(parameters[1]);
 		sendMessageUnicast(user, receiver, "PRIVMSG " + receiver.getNickname() + " " + ft_getStringAfterColon(parameters));
-		// 여기도 공백들어오는 메세지 추가하기 
-
 	} else {
 		// 채널도 사용자도 아닌 에러
 	}
@@ -172,4 +170,22 @@ void		Server::commandNAMES(User &user, std::vector<std::string>& parameters) {
 	Channel	&ch = findChannel(parameters[1]);
 	sendClientMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), ch.getUserList()));
 	sendClientMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + ch.getChannelName()));
+}
+
+// KICK #xx tes1 :
+// KICK <channel> <username> : <msg>
+// sender가 operator인지 확인
+// 채널이 존재하는지 확인
+// 채널에 유저가 존재하는지 확인
+// kick
+void		Server::commandKICK(User &user, std::vector<std::string>& parameters) {
+	Channel &ch = findChannel(parameters[1]);
+
+	if (!ch.isOperator(user.getNickname()))
+		throw std::runtime_error(Error(ERR_CHANOPRIVSNEEDED));
+	if (!ch.isUser(parameters[2]))
+		throw std::runtime_error(Error(ERR_NOSUCHNICK));
+	sendMessageBroadcast(0, ch, user, "KICK " + ch.getChannelName() + " " + parameters[2] + ":" + ft_getStringAfterColon(parameters));
+	ch.deleteNormalUser(parameters[2]);
+	ch.deleteOperatorUser(parameters[2]);
 }
