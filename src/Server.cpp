@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/06 01:32:58 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/06 05:20:05 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,20 @@
 
 Server::Server(char* port, char* password) {
 	struct pollfd 	server_pollfd;
-	int				socket_opt = 1;
+	// int				socket_opt = 1;
 
 	_serverSocket = socket(PF_INET, SOCK_STREAM, 0);	// 소켓 생성
 	if (_serverSocket < 0)
 		throw std::runtime_error(Error(ERR_SERVEROPENFAILED, "socket"));
-	if (setsockopt(_serverSocket, SOL_SOCKET, SO_REUSEADDR, &socket_opt, sizeof(socket_opt)) < 0)
-		throw std::runtime_error(Error(ERR_SERVEROPENFAILED, "socketopt"));
+	// if (setsockopt(_serverSocket, SOL_SOCKET, SO_REUSEADDR, &socket_opt, sizeof(socket_opt)) < 0)
+	// 	throw std::runtime_error(Error(ERR_SERVEROPENFAILED, "socketopt"));
 	_port = atoi(port);
 	_password = password;
 	memset(&_serverAddress, 0, sizeof(_serverAddress));	// 구조체 변수의 모든 멤버를 0으로 초기화
 	_serverAddress.sin_family = AF_INET;			// 주소 체계 지정, AF_INET : IPv4 인터넷 프로토콜에 적용
 	_serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);	// IP 주소
 	_serverAddress.sin_port = htons(_port);	// port 번호 초기화
-	_created_time = time(NULL);
+	// _created_time = time(NULL);
 	server_pollfd.fd = _serverSocket;
 	server_pollfd.events = POLLIN;
 	_poll_fds.push_back(server_pollfd);
@@ -49,16 +49,13 @@ void	Server::serverOn(void) {
 		throw std::runtime_error(Error(ERR_SERVEROPENFAILED, "listen"));
 	while (true) {
 		if (!poll(_poll_fds.data(), _poll_fds.size(), 1000)) {
-			// test code - 1
-			std::cout << "server waiting\n";
 			continue ;
 		}
 		if (_poll_fds[0].revents & POLLIN) { // _poll_fds[0] -> 서버 fd에 POLLIN event발생
 			acceptClient();
-			// test code - line 1
-			std::cout << "server accept\n";
 			continue;
 		}
+		ft_checkPollReturnEvent(_poll_fds[0].revents);
 		for (iter = _poll_fds.begin() + 1; iter < _poll_fds.end(); iter++) {
 			if (iter->revents & POLLHUP) { // 현재 클라이언트 연결 끊김
 				setUserDisconnectByFd(iter->fd);
@@ -198,7 +195,7 @@ void	Server::disconnectClients() {
 		pollIter = _poll_fds.begin() + 1;
 		while (pollIter < _poll_fds.end()) {
 			if (userIter->getSocketFd() == pollIter->fd) {
-				_poll_fds.erase(_poll_fds.begin());
+				_poll_fds.erase(pollIter);
 				break ;
 			}
 			pollIter++;

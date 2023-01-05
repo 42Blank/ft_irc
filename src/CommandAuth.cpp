@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandAuth.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 21:49:06 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/05 16:51:56 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/06 04:22:58 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	Server::checkIsVerified(User& user) {
 		"002 " + user.getNickname() + " :\033[1;32mYour host is " + SERVER_NAME + ", " + "running version 0.1\e[0m"
 	);
 	sendMessage(user,
-		"003 " + user.getNickname() + " :\033[1;32mThis server was created " + ctime(&_created_time) + "\e[0m"
+		"003 " + user.getNickname() + " :\033[1;32mThis server was created at 2023\e[0m"
 	);
 	sendMessage(user,
 		"004 " + user.getNickname() + " :\033[1;32m" + SERVER_NAME + " 0.1\e[0m"

@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/06 01:03:09 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/06 04:02:16 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ class Server {
 		void		sendMessage(User& sender, User& receiver, std::string str);
 		void		sendMessageBroadcast(int mode, Channel& ch, User& sender, std::string str);
 
-		void		receiveFirstClientMessage(int fdIndex);
+		void		receiveFirstClientMessage(int clientFd);
 		void		receiveClientMessage(int clientSocket);
 		std::string	concatMessage(int clientSocket);
 		void		parseMessageStream(User& user, const std::string& fullMsg);
