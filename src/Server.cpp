@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/06 01:03:22 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/06 01:20:15 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,19 +181,24 @@ void	Server::setUserDisconnectByFd(int clientFd) {
 }
 
 void	Server::disconnectClients() {
-	std::vector<User>::iterator iter = _s_userList.begin();
-	int	fdIndex;
+	std::vector<User>::iterator userIter = _s_userList.begin();
+	std::vector<pollfd>::iterator pollIter;
 
-	while (iter < _s_userList.end()) {
-		if (!iter->getIsDisconnected()) {
-			iter++;
+	while (userIter < _s_userList.end()) {
+		if (!userIter->getIsDisconnected()) {
+			userIter++;
 			continue;
 		}
-		// TODO : 수정 해야함
-		fdIndex = iter->getSocketFd();
-		close(_poll_fds[fdIndex].fd);
-		_poll_fds.erase(_poll_fds.begin() + fdIndex);
-		iter = _s_userList.erase(iter);
+		close(userIter->getSocketFd());
+		pollIter = _poll_fds.begin();
+		while (pollIter < _poll_fds.end()) {
+			if (userIter->getSocketFd() == pollIter->fd) {
+				_poll_fds.erase(_poll_fds.begin());
+				break ;
+			}
+			pollIter++;
+		}
+		userIter = _s_userList.erase(userIter);
 	}
 }
 
