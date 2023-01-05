@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 04:09:31 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/05 16:35:58 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/05 16:53:51 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	Server::commandCAP(User& user, std::vector<std::string>& parameters) {
 	if (parameters.size() != 2) throw std::runtime_error(Error(ERR_NEEDMOREPARAMS, CMD_CAP));
-	if (parameters[1] == "LS") {
+	if (!parameters[1].compare("LS")) {
 		sendMessage(user, "CAP * LS");
 	}
 }
@@ -37,5 +37,6 @@ void	Server::commandQUIT(User& user, std::vector<std::string>& parameters) {
 	std::string quitUserNickname = user.getNickname();
 	std::string	quitMsg = ft_getStringAfterColon(parameters);
 	sendMessage(user, ErrorReply(":Closing Link:", quitUserHostname, "(Quit: " + quitUserNickname + ")"));
+	// sendMessageBroadcast()
 	user.setIsDisconnected(true);
 }

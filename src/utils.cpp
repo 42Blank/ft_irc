@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:41:37 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/04 16:58:30 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/05 16:57:23 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,18 +104,18 @@ int	ft_checkPollReturnEvent(short revents) {
 }
 
 bool	ft_checkIsCommandValid(std::string command, bool isVerified) {
-	if (command == CMD_CAP ||
-		command == CMD_PASS ||
-		command == CMD_NICK ||
-		command == CMD_USER) return true;
+	if (!command.compare(CMD_CAP) ||
+		!command.compare(CMD_PASS) ||
+		!command.compare(CMD_NICK) ||
+		!command.compare(CMD_USER)) return true;
 	if (isVerified) {
-		if (command == CMD_JOIN ||
-			command == CMD_MSG ||
-			command == CMD_TOPIC ||
-			command == CMD_NAMES ||
-			command == CMD_PART ||
-			command == CMD_PING ||
-			command == CMD_PONG ) return true;
+		if (!command.compare(CMD_JOIN) ||
+			!command.compare(CMD_MSG) ||
+			!command.compare(CMD_TOPIC) ||
+			!command.compare(CMD_NAMES) ||
+			!command.compare(CMD_PART) ||
+			!command.compare(CMD_PING) ||
+			!command.compare(CMD_PONG) ) return true;
 	}
 	return false;
 }

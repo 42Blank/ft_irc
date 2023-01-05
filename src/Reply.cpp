@@ -6,15 +6,15 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 19:31:32 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/04 17:15:25 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/05 16:51:02 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../includes/Reply.hpp"
 
 static std::string	getReplyMessage(std::string code) {
-	if (code == RPL_NOTOPIC) return " :No topic is set";
-	if (code == RPL_ENDOFNAMES) return " :End of /NAMES list";
+	if (!code.compare(RPL_NOTOPIC)) return " :No topic is set";
+	if (!code.compare(RPL_ENDOFNAMES)) return " :End of /NAMES list";
 	return "";
 }
 
@@ -31,26 +31,26 @@ std::string	Reply(std::string repCode, std::string param1, std::string param2) {
 }
 
 static std::string	getErrorMessage(std::string code) {
-	if (code == ERR_NOSUCHNICK) return " :No such nick/channel";
-	if (code == ERR_NOSUCHSERVER) return " :No such server";
-	if (code == ERR_NOSUCHCHANNEL) return " :No such channel";
-	if (code == ERR_NOORIGIN) return " :No origin specified";
-	if (code == ERR_UNKNOWNCOMMAND) return " :Unknown command";
-	if (code == ERR_NONICKNAMEGIVEN) return " :No nickname given";
-	if (code == ERR_ERRONEUSNICKNAME) return " :Erroneous nickname";
-	if (code == ERR_NICKNAMEINUSE) return " :Nickname is already in use";
-	if (code == ERR_USERNOTINCHANNEL) return " :They aren't on that channel";
-	if (code == ERR_NOTONCHANNEL) return " :You're not on that channel";
-	if (code == ERR_NOTREGISTERED) return " :You have not registered";
-	if (code == ERR_NEEDMOREPARAMS) return " :Not enough parameters";
-	if (code == ERR_PASSWDMISMATCH) return " :Password incorrect";
-	if (code == ERR_CHANOPRIVSNEEDED) return " :You're not channel operator";
+	if (!code.compare(ERR_NOSUCHNICK)) return " :No such nick/channel";
+	if (!code.compare(ERR_NOSUCHSERVER)) return " :No such server";
+	if (!code.compare(ERR_NOSUCHCHANNEL)) return " :No such channel";
+	if (!code.compare(ERR_NOORIGIN)) return " :No origin specified";
+	if (!code.compare(ERR_UNKNOWNCOMMAND)) return " :Unknown command";
+	if (!code.compare(ERR_NONICKNAMEGIVEN)) return " :No nickname given";
+	if (!code.compare(ERR_ERRONEUSNICKNAME)) return " :Erroneous nickname";
+	if (!code.compare(ERR_NICKNAMEINUSE)) return " :Nickname is already in use";
+	if (!code.compare(ERR_USERNOTINCHANNEL)) return " :They aren't on that channel";
+	if (!code.compare(ERR_NOTONCHANNEL)) return " :You're not on that channel";
+	if (!code.compare(ERR_NOTREGISTERED)) return " :You have not registered";
+	if (!code.compare(ERR_NEEDMOREPARAMS)) return " :Not enough parameters";
+	if (!code.compare(ERR_PASSWDMISMATCH)) return " :Password incorrect";
+	if (!code.compare(ERR_CHANOPRIVSNEEDED)) return " :You're not channel operator";
 
-	if (code == ERR_USERSDONTMATCH) return " :Can't view modes for other users";
-	if (code == ERR_SERVEROPENFAILED) return " :Failed to open server";
-	if (code == ERR_CLIENTCONNECTFAILED) return " :Failed to connect with client";
-	if (code == ERR_CANNOTFINDUSERFD) return " :Cannot find user by fd";
-	if (code == ERR_MESSAGESENDFAILED) return " :Failed to send message";
+	if (!code.compare(ERR_USERSDONTMATCH)) return " :Can't view modes for other users";
+	if (!code.compare(ERR_SERVEROPENFAILED)) return " :Failed to open server";
+	if (!code.compare(ERR_CLIENTCONNECTFAILED)) return " :Failed to connect with client";
+	if (!code.compare(ERR_CANNOTFINDUSERFD)) return " :Cannot find user by fd";
+	if (!code.compare(ERR_MESSAGESENDFAILED)) return " :Failed to send message";
 	return " :Unknown error";
 }
 

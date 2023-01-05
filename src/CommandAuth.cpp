@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 21:49:06 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/05 16:35:58 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/05 16:51:56 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	Server::commandNICK(User& user, std::vector<std::string>& parameters) {
 	user.setNickname(nickname);
 
 	for (iter = _s_userList.begin(); iter < _s_userList.end(); iter++) {
-		if ((*iter).getNickname() == nickname) throw std::runtime_error(Error(ERR_NICKNAMEINUSE, nickname));
+		if (!(*iter).getNickname().compare(nickname)) throw std::runtime_error(Error(ERR_NICKNAMEINUSE, nickname));
 	}
 	user.setIsVerified(NICK_VERIFIED);
 	checkIsVerified(user);

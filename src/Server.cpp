@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/05 16:35:58 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/05 16:56:45 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	Server::serverOn(void) {
 	if (listen(_serverSocket, 5) < 0)	// 연결요청 대기상태
 		throw std::runtime_error(Error(ERR_SERVEROPENFAILED, "listen"));
 	while (true) {
-		if (poll(_poll_fds.data(), _poll_fds.size(), 1000) == 0)
+		if (!poll(_poll_fds.data(), _poll_fds.size(), 1000))
 			continue ;
 		if (_poll_fds[0].revents & POLLIN) { // _poll_fds[0] -> 서버 fd에 POLLIN event발생
 			acceptClient();
@@ -62,7 +62,7 @@ void	Server::serverOn(void) {
 				continue ;
 			}
 			else if (iter->revents & POLLIN) {
-				if (getUserIndexByFd(iter->fd) == -1) {
+				if (getUserIndexByFd(iter->fd) < 0) {
 					std::cout << "\n\n@@@@Welcome process called@@@@" << "\n\n";
 					receiveFirstClientMessage(idx);
 				}
@@ -138,7 +138,7 @@ std::string	Server::concatMessage(int clientSocket) {
 		_message[message_length] = 0;
 		std::cout << "JASONG DEBUG - recv message : " << _message << '\n';
 		fullMsg += _message;
-		if (fullMsg.length() >= 2 && fullMsg.substr(fullMsg.length() - 2) == "\r\n") break;
+		if (fullMsg.length() >= 2 && !fullMsg.substr(fullMsg.length() - 2).compare("\r\n")) break;
 	}
 	ft_replaceStr(fullMsg, "\r", " ");
 
@@ -154,19 +154,19 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 	for (cmdIter = commands.begin(); cmdIter != commands.end(); cmdIter++) {
 		std::vector<std::string>	parameters = ft_split(*cmdIter, ' ');
 
-		if (parameters[0] == CMD_CAP) commandCAP(user, parameters);
-		else if (parameters[0] == CMD_PASS) commandPASS(user, parameters);
-		else if (parameters[0] == CMD_NICK) commandNICK(user, parameters);
-		else if (parameters[0] == CMD_USER) commandUSER(user, parameters);
-		else if (parameters[0] == CMD_PING) commandPING(user, parameters);
-		else if (parameters[0] == CMD_PONG) commandPONG(user, parameters);
-		else if (parameters[0] == CMD_MODE) commandMODE(user, parameters);
-		else if (parameters[0] == CMD_JOIN) commandJOIN(user, parameters);
-		else if (parameters[0] == CMD_MSG) commandMSG(user, parameters);
-		else if (parameters[0] == CMD_TOPIC) commandTOPIC(user, parameters);
-		else if (parameters[0] == CMD_NAMES) commandNAMES(user, parameters);
-		else if (parameters[0] == CMD_PART) commandPART(user, parameters);
-		else if (parameters[0] == CMD_QUIT) commandQUIT(user, parameters);
+		if (!parameters[0].compare(CMD_CAP)) commandCAP(user, parameters);
+		else if (!parameters[0].compare(CMD_PASS)) commandPASS(user, parameters);
+		else if (!parameters[0].compare(CMD_NICK)) commandNICK(user, parameters);
+		else if (!parameters[0].compare(CMD_USER)) commandUSER(user, parameters);
+		else if (!parameters[0].compare(CMD_PING)) commandPING(user, parameters);
+		else if (!parameters[0].compare(CMD_PONG)) commandPONG(user, parameters);
+		else if (!parameters[0].compare(CMD_MODE)) commandMODE(user, parameters);
+		else if (!parameters[0].compare(CMD_JOIN)) commandJOIN(user, parameters);
+		else if (!parameters[0].compare(CMD_MSG)) commandMSG(user, parameters);
+		else if (!parameters[0].compare(CMD_TOPIC)) commandTOPIC(user, parameters);
+		else if (!parameters[0].compare(CMD_NAMES)) commandNAMES(user, parameters);
+		else if (!parameters[0].compare(CMD_PART)) commandPART(user, parameters);
+		else if (!parameters[0].compare(CMD_QUIT)) commandQUIT(user, parameters);
 		else sendMessage(user, Error(ERR_UNKNOWNCOMMAND, parameters[0]));
 	}
 }
