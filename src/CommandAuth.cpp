@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandAuth.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 21:49:06 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/04 15:54:20 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/05 16:35:58 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,17 +53,17 @@ void	Server::commandUSER(User& user, std::vector<std::string>& parameters) {
 void	Server::checkIsVerified(User& user) {
 	if (user.getIsVerified() != ALL_VERIFIED) return;
 
-	sendClientMessage(user,
+	sendMessage(user,
 		"001 " + user.getNickname() + " :\033[1;32mWelcome to the " + SERVER_NAME + "\e[0m " + \
 		user.getNickname() + "!" + user.getUsername() + "@" + user.getHostname()
 	);
-	sendClientMessage(user,
+	sendMessage(user,
 		"002 " + user.getNickname() + " :\033[1;32mYour host is " + SERVER_NAME + ", " + "running version 0.1\e[0m"
 	);
-	sendClientMessage(user,
+	sendMessage(user,
 		"003 " + user.getNickname() + " :\033[1;32mThis server was created " + ctime(&_created_time) + "\e[0m"
 	);
-	sendClientMessage(user,
+	sendMessage(user,
 		"004 " + user.getNickname() + " :\033[1;32m" + SERVER_NAME + " 0.1\e[0m"
 	);
 }

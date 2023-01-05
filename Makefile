@@ -6,14 +6,14 @@
 #    By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/28 13:47:07 by jiychoi           #+#    #+#              #
-#    Updated: 2023/01/04 12:52:08 by jiychoi          ###   ########.fr        #
+#    Updated: 2023/01/05 16:35:34 by jiychoi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CXX			=	c++
 CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98
 SRCS		=	src/main.cpp \
-				src/Server.cpp src/User.cpp \
+				src/Server.cpp src/ServerSendMessage.cpp src/User.cpp \
 				src/Command.cpp src/CommandChannel.cpp src/CommandAuth.cpp \
 				src/utils.cpp src/Reply.cpp \
 				src/Channel.cpp

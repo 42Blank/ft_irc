@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/05 16:23:54 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/05 16:35:58 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 		else if (parameters[0] == CMD_NAMES) commandNAMES(user, parameters);
 		else if (parameters[0] == CMD_PART) commandPART(user, parameters);
 		else if (parameters[0] == CMD_QUIT) commandQUIT(user, parameters);
-		else sendClientMessage(user, Error(ERR_UNKNOWNCOMMAND, parameters[0]));
+		else sendMessage(user, Error(ERR_UNKNOWNCOMMAND, parameters[0]));
 	}
 }
 

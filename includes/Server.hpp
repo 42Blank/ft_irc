@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/05 16:25:01 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/05 16:36:39 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ class Server {
 
 		void		acceptClient(void);
 
-		void		sendClientMessage(User& user, std::string str);
-		void		sendClientMessage(User& sender, User& receiver, std::string str);
+		void		sendMessage(User& user, std::string str);
+		void		sendMessage(User& sender, User& receiver, std::string str);
 		void		sendMessageBroadcast(int mode, Channel& ch, User& sender, std::string str);
 
 		void		receiveFirstClientMessage(int fdIndex);
@@ -82,8 +82,6 @@ class Server {
 
 		void		serverOn(void);
 		void		serverOff(void);
-		bool		isServerUser(std::string nickname);
-
 
 		// for debug
 		void		testUser(void);
