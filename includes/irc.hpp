@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 13:44:22 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/04 16:52:03 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/05 11:52:22 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@
 # define CMD_QUIT "QUIT"
 
 # define NICK_AVAILABLE_CHAR "[]\\`_^{}|"
-
-typedef std::vector<struct pollfd>::iterator fdIter;
 
 std::vector<std::string>	ft_split(std::string input, char delimiter);
 void						ft_replaceStr(std::string& str, std::string src, std::string des);

@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/04 17:39:59 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/05 13:14:38 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ Server::~Server(void) {
 
 void	Server::serverOn(void) {
 	std::vector<struct pollfd>::iterator iter;
+	int		idx;
 
 	if (listen(_serverSocket, 5) < 0)	// 연결요청 대기상태
 		throw std::runtime_error(Error(ERR_SERVEROPENFAILED, "listen"));
@@ -54,21 +55,23 @@ void	Server::serverOn(void) {
 			acceptClient();
 			continue;
 		}
+		idx = 1;
 		for (iter = _poll_fds.begin() + 1; iter < _poll_fds.end(); iter++) {
 			if (iter->revents & POLLHUP) { // 현재 클라이언트 연결 끊김
-				setUserDisconnectByFdIter(iter);
+				setUserDisconnectByFdIndex(idx);
 				continue ;
 			}
 			else if (iter->revents & POLLIN) {
 				if (getUserIndexByFd(iter->fd) == -1) {
 					std::cout << "\n\n@@@@Welcome process called@@@@" << "\n\n";
-					receiveFirstClientMessage(iter);
+					receiveFirstClientMessage(idx);
 				}
 				else
 					receiveClientMessage(iter->fd);
 			}
 			if (ft_checkPollReturnEvent(iter->revents) == POLLNVAL)
-				setUserDisconnectByFdIter(iter);
+				setUserDisconnectByFdIndex(idx);
+			idx++;
 		}
 		disconnectClients();
 	}
@@ -80,7 +83,7 @@ void	Server::serverOff(void) {
 }
 
 void	Server::sendClientMessage(User& user, std::string str) {
-	int	fd = user.getSocketFdIterator()->fd;
+	int	fd = _poll_fds[user.getSocketFdIndex()].fd;
 	std::string strToSend = ":" + user.getNickname() + "!" + user.getNickname()  + "@127.0.0.1 " + str + "\r\n";
 	std::cout << "Sending [" << strToSend << "]\n";
 	if (send(fd, (strToSend).c_str(), strToSend.length(), 0) == -1)
@@ -108,12 +111,12 @@ void	Server::acceptClient(void) {
 	}
 }
 
-void	Server::receiveFirstClientMessage(fdIter iter) {
+void	Server::receiveFirstClientMessage(int fdIndex) {
 	User	user;
-	int		fd = iter->fd;
+	int		fd = _poll_fds[fdIndex].fd;
 
 	try {
-		user.setSocketFdIterator(iter);
+		user.setSocketFdIndex(fdIndex);
 		std::string fullMsg = concatMessage(fd);
 		parseMessageStream(user, fullMsg);
 		_s_userList.push_back(user);
@@ -176,12 +179,12 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 	}
 }
 
-void	Server::setUserDisconnectByFdIter(fdIter fdIter) {
+void	Server::setUserDisconnectByFdIndex(int fdIndex) {
 	std::vector<User>::iterator userIter;
 
 	for (userIter = _s_userList.begin(); userIter < _s_userList.end(); userIter++) {
 		std::cout << "USER ITER [" << userIter->getNickname() << "]\n";
-		if (!(userIter->getSocketFdIterator() == fdIter)) continue;
+		if (userIter->getSocketFdIndex() != fdIndex) continue;
 		std::cout << "[" << userIter->getNickname() << "] WILL BE DELETED\n";
 		userIter->setIsDisconnected(true);
 		return;
@@ -190,27 +193,27 @@ void	Server::setUserDisconnectByFdIter(fdIter fdIter) {
 
 void	Server::disconnectClients() {
 	std::vector<User>::iterator iter = _s_userList.begin();
-	fdIter	fdIter;
+	int	fdIndex;
 
 	while (iter < _s_userList.end()) {
 		if (!iter->getIsDisconnected()) {
 			iter++;
 			continue;
 		}
-		fdIter = iter->getSocketFdIterator();
-		close(fdIter->fd);
-		_poll_fds.erase(fdIter);
+		fdIndex = iter->getSocketFdIndex();
+		close(_poll_fds[fdIndex].fd);
+		_poll_fds.erase(_poll_fds.begin() + fdIndex);
 		iter = _s_userList.erase(iter);
 	}
 }
 
 int	Server::getUserIndexByFd(int fd) {
 	std::vector<User>::iterator	iter;
-	int							index;
+	int	index;
 
 	index = 0;
 	for (iter = _s_userList.begin(); iter < _s_userList.end(); iter++) {
-		if (fd == (*iter).getSocketFdIterator()->fd)
+		if (fd == _poll_fds[(*iter).getSocketFdIndex()].fd)
 			return (index);
 		index++;
 	}
