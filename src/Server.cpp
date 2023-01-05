@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/05 22:10:44 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/06 01:03:22 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ Server::~Server(void) {
 
 void	Server::serverOn(void) {
 	std::vector<struct pollfd>::iterator iter;
-	int		idx;
 
 	if (listen(_serverSocket, 5) < 0)	// 연결요청 대기상태
 		throw std::runtime_error(Error(ERR_SERVEROPENFAILED, "listen"));
@@ -55,23 +54,22 @@ void	Server::serverOn(void) {
 			acceptClient();
 			continue;
 		}
-		idx = 1;
 		for (iter = _poll_fds.begin() + 1; iter < _poll_fds.end(); iter++) {
 			if (iter->revents & POLLHUP) { // 현재 클라이언트 연결 끊김
-				setUserDisconnectByFdIndex(idx);
+				setUserDisconnectByFd(iter->fd);
 				continue ;
 			}
 			else if (iter->revents & POLLIN) {
-				if (getUserIndexByFd(iter->fd) < 0) {
-					std::cout << "\n\n@@@@Welcome process called@@@@" << "\n\n";
-					receiveFirstClientMessage(idx);
-				}
-				else
+				if (isServerUser(iter->fd))
 					receiveClientMessage(iter->fd);
+				else {
+					std::cout << "\n\n@@@@Welcome process called@@@@" << "\n\n";
+					receiveFirstClientMessage(iter->fd);
+				}
 			}
-			if (ft_checkPollReturnEvent(iter->revents) == POLLNVAL)
-				setUserDisconnectByFdIndex(idx);
-			idx++;
+			if (ft_checkPollReturnEvent(iter->revents) == POLLNVAL) {
+				_poll_fds.erase(iter);
+			}
 		}
 		disconnectClients();
 	}
@@ -103,27 +101,26 @@ void	Server::acceptClient(void) {
 	}
 }
 
-void	Server::receiveFirstClientMessage(int fdIndex) {
+void	Server::receiveFirstClientMessage(int clientFd) {
 	User	user;
-	int		fd = _poll_fds[fdIndex].fd;
 
 	try {
-		user.setSocketFdIndex(fdIndex);
-		std::string fullMsg = concatMessage(fd);
+		user.setSocketFd(clientFd);
+		std::string fullMsg = concatMessage(clientFd);
 		parseMessageStream(user, fullMsg);
 		_s_userList.push_back(user);
 	}	catch (std::exception &e) {
 		std::cout << e.what() << "\n";
-		close(fd); // 위의 절차 중 하나라도 실패 시에는 유저 통신 끊어야함
+		close(clientFd); // 위의 절차 중 하나라도 실패 시에는 유저 통신 끊어야함
 	}
 }
 
 void	Server::receiveClientMessage(int clientSocket) {
 	try {
 		std::string	fullMsg = concatMessage(clientSocket);
-		int			userIdx = getUserIndexByFd(clientSocket);
-
-		parseMessageStream(_s_userList[userIdx], fullMsg);
+		User&		user = getUserByFd(clientSocket);
+		// TODO : 고쳐야함
+		parseMessageStream(user, fullMsg);
 	} catch (std::exception &e) {
 		std::cout << e.what() << "\n";
 	}
@@ -171,12 +168,12 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 	}
 }
 
-void	Server::setUserDisconnectByFdIndex(int fdIndex) {
+void	Server::setUserDisconnectByFd(int clientFd) {
 	std::vector<User>::iterator userIter;
 
 	for (userIter = _s_userList.begin(); userIter < _s_userList.end(); userIter++) {
 		std::cout << "USER ITER [" << userIter->getNickname() << "]\n";
-		if (userIter->getSocketFdIndex() != fdIndex) continue;
+		if (userIter->getSocketFd() != clientFd) continue;
 		std::cout << "[" << userIter->getNickname() << "] WILL BE DELETED\n";
 		userIter->setIsDisconnected(true);
 		return;
@@ -192,27 +189,33 @@ void	Server::disconnectClients() {
 			iter++;
 			continue;
 		}
-		fdIndex = iter->getSocketFdIndex();
+		// TODO : 수정 해야함
+		fdIndex = iter->getSocketFd();
 		close(_poll_fds[fdIndex].fd);
 		_poll_fds.erase(_poll_fds.begin() + fdIndex);
 		iter = _s_userList.erase(iter);
 	}
 }
 
-int	Server::getUserIndexByFd(int fd) {
+User&	Server::getUserByFd(int fd) {
 	std::vector<User>::iterator	iter;
-	int	index;
 
-	index = 0;
 	for (iter = _s_userList.begin(); iter < _s_userList.end(); iter++) {
-		if (fd == _poll_fds[(*iter).getSocketFdIndex()].fd)
-			return (index);
-		index++;
+		if (fd == iter->getSocketFd())
+			return (*iter);
 	}
-	// throw std::runtime_error(Error(ERR_CANNOTFINDUSERFD));
-	return (-1);
+	throw std::runtime_error(Error(ERR_CANNOTFINDUSERFD));
 }
 
+bool	Server::isServerUser(int socketFd) {
+	std::vector<User>::iterator	iter;
+
+	for (iter = _s_userList.begin(); iter < _s_userList.end(); iter++) {
+		if (socketFd == iter->getSocketFd())
+			return (true);
+	}
+	return (false);
+}
 
 ////////////////////////////////////////// FOR DEBUG
 
