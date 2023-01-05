@@ -6,11 +6,13 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 10:08:55 by san               #+#    #+#             */
-/*   Updated: 2023/01/05 17:48:50 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/05 22:21:01 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Channel.hpp"
+
+Channel::Channel() {}
 
 // 여기 유저 nickname만 받아서 Channel user list에 넣으면 안될지 고민 중
 Channel::Channel(User &user, std::string name) {

@@ -15,6 +15,7 @@ class Channel {
 		std::string			_modeInServer_c;
 
 	public:
+		Channel();
 		Channel(User &user, std::string name);
 		~Channel();
 

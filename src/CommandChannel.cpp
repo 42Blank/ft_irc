@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 17:53:57 by san               #+#    #+#             */
-/*   Updated: 2023/01/05 17:49:19 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/05 22:21:25 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,21 +56,23 @@ User		&Server::findUser(std::string nickname) {
 	throw std::runtime_error(Error(ERR_NOSUCHNICK, nickname));
 }
 
-
-
 void	Server::commandJOIN(User &user, std::vector<std::string> &parameters) {
 	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 	if (parameters.size() < 2) throw std::runtime_error(Error(ERR_NEEDMOREPARAMS, CMD_JOIN));
 
 	std::string	channelName = parameters[1];
-	Channel	ch = Channel(user, channelName);
+	Channel	ch;
 	bool	isChannelAvailable = isChannel(channelName);
 
 	sendMessage(user, " JOIN " + channelName);
-	if (isChannelAvailable)
-		findChannel(channelName).joinNewUser(user);
-	else
+	if (isChannelAvailable) {
+		ch = findChannel(channelName);
+		ch.joinNewUser(user);
+	}
+	else {
+		ch = Channel(user, channelName);
 		_channelList.push_back(ch);
+	}
 	sendMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), ch.getUserList()));
 	sendMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + ch.getChannelName()));
 	if (isChannelAvailable)
