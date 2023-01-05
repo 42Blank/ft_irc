@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/05 16:36:39 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/05 22:07:33 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ class Server {
 		void		commandMODE(User &user, std::vector<std::string>& parameters);
 		void		commandPART(User &user, std::vector<std::string>& parameters);
 		void		commandQUIT(User& user, std::vector<std::string>& parameters);
-
-
+		void		commandKICK(User &user, std::vector<std::string>& parameters);
+		
 		bool		isChannel(std::string channelName);
 		Channel		&findChannel(std::string channelName);
 		bool		isServerUser(std::string nickname);
