@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 17:53:57 by san               #+#    #+#             */
-/*   Updated: 2023/01/05 17:45:18 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/05 17:49:19 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ void	Server::commandJOIN(User &user, std::vector<std::string> &parameters) {
 	if (isChannelAvailable)
 		sendMessageBroadcast(1, ch, user, "JOIN :" + ch.getChannelName());
 }
-
 
 //관리자만 사용할 수 있다.
 void		Server::commandTOPIC(User &user, std::vector<std::string>& parameters) {
