@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   irc.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 13:44:22 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/05 11:52:22 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/05 22:10:14 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@
 # define CMD_PING "PING"
 # define CMD_PONG "PONG"
 # define CMD_QUIT "QUIT"
+# define CMD_KICK "KICK"
 
 # define NICK_AVAILABLE_CHAR "[]\\`_^{}|"
 
