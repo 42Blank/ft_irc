@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/05 22:07:33 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/05 22:10:44 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,6 +166,7 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 		else if (!parameters[0].compare(CMD_NAMES)) commandNAMES(user, parameters);
 		else if (!parameters[0].compare(CMD_PART)) commandPART(user, parameters);
 		else if (!parameters[0].compare(CMD_QUIT)) commandQUIT(user, parameters);
+		else if (!parameters[0].compare(CMD_KICK)) commandKICK(user, parameters);
 		else sendMessage(user, Error(ERR_UNKNOWNCOMMAND, parameters[0]));
 	}
 }
