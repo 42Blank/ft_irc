@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:50:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/06 00:47:19 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/06 06:25:09 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,19 @@ void	User::setModeInServer(std::string mode) {
 
 void	User::setChannelList(std::vector<std::string> channelList) {
 	_channelList = channelList;
+}
+
+void	User::addJoinedChannelByName(std::string channelName) {
+	_channelList.push_back(channelName);
+}
+
+void	User::deleteJoinedChannelByName(std::string channelName) {
+	std::vector<std::string>::iterator iter;
+
+	for (iter = _channelList.begin(); iter < _channelList.end(); iter++) {
+		if (*iter == channelName)
+			_channelList.erase(iter);
+	}
 }
 
 std::ostream& operator<<(std::ostream& out, const User& instance) {

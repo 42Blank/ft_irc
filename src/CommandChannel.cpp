@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 17:53:57 by san               #+#    #+#             */
-/*   Updated: 2023/01/06 05:49:42 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/06 07:10:31 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,12 @@ void	Server::commandJOIN(User &user, std::vector<std::string> &parameters) {
 	if (isChannelAvailable) {
 		Channel& ch = findChannel(channelName);
 		ch.joinNewUser(user);
+		user.addJoinedChannelByName(channelName);
+		// DEBUG : iter delete
+		// std::cout << "joined channel - " << channelName << '\n';
+		// for (int i = 0; i < (int)user.getChannelList().size(); i++) {
+		// 	std::cout << "joined all channel : " << user.getChannelList()[i] << std::endl;
+		// }
 		sendMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), ch.getUserList()));
 		sendMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + ch.getChannelName()));
 		sendMessageBroadcast(1, ch, user, "JOIN :" + ch.getChannelName());
@@ -74,6 +80,12 @@ void	Server::commandJOIN(User &user, std::vector<std::string> &parameters) {
 	else {
 		Channel ch = Channel(user, channelName);
 		_channelList.push_back(ch);
+		user.addJoinedChannelByName(channelName);
+		// DEBUG : iter delete
+		// for (std::vector<std::string>::iterator iter = user.getChannelList().begin(); iter < user.getChannelList().end(); iter++) {
+		// 	std::cout << "joined all channel : " << *iter << std::endl;
+		// }
+		std::cout << "joined channel - " << channelName << '\n';
 		sendMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), ch.getUserList()));
 		sendMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + ch.getChannelName()));
 	}
@@ -153,9 +165,14 @@ void		Server::commandPART(User &user, std::vector<std::string>& parameters) {
 
 	if (isChannel(parameters[1])) {	// 채널이면
 		Channel	&ch = findChannel(parameters[1]);
+		user.deleteJoinedChannelByName(ch.getChannelName());
+		std::cout << "deleted user channel - " << ch.getChannelName() << '\n';
 		if (ch.isUser(user.getNickname())) { // 유저가 있으면
 			sendMessageBroadcast(0, ch, user, "PART :" + ch.getChannelName());
 			ch.deleteNormalUser(user.getNickname());
+			// for (std::vector<std::string>::iterator iter = user.getChannelList().begin(); iter < user.getChannelList().end(); iter++) {
+			// 	std::cout << "joined all channel : " << *iter << std::endl;
+			// }
 		} else if (ch.isOperator(user.getNickname())) {
 			sendMessageBroadcast(0, ch, user, "PART :" + ch.getChannelName());
 			ch.deleteOperatorUser(user.getNickname());
