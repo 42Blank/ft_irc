@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandChannel.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 17:53:57 by san               #+#    #+#             */
-/*   Updated: 2023/01/05 23:17:33 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/06 05:49:42 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,22 +61,22 @@ void	Server::commandJOIN(User &user, std::vector<std::string> &parameters) {
 	if (parameters.size() < 2) throw std::runtime_error(Error(ERR_NEEDMOREPARAMS, CMD_JOIN));
 
 	std::string	channelName = parameters[1];
-	Channel	ch;
 	bool	isChannelAvailable = isChannel(channelName);
 
 	sendMessage(user, " JOIN " + channelName);
 	if (isChannelAvailable) {
-		ch = findChannel(channelName);
+		Channel& ch = findChannel(channelName);
 		ch.joinNewUser(user);
+		sendMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), ch.getUserList()));
+		sendMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + ch.getChannelName()));
+		sendMessageBroadcast(1, ch, user, "JOIN :" + ch.getChannelName());
 	}
 	else {
-		ch = Channel(user, channelName);
+		Channel ch = Channel(user, channelName);
 		_channelList.push_back(ch);
+		sendMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), ch.getUserList()));
+		sendMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + ch.getChannelName()));
 	}
-	sendMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), ch.getUserList()));
-	sendMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + ch.getChannelName()));
-	if (isChannelAvailable)
-		sendMessageBroadcast(1, ch, user, "JOIN :" + ch.getChannelName());
 }
 
 //관리자만 사용할 수 있다.
