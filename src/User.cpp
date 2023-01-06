@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:50:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 02:21:19 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 03:03:41 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ User::User(void) {
 }
 
 User::~User(void) {
-	std::cout << "deleted user: " << _nickname << "\n";
 	delete _clientAddress;
 	delete _clientAddressSize;
 }
@@ -30,8 +29,6 @@ User::User(const User& instance) {
 }
 
 User&	User::operator=(const User& instance) {
-	std::cout << "copied user: " << instance.getNickname() << "\n";
-
 	_clientFd = instance.getSocketFd();
 	_clientAddress = new sockaddr_in(*instance.getAddressPtr());
 	_clientAddressSize = new socklen_t(*instance.getAddressSizePtr());

@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 02:42:48 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 02:46:09 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	Server::acceptClient(void) {
 	size_t				client_len = sizeof(client_addr);
 
 	try {
-		clientSocket = accept(_serverSocket, (struct sockaddr *)&client_addr, (socklen_t *)&client_len);
+		clientSocket = accept(_serverSocket, (struct sockaddr*)&client_addr, (socklen_t*)&client_len);
 		if (clientSocket < 0)
 			throw std::runtime_error(Error(ERR_CLIENTCONNECTFAILED));
 		fcntl(clientSocket, F_SETFL, O_NONBLOCK);
