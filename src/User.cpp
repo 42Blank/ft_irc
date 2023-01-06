@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:50:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 01:56:52 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 02:21:19 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ std::string	User::getUserMode() const {
 	return _userMode;
 }
 
-std::vector<std::string>&	User::getChannelList() {
+stringVector&	User::getChannelList() {
 	return _channelList;
 }
 
@@ -116,7 +116,7 @@ void	User::addJoinedChannel(std::string channelName) {
 }
 
 void	User::deleteJoinedChannel(std::string channelName) {
-	std::vector<std::string>::iterator iter;
+	stringIter iter;
 
 	for (iter = _channelList.begin(); iter < _channelList.end(); iter++) {
 		if (*iter == channelName)

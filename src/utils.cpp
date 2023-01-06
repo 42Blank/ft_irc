@@ -6,16 +6,16 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:41:37 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 02:10:15 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 02:34:27 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../includes/irc.hpp"
 
-std::vector<std::string>	ft_split(std::string input, char delimiter) {
-	std::vector<std::string> returnVector;
-	std::stringstream stream(input);
-	std::string temp;
+stringVector	ft_split(std::string input, char delimiter) {
+	stringVector		returnVector;
+	std::stringstream	stream(input);
+	std::string			temp;
 
 	while (std::getline(stream, temp, delimiter)) returnVector.push_back(temp);
 
@@ -54,9 +54,9 @@ bool	ft_isValidChannelName(const std::string& str) {
 	return false;
 }
 
-std::string ft_getStringAfterColon(std::vector<std::string> parameter) {
-	std::vector<std::string>::iterator iter;
-	std::string returnStr = "";
+std::string ft_getStringAfterColon(stringVector parameter) {
+	stringIter	iter;
+	std::string	returnStr = "";
 	std::string	ret;
 	bool flag = false;
 

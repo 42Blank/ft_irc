@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 16:23:22 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 02:15:57 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 02:35:11 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ void	Server::sendMessage(User& sender, User& receiver, std::string str) {
 
 // 이건 채널에서 전체 메세지를 보내거나 채널에서 어떤 행동을 했을 때 사용하는 것 -> 채널의 userList가 있어야 한다.
 void	Server::sendMessageBroadcast(int mode, Channel& ch, User& sender, std::string str) {
-	userIter			it;
-	std::vector<User>	operUsers = ch.getOperatorVector();
-	std::vector<User>	normUsers = ch.getNormalUserVector();
+	userIter	it;
+	userVector	operUsers = ch.getOperatorVector();
+	userVector	normUsers = ch.getNormalUserVector();
 
 	for (it = operUsers.begin(); it < operUsers.end(); it++) {
 		if (mode == 0 || (*it).getNickname().compare(sender.getNickname()))

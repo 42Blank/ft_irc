@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 02:15:46 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 02:27:05 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void	Server::receiveFirstClientMessage(int clientFd) {
 		user.setSocketFd(clientFd);
 		std::string	fullMsg = concatMessage(clientFd);
 		parseMessageStream(user, fullMsg);
-		_s_userList.push_back(user);
+		_serverUser.push_back(user);
 	}	catch (std::exception &e) {
 		std::cout << e.what() << "\n";
 		close(clientFd); // 위의 절차 중 하나라도 실패 시에는 유저 통신 끊어야함
@@ -134,13 +134,13 @@ std::string	Server::concatMessage(int clientSocket) {
 }
 
 void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
-	std::vector<std::string>			commands = ft_split(fullMsg, '\n');
-	std::vector<std::string>::iterator	cmdIter;
+	stringVector	commands = ft_split(fullMsg, '\n');
+	stringIter		cmdIter;
 
 	std::cout << "\n======Message======\n" << fullMsg << "\n";
 
 	for (cmdIter = commands.begin(); cmdIter != commands.end(); cmdIter++) {
-		std::vector<std::string>	parameters = ft_split(*cmdIter, ' ');
+		stringVector	parameters = ft_split(*cmdIter, ' ');
 
 		if (!parameters[0].compare(CMD_CAP)) commandCAP(user, parameters);
 		else if (!parameters[0].compare(CMD_PASS)) commandPASS(user, parameters);
@@ -162,10 +162,10 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 }
 
 void	Server::disconnectClients() {
-	userIter		userIter = _s_userList.begin();
-	pollFdIter		pollIter;
+	userIter	userIter = _serverUser.begin();
+	pollFdIter	pollIter;
 
-	while (userIter < _s_userList.end()) {
+	while (userIter < _serverUser.end()) {
 		if (!userIter->getIsDisconnected()) {
 			userIter++;
 			continue;
@@ -179,6 +179,6 @@ void	Server::disconnectClients() {
 			}
 			pollIter++;
 		}
-		userIter = _s_userList.erase(userIter);
+		userIter = _serverUser.erase(userIter);
 	}
 }
