@@ -28,11 +28,11 @@ void	Server::commandNICK(User& user, std::vector<std::string>& parameters) {
 	if (nickname.length() <= 0 || nickname.length() > 9) throw std::runtime_error(Error(ERR_ERRONEUSNICKNAME, nickname));
 	if (!ft_isValidNickname(nickname)) throw std::runtime_error(Error(ERR_ERRONEUSNICKNAME, nickname));
 
-	user.setNickname(nickname);
-
 	for (iter = _s_userList.begin(); iter < _s_userList.end(); iter++) {
 		if (!(*iter).getNickname().compare(nickname)) throw std::runtime_error(Error(ERR_NICKNAMEINUSE, nickname));
 	}
+	user.setNickname(nickname);
+	
 	user.setIsVerified(NICK_VERIFIED);
 	checkIsVerified(user);
 }
