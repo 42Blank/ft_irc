@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 01:43:48 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 02:01:31 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ void	Server::serverOn(void) {
 			acceptClient();
 			continue;
 		}
-		ft_checkPollReturnEvent(_poll_fds[0].revents);
 		for (iter = _poll_fds.begin() + 1; iter < _poll_fds.end(); iter++) {
 			if (iter->revents & POLLHUP) { // 현재 클라이언트 연결 끊김
 				setUserDisconnectByFd(iter->fd);
@@ -62,7 +61,7 @@ void	Server::serverOn(void) {
 				else
 					receiveFirstClientMessage(iter->fd);
 			}
-			if (ft_checkPollReturnEvent(iter->revents) == POLLNVAL)
+			if (iter->revents & POLLNVAL)
 				_poll_fds.erase(iter);
 		}
 		disconnectClients();

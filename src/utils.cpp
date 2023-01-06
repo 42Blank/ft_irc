@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:41:37 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/06 05:20:34 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/07 02:02:05 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,49 +75,4 @@ std::string ft_getStringAfterColon(std::vector<std::string> parameter) {
 	catch (std::exception &e) {
 		return ("");
 	}
-}
-
-int	ft_checkPollReturnEvent(short revents) {
-	// if (revents & POLLIN)
-	// 	std::cout << "POLLIN\n";
-	// if (revents & POLLRDNORM)
-	// 	std::cout << "POLLRDNORM\n";
-	// if (revents & POLLRDBAND)
-	// 	std::cout << "POLLRDBAND\n";
-	// if (revents & POLLPRI)
-	// 	std::cout << "POLLPRI\n";
-	// if (revents & POLLOUT)
-	// 	std::cout << "POLLOUT\n";
-	// if (revents & POLLWRNORM)
-	// 	std::cout << "POLLWRNORM\n";
-	// if (revents & POLLWRBAND)
-	// 	std::cout << "POLLWRBAND\n";
-	// if (revents & POLLERR)
-	// 	std::cout << "POLLERR\n";
-	// if (revents & POLLHUP)
-	// 	std::cout << "POLLHUP\n";
-	if (revents & POLLNVAL) {
-		std::cout << "POLLNVAL\n";
-		return (POLLNVAL);
-	}
-	return (0);
-}
-
-bool	ft_checkIsCommandValid(std::string command, bool isVerified) {
-	if (!command.compare(CMD_CAP) ||
-		!command.compare(CMD_PASS) ||
-		!command.compare(CMD_NICK) ||
-		!command.compare(CMD_USER)) return true;
-	if (isVerified) {
-		if (!command.compare(CMD_JOIN) ||
-			!command.compare(CMD_MSG) ||
-			!command.compare(CMD_TOPIC) ||
-			!command.compare(CMD_NAMES) ||
-			!command.compare(CMD_PART) ||
-			!command.compare(CMD_PING) ||
-			!command.compare(CMD_PONG) ||
-			!command.compare(CMD_KICK)
-			) return true;
-	}
-	return false;
 }
