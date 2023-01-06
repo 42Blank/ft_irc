@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:50:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/06 06:25:09 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/06 10:01:59 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ User::User(void) {
 	_clientAddress = new sockaddr_in();
 	_clientAddressSize = new socklen_t(sizeof(_clientAddress));
 	_isVerified = 0b000;
+	_isDisconnected = false;
 }
 
 User::~User(void) {
@@ -102,6 +103,7 @@ void	User::setIsVerified(short what) {
 }
 
 void	User::setIsDisconnected(bool isDisconnected) {
+	std::cout << "is called\n";
 	_isDisconnected = isDisconnected;
 }
 
