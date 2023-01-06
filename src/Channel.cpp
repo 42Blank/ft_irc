@@ -6,20 +6,17 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 10:08:55 by san               #+#    #+#             */
-/*   Updated: 2023/01/05 22:21:01 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 01:57:14 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Channel.hpp"
 
-Channel::Channel() {}
-
-// 여기 유저 nickname만 받아서 Channel user list에 넣으면 안될지 고민 중
 Channel::Channel(User &user, std::string name) {
 	_operator.push_back(user);
 	// _c_userList.push_back(user);
 	_channelName = name;
-	_modeInServer_c = "+nt";
+	_channelMode = "+nt";
 }
 
 Channel::~Channel() {}
@@ -31,7 +28,7 @@ void	Channel::joinNewUser(User user) {
 
 // 관리자인지 확인하는 메서드
 bool	Channel::isOperator(std::string nickname) {
-	std::vector<User>::iterator iter;
+	std::vector<User>::iterator	iter;
 	for (iter = _operator.begin(); iter < _operator.end(); iter++) {
 		if (!((*iter).getNickname().compare(nickname)))
 			return true;
@@ -77,16 +74,16 @@ std::string			Channel::getChannelName() {
 	return _channelName;
 }
 
-std::string			Channel::getModeInServer() {
-	return _modeInServer_c;
+std::string			Channel::getChannelMode() {
+	return _channelMode;
 }
 
 void				Channel::setTopic(std::string topic) {
 	_topic = topic;
 }
 
-void				Channel::setModeInServer(std::string mode) {
-	_modeInServer_c = mode;
+void				Channel::setChannelMode(std::string channelMode) {
+	_channelMode = channelMode;
 }
 
 void	Channel::deleteNormalUser(std::string nickname){

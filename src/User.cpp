@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:50:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/06 10:01:59 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 01:56:52 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,11 @@ bool	User::getIsDisconnected() const {
 	return _isDisconnected;
 }
 
-std::string	User::getModeInServer() const {
-	return _modeInServer;
+std::string	User::getUserMode() const {
+	return _userMode;
 }
 
-std::vector<std::string>	User::getChannelList() const {
+std::vector<std::string>&	User::getChannelList() {
 	return _channelList;
 }
 
@@ -107,19 +107,15 @@ void	User::setIsDisconnected(bool isDisconnected) {
 	_isDisconnected = isDisconnected;
 }
 
-void	User::setModeInServer(std::string mode) {
-	_modeInServer = mode;
+void	User::setUserMode(std::string userMode) {
+	_userMode = userMode;
 }
 
-void	User::setChannelList(std::vector<std::string> channelList) {
-	_channelList = channelList;
-}
-
-void	User::addJoinedChannelByName(std::string channelName) {
+void	User::addJoinedChannel(std::string channelName) {
 	_channelList.push_back(channelName);
 }
 
-void	User::deleteJoinedChannelByName(std::string channelName) {
+void	User::deleteJoinedChannel(std::string channelName) {
 	std::vector<std::string>::iterator iter;
 
 	for (iter = _channelList.begin(); iter < _channelList.end(); iter++) {

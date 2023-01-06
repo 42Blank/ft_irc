@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 15:55:05 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/06 06:16:02 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/07 01:57:28 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@ class User {
 		std::vector<std::string>	_channelList;
 		short						_isVerified;
 		bool						_isDisconnected;
-		std::string					_modeInServer;
+		std::string					_userMode;
 	public:
 		User();
 		User(const User& instance);
 		~User();
-		User&				operator=(const User& instance);
+		User&						operator=(const User& instance);
 
 		int							getSocketFd() const;
 		struct sockaddr_in*			getAddressPtr() const;
@@ -41,8 +41,8 @@ class User {
 		std::string					getHostname() const;
 		short						getIsVerified() const;
 		bool						getIsDisconnected() const;
-		std::string					getModeInServer() const;
-		std::vector<std::string>	getChannelList() const;
+		std::string					getUserMode() const;
+		std::vector<std::string>&	getChannelList();
 
 		void						setNickname(std::string nickname);
 		void						setUsername(std::string username);
@@ -50,11 +50,10 @@ class User {
 		void						setIsVerified(short what);
 		void						setSocketFd(int clientFd);
 		void						setIsDisconnected(bool isDisconnected);
-		void						setModeInServer(std::string mode);
-		void						setChannelList(std::vector<std::string> channelList);
+		void						setUserMode(std::string userMode);
 
-		void						addJoinedChannelByName(std::string channelName);
-		void						deleteJoinedChannelByName(std::string channelName);
+		void						addJoinedChannel(std::string channelName);
+		void						deleteJoinedChannel(std::string channelName);
 
 };
 

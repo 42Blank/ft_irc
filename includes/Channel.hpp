@@ -12,10 +12,9 @@ class Channel {
 		std::vector<User>	_operator;	// user의 nickname 저장
 		std::string			_topic;
 		std::vector<User>	_c_userList;
-		std::string			_modeInServer_c;
+		std::string			_channelMode;
 
 	public:
-		Channel();
 		Channel(User &user, std::string name);
 		~Channel();
 
@@ -25,15 +24,14 @@ class Channel {
 
 		std::string			getTopic();
 		std::string			getUserList();
-		// std::vector<User>	getRealAllUserList();
 		std::vector<User>	getOperatorVector();
 		std::vector<User>	getNormalUserVector();
 
 		std::string			getChannelName();
-		std::string			getModeInServer();
+		std::string			getChannelMode();
 
 		void				setTopic(std::string topic);
-		void				setModeInServer(std::string mode);
+		void				setChannelMode(std::string channelMode);
 
 		void				deleteNormalUser(std::string nickname);
 		int					deleteOperatorUser(std::string nickname);
