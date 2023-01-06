@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 00:04:29 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 03:30:51 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 03:38:06 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	Server::setUserDisconnectByFd(int clientFd) {
 bool	Server::isChannel(std::string channelName) {
 	channelIter	iter;
 
-	if (!ft_isValidNickname(channelName)) return false;
+	if (!ft_isValidChannelName(channelName)) return false;
 	for (iter = _channelList.begin(); iter < _channelList.end(); iter++)
 		if (!(*iter).getChannelName().compare(channelName)) return true;
 	return false;

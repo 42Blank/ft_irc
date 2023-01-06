@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 13:44:22 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 02:22:47 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 03:38:22 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ typedef	std::vector<struct pollfd>::iterator	pollFdIter;
 stringVector	ft_split(std::string input, char delimiter);
 void			ft_replaceStr(std::string& str, std::string src, std::string des);
 bool			ft_isValidNickname(const std::string& str);
+bool			ft_isValidChannelName(const std::string& str);
 std::string		ft_getStringAfterColon(stringVector parameter);
+
 
 #endif
