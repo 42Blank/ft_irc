@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 10:08:55 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 01:57:14 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 02:13:14 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	Channel::joinNewUser(User user) {
 
 // 관리자인지 확인하는 메서드
 bool	Channel::isOperator(std::string nickname) {
-	std::vector<User>::iterator	iter;
+	userIter	iter;
 	for (iter = _operator.begin(); iter < _operator.end(); iter++) {
 		if (!((*iter).getNickname().compare(nickname)))
 			return true;
@@ -37,7 +37,7 @@ bool	Channel::isOperator(std::string nickname) {
 }
 
 bool	Channel::isUser(std::string nickname) {
-	std::vector<User>::iterator	iter;
+	userIter	iter;
 	for (iter = _c_userList.begin(); iter < _c_userList.end(); iter++) {
 		if (!(*iter).getNickname().compare(nickname))
 			return true;
@@ -52,7 +52,7 @@ std::string			Channel::getTopic() {
 // 그냥 유저 닉네임을 모두 출력하도록 함
 std::string			Channel::getUserList() {
 	std::string	userList;
-	std::vector<User>::iterator	iter;
+	userIter	iter;
 
 	userList = "= " + _channelName + " :";
 	for (iter = _c_userList.begin(); iter < _c_userList.end(); iter++)
@@ -87,7 +87,7 @@ void				Channel::setChannelMode(std::string channelMode) {
 }
 
 void	Channel::deleteNormalUser(std::string nickname){
-	std::vector<User>::iterator	iter;
+	userIter	iter;
 
 	for (iter = _c_userList.begin(); iter < _c_userList.end(); iter++) {
 		if (!(*iter).getNickname().compare(nickname))
@@ -97,7 +97,7 @@ void	Channel::deleteNormalUser(std::string nickname){
 
 int		Channel::deleteOperatorUser(std::string nickname) {
 	// Operator 에 벡터의 첫번쨰 사용자 넣고 만일 벡터에 아무도 없으면 채널이 사라지도록 하기
-	std::vector<User>::iterator	iter;
+	userIter	iter;
 
 	for (iter = _operator.begin(); iter < _operator.end(); iter++) {
 		if (!(*iter).getNickname().compare(nickname))

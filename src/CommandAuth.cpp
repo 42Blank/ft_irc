@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 21:49:06 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/06 10:02:27 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 02:14:15 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	Server::commandPASS(User& user, std::vector<std::string>& parameters) {
 }
 
 void	Server::commandNICK(User& user, std::vector<std::string>& parameters) {
-	std::vector<User>::iterator	iter;
+	userIter	iter;
 
 	const std::string nickname = parameters[1];
 	if (!(user.getIsVerified() & PASS_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
@@ -28,11 +28,9 @@ void	Server::commandNICK(User& user, std::vector<std::string>& parameters) {
 	if (nickname.length() <= 0 || nickname.length() > 9) throw std::runtime_error(Error(ERR_ERRONEUSNICKNAME, nickname));
 	if (!ft_isValidNickname(nickname)) throw std::runtime_error(Error(ERR_ERRONEUSNICKNAME, nickname));
 
-	for (iter = _s_userList.begin(); iter < _s_userList.end(); iter++) {
+	for (iter = _s_userList.begin(); iter < _s_userList.end(); iter++)
 		if (!(*iter).getNickname().compare(nickname)) throw std::runtime_error(Error(ERR_NICKNAMEINUSE, nickname));
-	}
 	user.setNickname(nickname);
-	
 	user.setIsVerified(NICK_VERIFIED);
 	checkIsVerified(user);
 }

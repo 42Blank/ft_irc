@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 01:44:59 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 02:15:08 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,7 @@ class Server {
 		void		serverOn(void);
 		void		serverOff(void);
 };
+
+typedef std::vector<struct pollfd>::iterator	pollFdIter;
 
 #endif

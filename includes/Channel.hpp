@@ -15,9 +15,6 @@
 
 # include "User.hpp"
 
-# include <string>
-# include <vector>
-
 class Channel {
 	private:
 		std::string			_channelName;
@@ -50,5 +47,6 @@ class Channel {
 
 };
 
+typedef std::vector<Channel>::iterator	channelIter;
 
 #endif

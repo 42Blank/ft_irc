@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 17:53:57 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 01:56:20 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 02:13:15 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,18 @@
 
 #include <iostream>
 
-bool		Server::isChannel(std::string channelName) {
-	if (channelName[0] != '&' && channelName[0] != '#' && channelName[0] != '+' && channelName[0] != '!')
-		return false;
-	std::vector<Channel>::iterator	iter;
-	for (iter = _channelList.begin(); iter < _channelList.end(); iter++) {
-		if (!(*iter).getChannelName().compare(channelName))
-			return true;
-	}
+bool	Server::isChannel(std::string channelName) {
+	if (!ft_isValidNickname(channelName)) return false;
+
+	channelIter	iter;
+
+	for (iter = _channelList.begin(); iter < _channelList.end(); iter++)
+		if (!(*iter).getChannelName().compare(channelName)) return true;
 	return false;
 }
 
 Channel		&Server::findChannel(std::string channelName) {
-	std::vector<Channel>::iterator	iter;
+	channelIter	iter;
 
 	for (iter = _channelList.begin(); iter < _channelList.end(); iter++) {
 		if (!(*iter).getChannelName().compare(channelName))
@@ -37,7 +36,7 @@ Channel		&Server::findChannel(std::string channelName) {
 }
 
 bool		Server::isServerUser(std::string nickname) {
-	std::vector<User>::iterator	iter;
+	userIter	iter;
 
 	for (iter = _s_userList.begin(); iter < _s_userList.end(); iter++) {
 		if (!(*iter).getNickname().compare(nickname))
@@ -47,7 +46,7 @@ bool		Server::isServerUser(std::string nickname) {
 }
 
 User		&Server::findUser(std::string nickname) {
-	std::vector<User>::iterator iter;
+	userIter iter;
 
 	for (iter = _s_userList.begin(); iter < _s_userList.end(); iter++) {
 		if (!(*iter).getNickname().compare(nickname))

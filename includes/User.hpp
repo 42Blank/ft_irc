@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 15:55:05 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 01:57:28 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 02:13:00 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define USER_HPP
 
 # include "irc.hpp"
-# include <vector>
+
 class User {
 	private:
 		int							_clientFd; // 클라이언트 소켓 fd
@@ -58,5 +58,7 @@ class User {
 };
 
 std::ostream&	operator<<(std::ostream& out, const User& instance);
+
+typedef std::vector<User>::iterator	userIter;
 
 #endif

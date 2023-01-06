@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 02:01:31 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 02:15:46 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ Server::~Server(void) {
 }
 
 void	Server::serverOn(void) {
-	std::vector<struct pollfd>::iterator	iter;
+	pollFdIter	iter;
 
 	if (listen(_serverSocket, 5) < 0)	// 연결요청 대기상태
 		throw std::runtime_error(Error(ERR_SERVEROPENFAILED, "listen"));
@@ -162,8 +162,8 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 }
 
 void	Server::disconnectClients() {
-	std::vector<User>::iterator		userIter = _s_userList.begin();
-	std::vector<pollfd>::iterator	pollIter;
+	userIter		userIter = _s_userList.begin();
+	pollFdIter		pollIter;
 
 	while (userIter < _s_userList.end()) {
 		if (!userIter->getIsDisconnected()) {
