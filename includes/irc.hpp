@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 13:44:22 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 02:01:56 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 02:09:05 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@
 # define CMD_WHO "WHO"
 
 # define NICK_AVAILABLE_CHAR "[]\\`_^{}|"
+# define CHANNEL_AVAILABLE_CHAR "&#+!"
 
 std::vector<std::string>	ft_split(std::string input, char delimiter);
 void						ft_replaceStr(std::string& str, std::string src, std::string des);

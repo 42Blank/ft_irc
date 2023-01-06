@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:41:37 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 02:02:05 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 02:10:15 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,20 @@ bool	ft_isValidNickname(const std::string& str) {
 	for (int i = 0; i < length; i++) {
 		isValidChar = false;
 		for (int j = 0; j < 9; j++) {
-			if (str[i] == NICK_AVAILABLE_CHAR[j]) {
-				isValidChar = true;
-				break;
-			}
+			if (str[i] != NICK_AVAILABLE_CHAR[j]) continue;
+			isValidChar = true;
+			break;
 		}
-		if (isValidChar) continue;
-		if (i == 0 && isalpha(str[i])) continue;
-		else if (isalnum(str[i])) continue;
+		if (isValidChar || (i == 0 && isalpha(str[i])) || isalnum(str[i])) continue;
 		return false;
 	}
 	return true;
+}
+
+bool	ft_isValidChannelName(const std::string& str) {
+	for (int i = 0; i < 4; i++)
+		if (str[0] == CHANNEL_AVAILABLE_CHAR[i]) return true;
+	return false;
 }
 
 std::string ft_getStringAfterColon(std::vector<std::string> parameter) {
@@ -57,16 +60,13 @@ std::string ft_getStringAfterColon(std::vector<std::string> parameter) {
 	std::string	ret;
 	bool flag = false;
 
-	for (iter = parameter.begin(); iter < parameter.end(); iter++)
-	{
-		if ((*iter)[0] == ':')
-		{
+	for (iter = parameter.begin(); iter < parameter.end(); iter++) {
+		if ((*iter)[0] == ':') {
 			flag = true;
 			returnStr += (*iter);
 			continue;
 		}
-		if (flag)
-			returnStr += " " + *iter;
+		if (flag) returnStr += " " + *iter;
 	}
 	try {
 		ret = returnStr.substr(1, returnStr.length() - 1);
