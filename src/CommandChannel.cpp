@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandChannel.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 17:53:57 by san               #+#    #+#             */
-/*   Updated: 2023/01/06 14:09:53 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/07 01:56:20 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,7 @@ void	Server::commandJOIN(User &user, std::vector<std::string> &parameters) {
 	if (isChannelAvailable) {
 		Channel& ch = findChannel(channelName);
 		ch.joinNewUser(user);
-		user.addJoinedChannelByName(channelName);
-		// DEBUG : iter delete
-		// std::cout << "joined channel - " << channelName << '\n';
-		// for (int i = 0; i < (int)user.getChannelList().size(); i++) {
-		// 	std::cout << "joined all channel : " << user.getChannelList()[i] << std::endl;
-		// }
+		user.addJoinedChannel(channelName);
 		sendMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), ch.getUserList()));
 		sendMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + ch.getChannelName()));
 		sendMessageBroadcast(1, ch, user, "JOIN :" + ch.getChannelName());
@@ -80,11 +75,7 @@ void	Server::commandJOIN(User &user, std::vector<std::string> &parameters) {
 	else {
 		Channel ch = Channel(user, channelName);
 		_channelList.push_back(ch);
-		user.addJoinedChannelByName(channelName);
-		// DEBUG : iter delete
-		// for (std::vector<std::string>::iterator iter = user.getChannelList().begin(); iter < user.getChannelList().end(); iter++) {
-		// 	std::cout << "joined all channel : " << *iter << std::endl;
-		// }
+		user.addJoinedChannel(channelName);
 		std::cout << "joined channel - " << channelName << '\n';
 		sendMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), ch.getUserList()));
 		sendMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + ch.getChannelName()));
@@ -143,11 +134,11 @@ void		Server::commandMODE(User &user, std::vector<std::string>& parameters) {
 	if (paramLen == 2) {
 		if (isChannel(name)) {
 			Channel	&ch = findChannel(name);
-			sendMessage(user, Reply(RPL_CHANNELMODEIS, user.getNickname(), ch.getChannelName() + " :" + ch.getModeInServer()));
+			sendMessage(user, Reply(RPL_CHANNELMODEIS, user.getNickname(), ch.getChannelName() + " :" + ch.getChannelMode()));
 			return;
 		}
 		if (!name.compare(user.getNickname()))
-			sendMessage(user, Reply(RPL_UMODEIS, user.getNickname() + " :" + user.getModeInServer()));
+			sendMessage(user, Reply(RPL_UMODEIS, user.getNickname() + " :" + user.getUserMode()));
 		else
 			throw std::runtime_error(Error(ERR_USERSDONTMATCH, user.getNickname()));
 		return;
@@ -155,9 +146,9 @@ void		Server::commandMODE(User &user, std::vector<std::string>& parameters) {
 	if (paramLen == 3) {
 		if (isChannel(name)) {
 			Channel	&ch = findChannel(name);
-			ch.setModeInServer(parameters[2]);
+			ch.setChannelMode(parameters[2]);
 		} else
-			user.setModeInServer(parameters[2]);
+			user.setUserMode(parameters[2]);
 		sendMessage(user, "MODE " + user.getNickname() + " :" + parameters[2]);
 	}
 }
@@ -167,14 +158,11 @@ void		Server::commandPART(User &user, std::vector<std::string>& parameters) {
 
 	if (isChannel(parameters[1])) {	// 채널이면
 		Channel	&ch = findChannel(parameters[1]);
-		user.deleteJoinedChannelByName(ch.getChannelName());
+		user.deleteJoinedChannel(ch.getChannelName());
 		std::cout << "deleted user channel - " << ch.getChannelName() << '\n';
-		if (ch.isUser(user.getNickname())) { // 유저가 있으면
+		if (ch.isUser(user.getNickname())) {
 			sendMessageBroadcast(0, ch, user, "PART :" + ch.getChannelName());
 			ch.deleteNormalUser(user.getNickname());
-			// for (std::vector<std::string>::iterator iter = user.getChannelList().begin(); iter < user.getChannelList().end(); iter++) {
-			// 	std::cout << "joined all channel : " << *iter << std::endl;
-			// }
 		} else if (ch.isOperator(user.getNickname())) {
 			sendMessageBroadcast(0, ch, user, "PART :" + ch.getChannelName());
 			ch.deleteOperatorUser(user.getNickname());
@@ -207,7 +195,7 @@ void		Server::commandKICK(User &user, std::vector<std::string>& parameters) {
 		throw std::runtime_error(Error(ERR_NOSUCHNICK));
 	sendMessageBroadcast(0, ch, user, "KICK " + ch.getChannelName() + " " + parameters[2] + ":" + ft_getStringAfterColon(parameters));
 	User&	kickedUser = findUser(parameters[2]);
-	kickedUser.deleteJoinedChannelByName(parameters[1]);
+	kickedUser.deleteJoinedChannel(parameters[1]);
 	ch.deleteNormalUser(parameters[2]);
 	ch.deleteOperatorUser(parameters[2]);
 }

@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 04:09:31 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/06 10:37:50 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 01:53:58 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@ void	Server::commandPONG(User& user, std::vector<std::string>& parameters) {
 }
 
 void	Server::commandQUIT(User& user, std::vector<std::string>& parameters) {
-	std::string quitUserHostname = user.getHostname();
-	std::string quitUserNickname = user.getNickname();
-	std::string	quitMsg = ft_getStringAfterColon(parameters);
-	std::vector<std::string> channelList = user.getChannelList();
+	std::string					quitUserHostname = user.getHostname();
+	std::string					quitUserNickname = user.getNickname();
+	std::string					quitMsg = ft_getStringAfterColon(parameters);
+	std::vector<std::string>&	channelList = user.getChannelList();
 
 	sendMessage(user, ErrorReply(":Closing Link:", quitUserHostname, "(Quit: " + quitMsg + ")"));
 	for (std::vector<std::string>::iterator iter = channelList.begin(); iter < channelList.end(); iter++) {
