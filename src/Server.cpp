@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 01:36:33 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 01:43:48 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,12 @@
 # include <fcntl.h>
 
 Server::Server(char* port, char* password) {
-	struct pollfd 	server_pollfd;
-	// int				socket_opt = 1;
+	struct pollfd	server_pollfd;
 
 	_serverSocket = socket(PF_INET, SOCK_STREAM, 0);	// 소켓 생성
 	if (_serverSocket < 0)
 		throw std::runtime_error(Error(ERR_SERVEROPENFAILED, "socket"));
-	// if (setsockopt(_serverSocket, SOL_SOCKET, SO_REUSEADDR, &socket_opt, sizeof(socket_opt)) < 0)
-	// 	throw std::runtime_error(Error(ERR_SERVEROPENFAILED, "socketopt"));
+
 	_port = atoi(port);
 	_password = password;
 	memset(&_serverAddress, 0, sizeof(_serverAddress));	// 구조체 변수의 모든 멤버를 0으로 초기화
@@ -37,12 +35,11 @@ Server::Server(char* port, char* password) {
 }
 
 Server::~Server(void) {
-	std::cout << "destructor called\n";
 	serverOff();
 }
 
 void	Server::serverOn(void) {
-	std::vector<struct pollfd>::iterator iter;
+	std::vector<struct pollfd>::iterator	iter;
 
 	if (listen(_serverSocket, 5) < 0)	// 연결요청 대기상태
 		throw std::runtime_error(Error(ERR_SERVEROPENFAILED, "listen"));
@@ -81,7 +78,7 @@ void	Server::acceptClient(void) {
 	struct sockaddr_in	client_addr;
 	int					clientSocket;
 	struct pollfd		client_pollfd;
-	size_t	client_len = sizeof(client_addr);
+	size_t				client_len = sizeof(client_addr);
 
 	try {
 		clientSocket = accept(_serverSocket, (struct sockaddr *)&client_addr, (socklen_t *)&client_len);
@@ -103,7 +100,7 @@ void	Server::receiveFirstClientMessage(int clientFd) {
 
 	try {
 		user.setSocketFd(clientFd);
-		std::string fullMsg = concatMessage(clientFd);
+		std::string	fullMsg = concatMessage(clientFd);
 		parseMessageStream(user, fullMsg);
 		_s_userList.push_back(user);
 	}	catch (std::exception &e) {
@@ -115,8 +112,7 @@ void	Server::receiveFirstClientMessage(int clientFd) {
 void	Server::receiveClientMessage(int clientSocket) {
 	try {
 		std::string	fullMsg = concatMessage(clientSocket);
-		User&		user = getUserByFd(clientSocket);
-		// TODO : 고쳐야함
+		User&		user = findUser(clientSocket);
 		parseMessageStream(user, fullMsg);
 	} catch (std::exception &e) {
 		std::cout << e.what() << "\n";
@@ -124,7 +120,7 @@ void	Server::receiveClientMessage(int clientSocket) {
 }
 
 std::string	Server::concatMessage(int clientSocket) {
-	int		message_length;
+	int			message_length;
 	std::string	fullMsg = "";
 
 	while ((message_length = recv(clientSocket, _message, BUF_SIZE, 0)) != 0) {
@@ -167,8 +163,8 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 }
 
 void	Server::disconnectClients() {
-	std::vector<User>::iterator userIter = _s_userList.begin();
-	std::vector<pollfd>::iterator pollIter;
+	std::vector<User>::iterator		userIter = _s_userList.begin();
+	std::vector<pollfd>::iterator	pollIter;
 
 	while (userIter < _s_userList.end()) {
 		if (!userIter->getIsDisconnected()) {

@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 00:05:01 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 01:44:59 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,11 @@ class Server {
 		void		commandWHO(User& user, std::vector<std::string>& parameters);
 
 		bool		isChannel(std::string channelName);
-		Channel		&findChannel(std::string channelName);
 		bool		isServerUser(std::string nickname);
-		bool		isServerUser(int socketFd);
-		User		&findUser(std::string nickname);
-		User		&getUserByFd(int fd);
-
+		bool		isServerUser(int clientFd);
+		Channel&	findChannel(std::string channelName);
+		User&		findUser(std::string nickname);
+		User&		findUser(int clientFd);
 		void		checkIsVerified(User& user);
 
 	public:

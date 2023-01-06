@@ -3,20 +3,21 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+         #
+#    By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/28 13:47:07 by jiychoi           #+#    #+#              #
-#    Updated: 2023/01/06 04:13:53 by jasong           ###   ########.fr        #
+#    Updated: 2023/01/07 01:45:39 by jiychoi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CXX			=	c++
 CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98
 SRCS		=	src/main.cpp \
-				src/Server.cpp src/ServerSendMessage.cpp src/User.cpp \
+				src/Server.cpp src/ServerSendMessage.cpp src/ServerUtils.cpp \
+				src/User.cpp src/Channel.cpp \
 				src/Command.cpp src/CommandChannel.cpp src/CommandAuth.cpp \
-				src/utils.cpp src/Reply.cpp \
-				src/Channel.cpp
+				src/utils.cpp src/Reply.cpp
+
 OBJS		=	$(SRCS:.cpp=.o)
 TARGET		=	ircserv
 SANFLAG		=	#-g3 -fsanitize=address
