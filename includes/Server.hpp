@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/06 09:46:29 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/06 10:05:30 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ class Server {
 		void		commandPART(User &user, std::vector<std::string>& parameters);
 		void		commandQUIT(User& user, std::vector<std::string>& parameters);
 		void		commandKICK(User& user, std::vector<std::string>& parameters);
+		void		commandWHO(User& user, std::vector<std::string>& parameters);
 
 		bool		isChannel(std::string channelName);
 		Channel		&findChannel(std::string channelName);

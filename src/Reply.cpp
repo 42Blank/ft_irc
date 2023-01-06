@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 19:31:32 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/05 16:51:02 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/06 10:34:08 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 static std::string	getReplyMessage(std::string code) {
 	if (!code.compare(RPL_NOTOPIC)) return " :No topic is set";
-	if (!code.compare(RPL_ENDOFNAMES)) return " :End of /NAMES list";
+	if (!code.compare(RPL_ENDOFNAMES)) return " :End of NAMES list";
+	if (!code.compare(RPL_ENDOFWHO)) return " :End of WHO list";
 	return "";
 }
 
