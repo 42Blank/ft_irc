@@ -57,7 +57,7 @@ User		&Server::findUser(std::string nickname) {
 }
 
 void	Server::commandJOIN(User &user, std::vector<std::string> &parameters) {
-	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
+	if ((user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 	if (parameters.size() < 2) throw std::runtime_error(Error(ERR_NEEDMOREPARAMS, CMD_JOIN));
 
 	std::string	channelName = parameters[1];
@@ -93,7 +93,7 @@ void	Server::commandJOIN(User &user, std::vector<std::string> &parameters) {
 
 //관리자만 사용할 수 있다.
 void		Server::commandTOPIC(User &user, std::vector<std::string>& parameters) {
-	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
+	if ((user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 	if (parameters.size() < 3) throw std::runtime_error(Error(ERR_NEEDMOREPARAMS, CMD_TOPIC));
 
 	std::string channelName = parameters[1];
@@ -109,7 +109,7 @@ void		Server::commandTOPIC(User &user, std::vector<std::string>& parameters) {
 }
 
 void		Server::commandMSG(User &user, std::vector<std::string>& parameters) {
-	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
+	if ((user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 
 	std::string name = parameters[1];
 
@@ -163,7 +163,7 @@ void		Server::commandMODE(User &user, std::vector<std::string>& parameters) {
 }
 
 void		Server::commandPART(User &user, std::vector<std::string>& parameters) {
-	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
+	if ((user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 
 	if (isChannel(parameters[1])) {	// 채널이면
 		Channel	&ch = findChannel(parameters[1]);
@@ -185,7 +185,7 @@ void		Server::commandPART(User &user, std::vector<std::string>& parameters) {
 }
 
 void		Server::commandNAMES(User &user, std::vector<std::string>& parameters) {
-	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
+	if ((user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 
 	Channel	&ch = findChannel(parameters[1]);
 	sendMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), ch.getUserList()));
