@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/06 05:20:05 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/06 10:35:40 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ Server::Server(char* port, char* password) {
 	_serverAddress.sin_family = AF_INET;			// 주소 체계 지정, AF_INET : IPv4 인터넷 프로토콜에 적용
 	_serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);	// IP 주소
 	_serverAddress.sin_port = htons(_port);	// port 번호 초기화
-	// _created_time = time(NULL);
 	server_pollfd.fd = _serverSocket;
 	server_pollfd.events = POLLIN;
 	_poll_fds.push_back(server_pollfd);
@@ -48,9 +47,8 @@ void	Server::serverOn(void) {
 	if (listen(_serverSocket, 5) < 0)	// 연결요청 대기상태
 		throw std::runtime_error(Error(ERR_SERVEROPENFAILED, "listen"));
 	while (true) {
-		if (!poll(_poll_fds.data(), _poll_fds.size(), 1000)) {
+		if (!poll(_poll_fds.data(), _poll_fds.size(), 1000))
 			continue ;
-		}
 		if (_poll_fds[0].revents & POLLIN) { // _poll_fds[0] -> 서버 fd에 POLLIN event발생
 			acceptClient();
 			continue;
@@ -64,14 +62,11 @@ void	Server::serverOn(void) {
 			else if (iter->revents & POLLIN) {
 				if (isServerUser(iter->fd))
 					receiveClientMessage(iter->fd);
-				else {
-					std::cout << "\n\n@@@@Welcome process called@@@@" << "\n\n";
+				else
 					receiveFirstClientMessage(iter->fd);
-				}
 			}
-			if (ft_checkPollReturnEvent(iter->revents) == POLLNVAL) {
+			if (ft_checkPollReturnEvent(iter->revents) == POLLNVAL)
 				_poll_fds.erase(iter);
-			}
 		}
 		disconnectClients();
 	}
@@ -166,6 +161,7 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 		else if (!parameters[0].compare(CMD_PART)) commandPART(user, parameters);
 		else if (!parameters[0].compare(CMD_QUIT)) commandQUIT(user, parameters);
 		else if (!parameters[0].compare(CMD_KICK)) commandKICK(user, parameters);
+		else if (!parameters[0].compare(CMD_WHO)) commandWHO(user, parameters);
 		else sendMessage(user, Error(ERR_UNKNOWNCOMMAND, parameters[0]));
 	}
 }
@@ -174,9 +170,7 @@ void	Server::setUserDisconnectByFd(int clientFd) {
 	std::vector<User>::iterator userIter;
 
 	for (userIter = _s_userList.begin(); userIter < _s_userList.end(); userIter++) {
-		std::cout << "USER ITER [" << userIter->getNickname() << "]\n";
 		if (userIter->getSocketFd() != clientFd) continue;
-		std::cout << "[" << userIter->getNickname() << "] WILL BE DELETED\n";
 		userIter->setIsDisconnected(true);
 		return;
 	}

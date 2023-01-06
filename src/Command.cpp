@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 04:09:31 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/06 07:20:06 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/06 10:37:50 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,19 @@ void	Server::commandQUIT(User& user, std::vector<std::string>& parameters) {
 		else ch.deleteNormalUser(quitUserNickname);
 	}
 	user.setIsDisconnected(true);
+}
+
+void	Server::commandWHO(User& user, std::vector<std::string>& parameters) {
+	int	size = parameters.size();
+	if (size != 2) throw std::runtime_error(Error(ERR_NEEDMOREPARAMS, CMD_WHO));
+
+	std::string	nickToFind = parameters[1];
+	try {
+		User&	userFound = findUser(nickToFind);
+		sendMessage(user, Reply(RPL_WHOREPLY, user.getNickname(),
+			"* ~" + userFound.getUsername() + " " + userFound.getHostname() + " 127.0.0.1 " + nickToFind + " H :0 " + userFound.getUsername()));
+		sendMessage(user,Reply(RPL_ENDOFWHO, user.getNickname() + " " + nickToFind));
+	} catch (std::exception e) {
+		throw std::runtime_error(Error(ERR_NOSUCHSERVER, nickToFind));
+	}
 }

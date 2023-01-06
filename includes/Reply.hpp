@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 19:30:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/04 12:51:57 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/06 10:21:35 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@
 
 # define RPL_NOTOPIC				"331" // No topic is set
 # define RPL_TOPIC					"332"
+# define RPL_WHOREPLY				"352"
+# define RPL_ENDOFWHO				"315" // End of WHO list
 # define RPL_NAMREPLY				"353"
 # define RPL_ENDOFNAMES				"366" // End of NAMES list
 

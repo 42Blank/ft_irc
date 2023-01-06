@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/06 04:02:16 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/06 10:05:30 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ class Server {
 		std::string					_password;
 		int							_serverSocket;
 		struct sockaddr_in			_serverAddress;
-		time_t						_created_time;
 		char						_message[BUF_SIZE];
 		struct timeval				_timeout;
 		fd_set						_reads;
@@ -67,7 +66,7 @@ class Server {
 		void		commandPART(User &user, std::vector<std::string>& parameters);
 		void		commandQUIT(User& user, std::vector<std::string>& parameters);
 		void		commandKICK(User& user, std::vector<std::string>& parameters);
-
+		void		commandWHO(User& user, std::vector<std::string>& parameters);
 
 		bool		isChannel(std::string channelName);
 		Channel		&findChannel(std::string channelName);
