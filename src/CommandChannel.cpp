@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 17:53:57 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 03:20:37 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 03:43:17 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	Server::commandJOIN(User& user, stringVector& parameters) {
 		Channel	ch = Channel(user, channelName);
 		_channelList.push_back(ch);
 		user.addJoinedChannel(channelName);
-		std::cout << "joined channel - " << channelName << '\n';
 		sendMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), ch.getUserList()));
 		sendMessage(user, Reply(RPL_ENDOFNAMES, user.getNickname() + " " + ch.getChannelName()));
 	}

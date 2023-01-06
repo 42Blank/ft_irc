@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 03:28:55 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 03:40:14 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ void	Server::parseMessageStream(User& user, const std::string& fullMsg) {
 	stringVector	commands = ft_split(fullMsg, '\n');
 	stringIter		cmdIter;
 
-	std::cout << "\n======Message======\n" << fullMsg << "\n";
+	std::cout << "======Message======\n" << fullMsg << "\n";
 
 	for (cmdIter = commands.begin(); cmdIter != commands.end(); cmdIter++) {
 		stringVector	parameters = ft_split(*cmdIter, ' ');

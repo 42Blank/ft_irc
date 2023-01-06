@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:50:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 03:03:41 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 03:44:04 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,6 @@ void	User::setIsVerified(short what) {
 }
 
 void	User::setIsDisconnected(bool isDisconnected) {
-	std::cout << "is called\n";
 	_isDisconnected = isDisconnected;
 }
 
