@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 02:46:09 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 03:28:55 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ Server::Server(char* port, char* password) {
 
 	_port = atoi(port);
 	_password = password;
-	memset(&_serverAddress, 0, sizeof(_serverAddress));	// 구조체 변수의 모든 멤버를 0으로 초기화
-	_serverAddress.sin_family = AF_INET;			// 주소 체계 지정, AF_INET : IPv4 인터넷 프로토콜에 적용
-	_serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);	// IP 주소
-	_serverAddress.sin_port = htons(_port);	// port 번호 초기화
+	memset(&_serverAddress, 0, sizeof(_serverAddress));
+	_serverAddress.sin_family = AF_INET;
+	_serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
+	_serverAddress.sin_port = htons(_port);
 	server_pollfd.fd = _serverSocket;
 	server_pollfd.events = POLLIN;
 	_poll_fds.push_back(server_pollfd);
@@ -41,12 +41,12 @@ Server::~Server(void) {
 void	Server::serverOn(void) {
 	pollFdIter	iter;
 
-	if (listen(_serverSocket, 5) < 0)	// 연결요청 대기상태
+	if (listen(_serverSocket, 5) < 0)
 		throw std::runtime_error(Error(ERR_SERVEROPENFAILED, "listen"));
+
 	while (true) {
-		if (!poll(_poll_fds.data(), _poll_fds.size(), 1000))
-			continue ;
-		if (_poll_fds[0].revents & POLLIN) { // _poll_fds[0] -> 서버 fd에 POLLIN event발생
+		if (!poll(_poll_fds.data(), _poll_fds.size(), 1000)) continue ;
+		if (_poll_fds[0].revents & POLLIN) {
 			acceptClient();
 			continue;
 		}
@@ -61,8 +61,7 @@ void	Server::serverOn(void) {
 				else
 					receiveFirstClientMessage(iter->fd);
 			}
-			if (iter->revents & POLLNVAL)
-				_poll_fds.erase(iter);
+			if (iter->revents & POLLNVAL) _poll_fds.erase(iter);
 		}
 		disconnectClients();
 	}
@@ -83,6 +82,7 @@ void	Server::acceptClient(void) {
 		clientSocket = accept(_serverSocket, (struct sockaddr*)&client_addr, (socklen_t*)&client_len);
 		if (clientSocket < 0)
 			throw std::runtime_error(Error(ERR_CLIENTCONNECTFAILED));
+
 		fcntl(clientSocket, F_SETFL, O_NONBLOCK);
 		client_pollfd.fd = clientSocket;
 		client_pollfd.events = POLLIN;
@@ -104,7 +104,7 @@ void	Server::receiveFirstClientMessage(int clientFd) {
 		_serverUser.push_back(user);
 	}	catch (std::exception& e) {
 		std::cout << e.what() << "\n";
-		close(clientFd); // 위의 절차 중 하나라도 실패 시에는 유저 통신 끊어야함
+		close(clientFd);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 04:09:31 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 03:17:27 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 03:23:21 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,14 @@
 
 void	Server::commandCAP(User& user, stringVector& parameters) {
 	if (parameters.size() != 2) throw std::runtime_error(Error(ERR_NEEDMOREPARAMS, CMD_CAP));
-	if (!parameters[1].compare("LS")) {
-		sendMessage(user, "CAP * LS");
-	}
+	if (!parameters[1].compare("LS")) sendMessage(user, "CAP * LS");
 }
 
 void	Server::commandPING(User& user, stringVector& parameters) {
 	if (user.getIsVerified() != ALL_VERIFIED) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 	if (parameters.size() < 2) throw std::runtime_error(Error(ERR_NOORIGIN));
 	else if (parameters.size() > 2) throw std::runtime_error(Error(ERR_NOSUCHSERVER, parameters[1]));
+
 	sendMessage(user, "PONG 127.0.0.1 :" + parameters[1]);
 }
 
@@ -50,16 +49,14 @@ void	Server::commandQUIT(User& user, stringVector& parameters) {
 }
 
 void	Server::commandWHO(User& user, stringVector& parameters) {
-	int	size = parameters.size();
-	if (size != 2) throw std::runtime_error(Error(ERR_NEEDMOREPARAMS, CMD_WHO));
+	if (parameters.size() != 2) throw std::runtime_error(Error(ERR_NEEDMOREPARAMS, CMD_WHO));
 
-	std::string	nickToFind = parameters[1];
 	try {
-		User&	userFound = findUser(nickToFind);
+		User&	userFound = findUser(parameters[1]);
 		sendMessage(user, Reply(RPL_WHOREPLY, user.getNickname(),
-			"* ~" + userFound.getUsername() + " " + userFound.getHostname() + " 127.0.0.1 " + nickToFind + " H :0 " + userFound.getUsername()));
-		sendMessage(user,Reply(RPL_ENDOFWHO, user.getNickname() + " " + nickToFind));
+			"* ~" + userFound.getUsername() + " " + userFound.getHostname() + " 127.0.0.1 " + parameters[1] + " H :0 " + userFound.getUsername()));
+		sendMessage(user,Reply(RPL_ENDOFWHO, user.getNickname() + " " + parameters[1]));
 	} catch (std::exception e) {
-		throw std::runtime_error(Error(ERR_NOSUCHSERVER, nickToFind));
+		throw std::runtime_error(Error(ERR_NOSUCHSERVER, parameters[1]));
 	}
 }

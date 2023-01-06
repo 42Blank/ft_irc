@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 19:30:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/06 10:21:35 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 03:31:22 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 # include "irc.hpp"
 # include <string>
 # include <stdexcept>
-
-// Reply
 
 # define RPL_WELCOME				"001"
 # define RPL_YOURHOST				"002"
@@ -34,8 +32,6 @@
 # define RPL_ENDOFWHO				"315" // End of WHO list
 # define RPL_NAMREPLY				"353"
 # define RPL_ENDOFNAMES				"366" // End of NAMES list
-
-// Error
 
 # define ERR_NOSUCHNICK				"401" // No such nick/channel
 # define ERR_NOSUCHSERVER			"402" // No such server

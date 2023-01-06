@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 00:04:29 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 02:41:23 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 03:30:51 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ bool	Server::isServerUser(int clientFd) {
 	return (false);
 }
 
-bool		Server::isServerUser(std::string nickname) {
+bool	Server::isServerUser(std::string nickname) {
 	userIter	iter;
 
 	for (iter = _serverUser.begin(); iter < _serverUser.end(); iter++) {
