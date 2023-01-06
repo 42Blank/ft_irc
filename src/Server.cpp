@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/06 10:35:40 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 01:36:33 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,16 +166,6 @@ void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
 	}
 }
 
-void	Server::setUserDisconnectByFd(int clientFd) {
-	std::vector<User>::iterator userIter;
-
-	for (userIter = _s_userList.begin(); userIter < _s_userList.end(); userIter++) {
-		if (userIter->getSocketFd() != clientFd) continue;
-		userIter->setIsDisconnected(true);
-		return;
-	}
-}
-
 void	Server::disconnectClients() {
 	std::vector<User>::iterator userIter = _s_userList.begin();
 	std::vector<pollfd>::iterator pollIter;
@@ -195,35 +185,5 @@ void	Server::disconnectClients() {
 			pollIter++;
 		}
 		userIter = _s_userList.erase(userIter);
-	}
-}
-
-User&	Server::getUserByFd(int fd) {
-	std::vector<User>::iterator	iter;
-
-	for (iter = _s_userList.begin(); iter < _s_userList.end(); iter++) {
-		if (fd == iter->getSocketFd())
-			return (*iter);
-	}
-	throw std::runtime_error(Error(ERR_CANNOTFINDUSERFD));
-}
-
-bool	Server::isServerUser(int socketFd) {
-	std::vector<User>::iterator	iter;
-
-	for (iter = _s_userList.begin(); iter < _s_userList.end(); iter++) {
-		if (socketFd == iter->getSocketFd())
-			return (true);
-	}
-	return (false);
-}
-
-////////////////////////////////////////// FOR DEBUG
-
-void		Server::testUser(void) {
-	std::vector<User>::iterator	iter;
-
-	for (iter = _s_userList.begin(); iter < _s_userList.end(); iter++) {
-		std::cout << (*iter) << '\n';
 	}
 }

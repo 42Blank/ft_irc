@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/06 10:05:30 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 00:05:01 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,6 @@ class Server {
 
 		void		serverOn(void);
 		void		serverOff(void);
-
-		// for debug
-		void		testUser(void);
 };
 
 #endif
