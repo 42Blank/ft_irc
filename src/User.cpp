@@ -36,6 +36,7 @@ User&	User::operator=(const User& instance) {
 	_username = instance.getUsername();
 	_hostname = instance.getHostname();
 	_isDisconnected = instance.getIsDisconnected();
+	_isVerified = instance.getIsVerified();
 	return *this;
 }
 

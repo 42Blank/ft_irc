@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 04:09:31 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 02:41:59 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 03:17:27 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ void	Server::commandCAP(User& user, stringVector& parameters) {
 }
 
 void	Server::commandPING(User& user, stringVector& parameters) {
-	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
+	if (user.getIsVerified() != ALL_VERIFIED) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 	if (parameters.size() < 2) throw std::runtime_error(Error(ERR_NOORIGIN));
 	else if (parameters.size() > 2) throw std::runtime_error(Error(ERR_NOSUCHSERVER, parameters[1]));
 	sendMessage(user, "PONG 127.0.0.1 :" + parameters[1]);
 }
 
 void	Server::commandPONG(User& user, stringVector& parameters) {
-	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
+	if (user.getIsVerified() != ALL_VERIFIED) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 	if (parameters.size() < 2) throw std::runtime_error(Error(ERR_NOORIGIN));
 	else if (parameters.size() > 2) throw std::runtime_error(Error(ERR_NOSUCHSERVER, parameters[1]));
 }

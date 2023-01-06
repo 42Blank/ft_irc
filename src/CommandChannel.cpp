@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 17:53:57 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 02:57:35 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 03:20:37 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../includes/Reply.hpp"
 
 void	Server::commandJOIN(User& user, stringVector& parameters) {
-	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
+	if (user.getIsVerified() != ALL_VERIFIED) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 	if (parameters.size() < 2) throw std::runtime_error(Error(ERR_NEEDMOREPARAMS, CMD_JOIN));
 
 	std::string	channelName = parameters[1];
@@ -40,7 +40,7 @@ void	Server::commandJOIN(User& user, stringVector& parameters) {
 }
 
 void	Server::commandTOPIC(User& user, stringVector& parameters) {
-	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
+	if (user.getIsVerified() != ALL_VERIFIED) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 	if (parameters.size() < 3) throw std::runtime_error(Error(ERR_NEEDMOREPARAMS, CMD_TOPIC));
 	if (!isChannel(parameters[1])) throw std::runtime_error(Error(ERR_NOSUCHCHANNEL, parameters[1]));
 
@@ -55,11 +55,10 @@ void	Server::commandTOPIC(User& user, stringVector& parameters) {
 }
 
 void	Server::commandMSG(User& user, stringVector& parameters) {
-	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
+	if (user.getIsVerified() != ALL_VERIFIED) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 
 	if (isChannel(parameters[1])) {
 		Channel&	ch = findChannel(parameters[1]);
-
 		if (ch.isUserInChannel(user.getNickname()) || ch.isOperator(user.getNickname()))
 			sendMessageBroadcast(1, ch, user, "PRIVMSG " + ch.getChannelName() + " " + ft_getStringAfterColon(parameters));
 		return;
@@ -102,7 +101,7 @@ void	Server::commandMODE(User& user, stringVector& parameters) {
 }
 
 void	Server::commandPART(User& user, stringVector& parameters) {
-	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
+	if (user.getIsVerified() != ALL_VERIFIED) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 
 	if (isChannel(parameters[1])) {	// 채널이면
 		Channel&	ch = findChannel(parameters[1]);
@@ -122,7 +121,7 @@ void	Server::commandPART(User& user, stringVector& parameters) {
 }
 
 void	Server::commandNAMES(User& user, stringVector& parameters) {
-	if (!(user.getIsVerified() != ALL_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
+	if (user.getIsVerified() != ALL_VERIFIED) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 
 	Channel&	ch = findChannel(parameters[1]);
 	sendMessage(user, Reply(RPL_NAMREPLY, user.getNickname(), ch.getUserList()));

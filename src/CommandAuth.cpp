@@ -32,7 +32,7 @@ void	Server::commandNICK(User& user, stringVector& parameters) {
 		if (!(*iter).getNickname().compare(nickname)) throw std::runtime_error(Error(ERR_NICKNAMEINUSE, nickname));
 	user.setNickname(nickname);
 	user.setIsVerified(NICK_VERIFIED);
-	checkIsVerified(user);
+	//checkIsVerified(user);
 }
 
 void	Server::commandUSER(User& user, stringVector& parameters) {
@@ -47,7 +47,8 @@ void	Server::commandUSER(User& user, stringVector& parameters) {
 }
 
 void	Server::checkIsVerified(User& user) {
-	if (user.getIsVerified() != ALL_VERIFIED) return;
+	// if (user.getIsVerified() != ALL_VERIFIED) return;
+	if (!(user.getIsVerified() & ALL_VERIFIED)) return;
 
 	sendMessage(user,
 		"001 " + user.getNickname() + " :\033[1;32mWelcome to the " + SERVER_NAME + "\e[0m " + \
