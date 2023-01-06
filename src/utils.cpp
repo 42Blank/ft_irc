@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:41:37 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 02:34:27 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 02:44:13 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ std::string ft_getStringAfterColon(stringVector parameter) {
 		ret = returnStr.substr(1, returnStr.length() - 1);
 		return (ret);
 	}
-	catch (std::exception &e) {
+	catch (std::exception& e) {
 		return ("");
 	}
 }

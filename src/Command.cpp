@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 04:09:31 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 02:35:46 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 02:41:59 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	Server::commandQUIT(User& user, stringVector& parameters) {
 	sendMessage(user, ErrorReply(":Closing Link:", quitUserHostname, "(Quit: " + quitMsg + ")"));
 	for (stringIter iter = channelList.begin(); iter < channelList.end(); iter++) {
 		if (!isChannel(*iter)) continue;
-		Channel &ch = findChannel(*iter);
+		Channel& ch = findChannel(*iter);
 		sendMessageBroadcast(0, ch, user, "QUIT :" + quitMsg);
 		if (ch.isOperator(quitUserNickname)) ch.deleteOperatorUser(quitUserNickname);
 		else ch.deleteNormalUser(quitUserNickname);

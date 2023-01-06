@@ -24,7 +24,7 @@ class Channel {
 		std::string	_channelMode;
 
 	public:
-		Channel(User &user, std::string name);
+		Channel(User& user, std::string name);
 		~Channel();
 
 		void		joinNewUser(User user);
@@ -34,7 +34,6 @@ class Channel {
 		std::string	getUserList();
 		userVector	getOperatorVector();
 		userVector	getNormalUserVector();
-
 		std::string	getChannelName();
 		std::string	getChannelMode();
 

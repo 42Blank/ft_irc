@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 02:27:05 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 02:42:48 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	Server::acceptClient(void) {
 		client_pollfd.events = POLLIN;
 		_poll_fds.push_back(client_pollfd);
 	}
-	catch (std::exception &e) {
+	catch (std::exception& e) {
 		std::cout << e.what() << "\n";
 		close(clientSocket);
 	}
@@ -102,7 +102,7 @@ void	Server::receiveFirstClientMessage(int clientFd) {
 		std::string	fullMsg = concatMessage(clientFd);
 		parseMessageStream(user, fullMsg);
 		_serverUser.push_back(user);
-	}	catch (std::exception &e) {
+	}	catch (std::exception& e) {
 		std::cout << e.what() << "\n";
 		close(clientFd); // 위의 절차 중 하나라도 실패 시에는 유저 통신 끊어야함
 	}
@@ -113,7 +113,7 @@ void	Server::receiveClientMessage(int clientSocket) {
 		std::string	fullMsg = concatMessage(clientSocket);
 		User&		user = findUser(clientSocket);
 		parseMessageStream(user, fullMsg);
-	} catch (std::exception &e) {
+	} catch (std::exception& e) {
 		std::cout << e.what() << "\n";
 	}
 }
@@ -133,7 +133,7 @@ std::string	Server::concatMessage(int clientSocket) {
 	return fullMsg;
 }
 
-void	Server::parseMessageStream(User &user, const std::string& fullMsg) {
+void	Server::parseMessageStream(User& user, const std::string& fullMsg) {
 	stringVector	commands = ft_split(fullMsg, '\n');
 	stringIter		cmdIter;
 

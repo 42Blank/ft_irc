@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 02:27:05 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 02:41:55 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,12 @@ class Server {
 		void		commandUSER(User& user, stringVector& parameters);
 		void		commandPING(User& user, stringVector& parameters);
 		void		commandPONG(User& user, stringVector& parameters);
-		void		commandJOIN(User &user, stringVector &parameters);
-		void		commandTOPIC(User &user, stringVector& parameters);
-		void		commandNAMES(User &user, stringVector& parameters);
-		void		commandMSG(User &user, stringVector& parameters);
-		void		commandMODE(User &user, stringVector& parameters);
-		void		commandPART(User &user, stringVector& parameters);
+		void		commandJOIN(User& user, stringVector& parameters);
+		void		commandTOPIC(User& user, stringVector& parameters);
+		void		commandNAMES(User& user, stringVector& parameters);
+		void		commandMSG(User& user, stringVector& parameters);
+		void		commandMODE(User& user, stringVector& parameters);
+		void		commandPART(User& user, stringVector& parameters);
 		void		commandQUIT(User& user, stringVector& parameters);
 		void		commandKICK(User& user, stringVector& parameters);
 		void		commandWHO(User& user, stringVector& parameters);
