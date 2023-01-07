@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandChannel.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 17:53:57 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 21:54:31 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 22:55:00 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,11 @@ void	Server::commandJOIN(User* user, stringVector& parameters) {
 	std::string	channelName = parameters[1];
 	bool		isChannelAvailable = isChannel(channelName);
 
-	sendMessage(user, " JOIN " + channelName);
 	if (isChannelAvailable) {
 		Channel*	ch = findChannel(channelName);
+		if (ch->isUserInChannel(user->getNickname()))
+			return ;
+		sendMessage(user, " JOIN " + channelName);
 		ch->joinNewUser(user);
 		user->addJoinedChannel(channelName);
 		sendMessage(user, Reply(RPL_NAMREPLY, user->getNickname(), ch->getUserList()));
@@ -31,6 +33,7 @@ void	Server::commandJOIN(User* user, stringVector& parameters) {
 	}
 	else {
 		Channel*	ch = new Channel(user, channelName);
+		sendMessage(user, " JOIN " + channelName);
 		_channelList.push_back(ch);
 		user->addJoinedChannel(channelName);
 		sendMessage(user, Reply(RPL_NAMREPLY, user->getNickname(), ch->getUserList()));
