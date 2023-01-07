@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 16:23:22 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/08 01:29:15 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 05:19:00 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,12 @@ void	Server::sendMessageBroadcastBot(Channel* ch, std::string str) {
 	userIter	it;
 	userVector	operUsers = ch->getOperatorVector();
 	userVector	normUsers = ch->getNormalUserVector();
+	std::string	strToSend = ":" + std::string(BOT_NAME) + "!" + std::string(BOT_NAME)  + "@127.0.0.1 " + str + "\r\n";
 
-	for (it = operUsers.begin(); it < operUsers.end(); it++) sendMessage(*it, str);
-	for (it = normUsers.begin(); it < normUsers.end(); it++) sendMessage(*it, str);
+	for (it = operUsers.begin(); it < operUsers.end(); it++)
+		if (send((*it)->getSocketFd(), (strToSend).c_str(), strToSend.length(), 0) < 0)
+			throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
+	for (it = normUsers.begin(); it < normUsers.end(); it++)
+		if (send((*it)->getSocketFd(), (strToSend).c_str(), strToSend.length(), 0) < 0)
+			throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
 }
