@@ -110,7 +110,11 @@ void	Server::commandPART(User* user, stringVector& parameters) {
 			// return;
 		}
 		else if (ch.isOperator(user->getNickname())) {
-			ch.deleteOperatorUser(user->getNickname());
+			if (ch.deleteOperatorUser(user->getNickname())) {	// 오퍼레이터가 새로 바뀌었다. 
+				sendMessageBroadcast(0, ch, user, "MODE " + ch.getChannelName() + " +o :" + (*ch.getOperatorVector().begin())->getNickname());
+			} else {
+				// 채널 지우기 
+			}
 			// return;
 		} else {
 			throw std::runtime_error(Error(ERR_NOTONCHANNEL));
@@ -142,4 +146,9 @@ void	Server::commandKICK(User* user, stringVector& parameters) {
 	kickedUser->deleteJoinedChannel(parameters[1]);
 	ch.deleteNormalUser(parameters[2]);
 	ch.deleteOperatorUser(parameters[2]);
+	if (ch.deleteOperatorUser(parameters[2])) {	// 오퍼레이터가 새로 바뀌었다. 
+		sendMessageBroadcast(0, ch, user, "MODE " + ch.getChannelName() + " +o :" + (*ch.getOperatorVector().begin())->getNickname());
+	} else {
+		// 채널 지우기 
+	}
 }

@@ -42,7 +42,13 @@ void	Server::commandQUIT(User* user, stringVector& parameters) {
 		if (!isChannel(*iter)) continue;
 		Channel& ch = findChannel(*iter);
 		sendMessageBroadcast(0, ch, user, "QUIT :" + quitMsg);
-		if (ch.isOperator(quitUserNickname)) ch.deleteOperatorUser(quitUserNickname);
+		if (ch.isOperator(quitUserNickname)) {
+			if (ch.deleteOperatorUser(user->getNickname())) {	// 오퍼레이터가 새로 바뀌었다. 
+				sendMessageBroadcast(0, ch, user, "MODE " + ch.getChannelName() + " +o :" + (*ch.getOperatorVector().begin())->getNickname());
+			} else {
+				// 채널 지우기 
+			}
+		}
 		else ch.deleteNormalUser(quitUserNickname);
 	}
 	user->setIsDisconnected(true);
