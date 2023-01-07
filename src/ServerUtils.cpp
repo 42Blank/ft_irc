@@ -84,10 +84,13 @@ Channel*	Server::findChannel(std::string channelName) {
 void	Server::kickUserFromChannel(Channel* ch, User* user, std::string message) {
 	sendMessageBroadcast(0, ch, user, "KICK " + ch->getChannelName() + " " + user->getNickname() + " :" + message);
 	user->deleteJoinedChannel(ch->getChannelName());
-	ch->deleteNormalUser(user->getNickname());
-	if (ch->deleteOperatorUser(user->getNickname()))
-		sendMessageBroadcast(0, ch, user, "MODE " + ch->getChannelName() + " +o :" + ch->getOperatorVector()[0]->getNickname());
-	else {
-		// 채널 지우기
+	if (ch->isOperator(user->getNickname())) {
+		if (ch->deleteOperatorUser(user->getNickname()))
+			sendMessageBroadcast(0, ch, user, "MODE " + ch->getChannelName() + " +o :" + ch->getOperatorVector()[0]->getNickname());
+		else {
+			ch->setIsDeleted(true);
+		}
+	} else {
+		ch->deleteNormalUser(user->getNickname());
 	}
 }

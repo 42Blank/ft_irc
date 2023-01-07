@@ -51,6 +51,7 @@ class Server {
 		std::string	concatMessage(int clientSocket);
 		void		parseMessageStream(User* user, const std::string& fullMsg);
 		void		setUserDisconnectByFd(int client_fd);
+		void		deleteChannel();
 		void		disconnectClients();
 
 		void		commandCAP(User* user, stringVector& parameters);

@@ -16,6 +16,7 @@ Channel::Channel(User* user, std::string channelName) {
 	_channelOperator.push_back(user);
 	_channelName = channelName;
 	_channelMode = "+nt";
+	_isDeleted = false;
 }
 
 Channel::~Channel() {}
@@ -69,9 +70,14 @@ std::string	Channel::getChannelName() {
 	return _channelName;
 }
 
-std::string			Channel::getChannelMode() {
+std::string	Channel::getChannelMode() {
 	return _channelMode;
 }
+
+bool	Channel::getIsDeleted() {
+	return _isDeleted;
+}
+
 
 void	Channel::setTopic(std::string topic) {
 	_channelTopic = topic;
@@ -79,6 +85,10 @@ void	Channel::setTopic(std::string topic) {
 
 void	Channel::setChannelMode(std::string channelMode) {
 	_channelMode = channelMode;
+}
+
+void	Channel::setIsDeleted(bool isDeleted) {
+	_isDeleted = isDeleted;
 }
 
 void	Channel::deleteNormalUser(std::string nickname){

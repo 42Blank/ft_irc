@@ -67,6 +67,7 @@ void	Server::serverOn(void) {
 			if (iter->revents & POLLNVAL) _poll_fds.erase(iter);
 		}
 		disconnectClients();
+		deleteChannel();
 	}
 }
 
@@ -162,6 +163,18 @@ void	Server::parseMessageStream(User* user, const std::string& fullMsg) {
 		else if (!parameters[0].compare(CMD_KICK)) commandKICK(user, parameters);
 		else if (!parameters[0].compare(CMD_WHO)) commandWHO(user, parameters);
 		else sendMessage(user, Error(ERR_UNKNOWNCOMMAND, parameters[0]));
+	}
+}
+
+void	Server::deleteChannel() {
+	channelIter	channelIter = _channelList.begin();
+
+	while (channelIter < _channelList.end()) {
+		if ((*channelIter)->getIsDeleted()) { // delete 하겠다고 했으면
+			delete *channelIter;
+			channelIter = _channelList.erase(channelIter);
+		}
+		channelIter++;
 	}
 }
 
