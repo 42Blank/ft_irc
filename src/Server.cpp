@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 15:46:05 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 23:18:28 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,10 @@ void	Server::serverOn(void) {
 		}
 		for (iter = _poll_fds.begin() + 1; iter < _poll_fds.end(); iter++) {
 			if (iter->revents & POLLHUP) { // 현재 클라이언트 연결 끊김
-				setUserDisconnectByFd(iter->fd);
+				stringVector	closeParams;
+
+				closeParams.push_back(":Connection closed");
+				commandQUIT(findUser(iter->fd), closeParams);
 				continue ;
 			}
 			else if (iter->revents & POLLIN) {
