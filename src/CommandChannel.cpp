@@ -105,8 +105,6 @@ void	Server::commandPART(User& user, stringVector& parameters) {
 	if (isChannel(parameters[1])) {	// 채널이면
 		Channel&	ch = findChannel(parameters[1]);
 
-		user.deleteJoinedChannel(ch.getChannelName());
-		sendMessageBroadcast(0, ch, user, "PART :" + ch.getChannelName());
 		if (ch.isUserInChannel(user.getNickname())) {
 			ch.deleteNormalUser(user.getNickname());
 			return;
@@ -116,6 +114,8 @@ void	Server::commandPART(User& user, stringVector& parameters) {
 			return;
 		}
 		throw std::runtime_error(Error(ERR_NOTONCHANNEL));
+		user.deleteJoinedChannel(ch.getChannelName());
+		sendMessageBroadcast(0, ch, user, "PART :" + ch.getChannelName());
 	}
 }
 
