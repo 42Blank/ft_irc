@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 15:03:26 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 15:09:47 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ class Server {
 		Channel&	findChannel(std::string channelName);
 		User*		findUser(std::string nickname);
 		User*		findUser(int clientFd);
-		void		checkIsVerified(User& user);
+		void		checkIsVerified(User* user);
 
 	public:
 		Server(char* port, char* password);
