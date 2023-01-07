@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 13:44:22 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 03:38:22 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 23:21:54 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@
 
 # define NICK_AVAILABLE_CHAR "[]\\`_^{}|"
 # define CHANNEL_AVAILABLE_CHAR "&#+!"
+# define BOT_NAME "치춘봇"
 
 typedef	std::vector<std::string>				stringVector;
 typedef	std::vector<std::string>::iterator		stringIter;
