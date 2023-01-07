@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 16:23:22 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/08 00:38:29 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 01:29:15 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,13 @@ void	Server::sendMessageBroadcast(int mode, Channel* ch, User* sender, std::stri
 		if (mode == 0 || (*it)->getNickname().compare(sender->getNickname()))
 			sendMessage(sender, *it, str);
 	}
+}
+
+void	Server::sendMessageBroadcastBot(Channel* ch, std::string str) {
+	userIter	it;
+	userVector	operUsers = ch->getOperatorVector();
+	userVector	normUsers = ch->getNormalUserVector();
+
+	for (it = operUsers.begin(); it < operUsers.end(); it++) sendMessage(*it, str);
+	for (it = normUsers.begin(); it < normUsers.end(); it++) sendMessage(*it, str);
 }
