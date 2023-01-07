@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 04:09:31 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 15:07:14 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 21:57:03 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,16 @@ void	Server::commandQUIT(User* user, stringVector& parameters) {
 	sendMessage(user, ErrorReply(":Closing Link:", quitUserHostname, "(Quit: " + quitMsg + ")"));
 	for (stringIter iter = channelList.begin(); iter < channelList.end(); iter++) {
 		if (!isChannel(*iter)) continue;
-		Channel& ch = findChannel(*iter);
+		Channel* ch = findChannel(*iter);
 		sendMessageBroadcast(0, ch, user, "QUIT :" + quitMsg);
-		if (ch.isOperator(quitUserNickname)) {
-			if (ch.deleteOperatorUser(user->getNickname())) {	// 오퍼레이터가 새로 바뀌었다. 
-				sendMessageBroadcast(0, ch, user, "MODE " + ch.getChannelName() + " +o :" + (*ch.getOperatorVector().begin())->getNickname());
+		if (ch->isOperator(quitUserNickname)) {
+			if (ch->deleteOperatorUser(user->getNickname())) {	// 오퍼레이터가 새로 바뀌었다.
+				sendMessageBroadcast(0, ch, user, "MODE " + ch->getChannelName() + " +o :" + (*ch->getOperatorVector().begin())->getNickname());
 			} else {
-				// 채널 지우기 
+				// 채널 지우기
 			}
 		}
-		else ch.deleteNormalUser(quitUserNickname);
+		else ch->deleteNormalUser(quitUserNickname);
 	}
 	user->setIsDisconnected(true);
 }

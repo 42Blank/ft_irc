@@ -6,7 +6,7 @@
 #    By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/28 13:47:07 by jiychoi           #+#    #+#              #
-#    Updated: 2023/01/07 01:45:39 by jiychoi          ###   ########.fr        #
+#    Updated: 2023/01/07 16:33:26 by jiychoi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,10 +17,12 @@ SRCS		=	src/main.cpp \
 				src/User.cpp src/Channel.cpp \
 				src/Command.cpp src/CommandChannel.cpp src/CommandAuth.cpp \
 				src/utils.cpp src/Reply.cpp
+SRCS_BONUS	=	src/bots_bonus.cpp
 
 OBJS		=	$(SRCS:.cpp=.o)
+OBJS_BONUS	=	$(SRCS_BONUS:.cpp=.o)
 TARGET		=	ircserv
-SANFLAG		=	#-g3 -fsanitize=address
+SANFLAG		=	-g3 -fsanitize=address
 
 NO_COLOR	=	\e[0m
 LF			=	\e[1K\r$(NO_COLOR)
@@ -33,7 +35,8 @@ $(TARGET) : $(OBJS)
 	@$(CXX) $(OBJS) $(SANFLAG) $(CXXFLAGS) -o $(TARGET)
 
 %.o : %.cpp
-	@$(CXX) $(CXXFLAGS) $(SANFLAG) -c -o $@ $< -I ./
+	@$(CXX) $(CXXFLAGS) -c -o $@ $< -I ./
+# @$(CXX) $(CXXFLAGS) $(SANFLAG) -c -o $@ $< -I ./
 
 clean :
 	@printf "$(LF)Deleting $(TARGET)...\n"
