@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 23:18:28 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/08 05:27:13 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,21 +146,21 @@ void	Server::parseMessageStream(User* user, const std::string& fullMsg) {
 	for (cmdIter = commands.begin(); cmdIter != commands.end(); cmdIter++) {
 		stringVector	parameters = ft_split(*cmdIter, ' ');
 
-		if (!parameters[0].compare(CMD_CAP)) commandCAP(user, parameters);
-		else if (!parameters[0].compare(CMD_PASS)) commandPASS(user, parameters);
-		else if (!parameters[0].compare(CMD_NICK)) commandNICK(user, parameters);
-		else if (!parameters[0].compare(CMD_USER)) commandUSER(user, parameters);
-		else if (!parameters[0].compare(CMD_PING)) commandPING(user, parameters);
-		else if (!parameters[0].compare(CMD_PONG)) commandPONG(user, parameters);
-		else if (!parameters[0].compare(CMD_MODE)) commandMODE(user, parameters);
-		else if (!parameters[0].compare(CMD_JOIN)) commandJOIN(user, parameters);
-		else if (!parameters[0].compare(CMD_MSG)) commandMSG(user, parameters);
-		else if (!parameters[0].compare(CMD_TOPIC)) commandTOPIC(user, parameters);
-		else if (!parameters[0].compare(CMD_NAMES)) commandNAMES(user, parameters);
-		else if (!parameters[0].compare(CMD_PART)) commandPART(user, parameters);
-		else if (!parameters[0].compare(CMD_QUIT)) commandQUIT(user, parameters);
-		else if (!parameters[0].compare(CMD_KICK)) commandKICK(user, parameters);
-		else if (!parameters[0].compare(CMD_WHO)) commandWHO(user, parameters);
+		if (!ft_toUpperString(parameters[0]).compare(CMD_CAP)) commandCAP(user, parameters);
+		else if (!ft_toUpperString(parameters[0]).compare(CMD_PASS)) commandPASS(user, parameters);
+		else if (!ft_toUpperString(parameters[0]).compare(CMD_NICK)) commandNICK(user, parameters);
+		else if (!ft_toUpperString(parameters[0]).compare(CMD_USER)) commandUSER(user, parameters);
+		else if (!ft_toUpperString(parameters[0]).compare(CMD_PING)) commandPING(user, parameters);
+		else if (!ft_toUpperString(parameters[0]).compare(CMD_PONG)) commandPONG(user, parameters);
+		else if (!ft_toUpperString(parameters[0]).compare(CMD_MODE)) commandMODE(user, parameters);
+		else if (!ft_toUpperString(parameters[0]).compare(CMD_JOIN)) commandJOIN(user, parameters);
+		else if (!ft_toUpperString(parameters[0]).compare(CMD_MSG)) commandMSG(user, parameters);
+		else if (!ft_toUpperString(parameters[0]).compare(CMD_TOPIC)) commandTOPIC(user, parameters);
+		else if (!ft_toUpperString(parameters[0]).compare(CMD_NAMES)) commandNAMES(user, parameters);
+		else if (!ft_toUpperString(parameters[0]).compare(CMD_PART)) commandPART(user, parameters);
+		else if (!ft_toUpperString(parameters[0]).compare(CMD_QUIT)) commandQUIT(user, parameters);
+		else if (!ft_toUpperString(parameters[0]).compare(CMD_KICK)) commandKICK(user, parameters);
+		else if (!ft_toUpperString(parameters[0]).compare(CMD_WHO)) commandWHO(user, parameters);
 		else sendMessage(user, Error(ERR_UNKNOWNCOMMAND, parameters[0]));
 	}
 }

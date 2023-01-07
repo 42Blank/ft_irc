@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:41:37 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 02:44:13 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 05:26:54 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../includes/irc.hpp"
+#include <cctype>
 
 stringVector	ft_split(std::string input, char delimiter) {
 	stringVector		returnVector;
@@ -75,4 +76,15 @@ std::string ft_getStringAfterColon(stringVector parameter) {
 	catch (std::exception& e) {
 		return ("");
 	}
+}
+
+std::string	ft_toUpperString(const std::string str) {
+	std::string	retStr = "";
+	int			i = 0;
+
+	while (str[i]) {
+		retStr += std::toupper(str[i]);
+		i++;
+	}
+	return (retStr);
 }
