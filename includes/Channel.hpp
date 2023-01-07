@@ -30,6 +30,7 @@ class Channel {
 		std::string		_channelTopic;
 		std::string		_channelMode;
 		stringVector	_badWordList;
+		bool			_isDeleted;
 
 		std::string		command42WORLD();
 		std::string		commandHELP();
@@ -54,9 +55,11 @@ class Channel {
 		std::string		getChannelName();
 		std::string		getChannelMode();
 		stringVector&	getBadWordList();
+		bool			getIsDeleted();
 
 		void			setTopic(std::string topic);
 		void			setChannelMode(std::string channelMode);
+		void			setIsDeleted(bool isDeleted);
 
 		std::string		parseBotCommand(std::string& message);
 		bool			isBadWordIncluded(std::string& message);
