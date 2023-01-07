@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:41:37 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 02:44:13 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 23:21:24 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ bool	ft_isValidNickname(const std::string& str) {
 		if (isValidChar || (i == 0 && isalpha(str[i])) || isalnum(str[i])) continue;
 		return false;
 	}
+	if (!str.compare(BOT_NAME)) return false;
 	return true;
 }
 

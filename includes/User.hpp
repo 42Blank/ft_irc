@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 15:55:05 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 21:40:07 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 00:35:50 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class User {
 		short				_isVerified;
 		bool				_isDisconnected;
 		std::string			_userMode;
+
 	public:
 		User();
 		User(const User& instance);
