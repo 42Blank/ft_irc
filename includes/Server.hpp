@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/08 01:29:05 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 01:43:39 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include "User.hpp"
 # include "Reply.hpp"
 # include "Channel.hpp"
-# include "Bot.hpp"
 
 # define BUF_SIZE 1024
 # define SERVER_NAME "SJJS_IRCServ"
@@ -77,7 +76,6 @@ class Server {
 		User*		findUser(std::string nickname);
 		User*		findUser(int clientFd);
 		void		checkIsVerified(User* user);
-		friend		Bot;
 
 	public:
 		Server(char* port, char* password);

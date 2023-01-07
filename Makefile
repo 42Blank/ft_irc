@@ -6,7 +6,7 @@
 #    By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/28 13:47:07 by jiychoi           #+#    #+#              #
-#    Updated: 2023/01/07 22:14:30 by jiychoi          ###   ########.fr        #
+#    Updated: 2023/01/08 00:42:57 by jiychoi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ SRCS		=	src/main.cpp \
 				src/Server.cpp src/ServerSendMessage.cpp src/ServerUtils.cpp \
 				src/User.cpp src/Channel.cpp \
 				src/Command.cpp src/CommandChannel.cpp src/CommandAuth.cpp \
-				src/utils.cpp src/Reply.cpp src/bots_bonus.cpp
+				src/utils.cpp src/Reply.cpp src/Bot.cpp
 
 OBJS		=	$(SRCS:.cpp=.o)
 TARGET		=	ircserv
