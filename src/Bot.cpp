@@ -6,11 +6,22 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 16:30:17 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/08 02:10:29 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 04:59:31 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../includes/Channel.hpp"
+
+std::string	Channel::parseBotCommand(std::string& message) {
+	stringVector parameters = ft_split(message, ' ');
+
+	if (!parameters[0].compare(BOT_CMD_42WORLD)) return command42WORLD();
+	if (!parameters[0].compare(BOT_CMD_HELP)) return commandHELP();
+	if (!parameters[0].compare(BOT_CMD_TIME)) return commandTIME();
+	if (!parameters[0].compare(BOT_CMD_ADD)) return commandADD(parameters);
+	if (!parameters[0].compare(BOT_CMD_REMOVE)) return commandREMOVE(parameters);
+	return "";
+}
 
 bool	Channel::addBadWord(std::string word) {
 	stringIter	iter = std::find(_badWordList.begin(), _badWordList.end(), word);
@@ -30,15 +41,12 @@ bool	Channel::removeBadWord(std::string word) {
 	return false;
 }
 
-std::string	Channel::parseBotCommand(std::string& message) {
-	stringVector parameters = ft_split(message, ' ');
+bool	Channel::isBadWordIncluded(std::string& message) {
+	stringIter	iter;
 
-	if (!parameters[0].compare(BOT_CMD_42WORLD)) return command42WORLD();
-	if (!parameters[0].compare(BOT_CMD_HELP)) return commandHELP();
-	if (!parameters[0].compare(BOT_CMD_TIME)) return commandTIME();
-	if (!parameters[0].compare(BOT_CMD_ADD)) return commandADD(parameters);
-	if (!parameters[0].compare(BOT_CMD_REMOVE)) return commandREMOVE(parameters);
-	return "";
+	for (iter = _badWordList.begin(); iter < _badWordList.end(); iter++)
+		if (message.find(*iter) != message.npos) return true;
+	return false;
 }
 
 std::string	Channel::command42WORLD() {

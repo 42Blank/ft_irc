@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 00:04:29 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/08 00:38:29 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 04:53:33 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,15 @@ Channel*	Server::findChannel(std::string channelName) {
 			return (*iter);
 	}
 	throw std::runtime_error(Error(ERR_NOSUCHCHANNEL, channelName));
+}
+
+void	Server::kickUserFromChannel(Channel* ch, User* user, std::string message) {
+	sendMessageBroadcast(0, ch, user, "KICK " + ch->getChannelName() + " " + user->getNickname() + ":" + message);
+	user->deleteJoinedChannel(ch->getChannelName());
+	ch->deleteNormalUser(user->getNickname());
+	if (ch->deleteOperatorUser(user->getNickname()))
+		sendMessageBroadcast(0, ch, user, "MODE " + ch->getChannelName() + " +o :" + ch->getOperatorVector()[0]->getNickname());
+	else {
+		// 채널 지우기
+	}
 }

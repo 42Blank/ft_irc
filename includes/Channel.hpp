@@ -59,7 +59,7 @@ class Channel {
 		void			setChannelMode(std::string channelMode);
 
 		std::string		parseBotCommand(std::string& message);
-		void			kickUser(User* user);
+		bool			isBadWordIncluded(std::string& message);
 		void			deleteNormalUser(std::string nickname);
 		int				deleteOperatorUser(std::string nickname);
 };

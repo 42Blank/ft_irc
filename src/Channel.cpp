@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 10:08:55 by san               #+#    #+#             */
-/*   Updated: 2023/01/08 00:38:29 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 04:53:40 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,9 +109,6 @@ int		Channel::deleteOperatorUser(std::string nickname) {
 			return 0;
 		}
 	}
-
-
-
 
 	return (_channelOperator.size());
 }

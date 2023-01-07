@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 17:53:57 by san               #+#    #+#             */
-/*   Updated: 2023/01/08 00:38:29 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 04:54:55 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,12 @@ void	Server::commandMSG(User* user, stringVector& parameters) {
 
 	if (isChannel(parameters[1])) {
 		Channel*	ch = findChannel(parameters[1]);
-		if (ch->isUserInChannel(user->getNickname()) || ch->isOperator(user->getNickname()))
+		std::string	botMessage = ch->parseBotCommand(message);
+
+		if (botMessage.size() > 0) sendMessageBroadcastBot(ch, botMessage);
+		else if (ch->isBadWordIncluded(message))
+			kickUserFromChannel(ch, user, "금지어 사용");
+		else if (ch->isUserInChannel(user->getNickname()) || ch->isOperator(user->getNickname()))
 			sendMessageBroadcast(1, ch, user, "PRIVMSG " + ch->getChannelName() + " " + message);
 		return;
 	}
@@ -143,12 +148,5 @@ void	Server::commandKICK(User* user, stringVector& parameters) {
 		throw std::runtime_error(Error(ERR_NOSUCHNICK));
 
 	User*	kickedUser = findUser(parameters[2]);
-	sendMessageBroadcast(0, ch, user, "KICK " + ch->getChannelName() + " " + parameters[2] + ":" + ft_getStringAfterColon(parameters));
-	kickedUser->deleteJoinedChannel(parameters[1]);
-	ch->deleteNormalUser(parameters[2]);
-	if (ch->deleteOperatorUser(parameters[2])) {	// 오퍼레이터가 새로 바뀌었다.
-		sendMessageBroadcast(0, ch, user, "MODE " + ch->getChannelName() + " +o :" + ch->getOperatorVector()[0]->getNickname());
-	} else {
-		// 채널 지우기
-	}
+	kickUserFromChannel(ch, kickedUser, ft_getStringAfterColon(parameters));
 }
