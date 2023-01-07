@@ -16,11 +16,11 @@
 # include "irc.hpp"
 # include "User.hpp"
 
-# define BOT_CMD_42WORLD ":$42world"
-# define BOT_CMD_HELP ":$help"
-# define BOT_CMD_TIME ":$time"
-# define BOT_CMD_ADD ":$add"
-# define BOT_CMD_REMOVE ":$remove"
+# define BOT_CMD_42WORLD "$42world"
+# define BOT_CMD_HELP "$help"
+# define BOT_CMD_TIME "$time"
+# define BOT_CMD_ADD "$add"
+# define BOT_CMD_REMOVE "$remove"
 
 class Channel {
 	private:

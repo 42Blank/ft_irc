@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 17:53:57 by san               #+#    #+#             */
-/*   Updated: 2023/01/08 04:54:55 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 05:24:11 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,10 @@ void	Server::commandMSG(User* user, stringVector& parameters) {
 		Channel*	ch = findChannel(parameters[1]);
 		std::string	botMessage = ch->parseBotCommand(message);
 
-		if (botMessage.size() > 0) sendMessageBroadcastBot(ch, botMessage);
+		if (botMessage.length() > 0)
+			sendMessageBroadcastBot(ch, "PRIVMSG "  + ch->getChannelName() + " " + botMessage);
 		else if (ch->isBadWordIncluded(message))
-			kickUserFromChannel(ch, user, "금지어 사용");
+			kickUserFromChannel(ch, user, "금지어");
 		else if (ch->isUserInChannel(user->getNickname()) || ch->isOperator(user->getNickname()))
 			sendMessageBroadcast(1, ch, user, "PRIVMSG " + ch->getChannelName() + " " + message);
 		return;

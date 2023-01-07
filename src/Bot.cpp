@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 16:30:17 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/08 04:59:31 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 05:24:58 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,11 @@ std::string	Channel::command42WORLD() {
 }
 
 std::string	Channel::commandHELP() {
-	return "[" + std::string(BOT_NAME) + "] 사용 가능한 명령어 목록입니다.\n" +
-		"\t{ " + BOT_CMD_HELP + " }" + "봇 도움말을 출력해요.\n" +
-		"\t{ " + BOT_CMD_TIME + " }" + "현재 시간을 알려줘요.\n" +
-		"\t{ " + BOT_CMD_ADD + "...<추가할 단어> }" + "금지어를 추가할 수 있어요. (관리자 권한 필요)\n" +
-		"\t{ " + BOT_CMD_REMOVE + "...<삭제할 단어> }" + "금지어를 삭제할 수 있어요. (관리자 권한 필요)";
+	return "[" + std::string(BOT_NAME) + "] 사용 가능한 명령어 목록입니다. " +
+		" { " + BOT_CMD_HELP + " } 봇 도움말을 출력해요. " +
+		" { " + BOT_CMD_TIME + " } 현재 시간을 알려줘요. " +
+		" { " + BOT_CMD_ADD + "...<추가할 단어> } 금지어를 추가할 수 있어요. (관리자 권한 필요) " +
+		" { " + BOT_CMD_REMOVE + "...<삭제할 단어> } 금지어를 삭제할 수 있어요. (관리자 권한 필요)";
 }
 
 std::string Channel::commandADD(stringVector& parameters) {
@@ -82,5 +82,5 @@ std::string Channel::commandREMOVE(stringVector& parameters) {
 
 std::string Channel::commandTIME() {
 	time_t	currentTime = time(NULL);
-	return	"현재 서버시간은 [" + std::string(ctime(&currentTime)) + "] 입니다";
+	return	"서버 시간: " + std::string(ctime(&currentTime));
 }
