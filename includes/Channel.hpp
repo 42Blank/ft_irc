@@ -45,7 +45,7 @@ class Channel {
 
 };
 
-typedef	std::vector<Channel>			channelVector;
-typedef	std::vector<Channel>::iterator	channelIter;
+typedef	std::vector<Channel*>			channelVector;
+typedef	std::vector<Channel*>::iterator	channelIter;
 
 #endif

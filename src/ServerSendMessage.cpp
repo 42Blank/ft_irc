@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 16:23:22 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 15:01:42 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 21:53:39 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ void	Server::sendMessage(User* sender, User* receiver, std::string str) {
 		throw std::runtime_error(Error(ERR_MESSAGESENDFAILED));
 }
 
-void	Server::sendMessageBroadcast(int mode, Channel& ch, User* sender, std::string str) {
+void	Server::sendMessageBroadcast(int mode, Channel* ch, User* sender, std::string str) {
 	userIter	it;
-	userVector	operUsers = ch.getOperatorVector();
-	userVector	normUsers = ch.getNormalUserVector();
+	userVector	operUsers = ch->getOperatorVector();
+	userVector	normUsers = ch->getNormalUserVector();
 
 	for (it = operUsers.begin(); it < operUsers.end(); it++) {
 		if (mode == 0 || (*it)->getNickname().compare(sender->getNickname()))

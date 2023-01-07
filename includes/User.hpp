@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 15:55:05 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 14:55:36 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 21:40:07 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ class User {
 
 std::ostream&	operator<<(std::ostream& out, const User& instance);
 
-typedef	std::vector<User *>				userVector;
-typedef	std::vector<User *>::iterator	userIter;
+typedef	std::vector<User*>				userVector;
+typedef	std::vector<User*>::iterator	userIter;
 
 #endif

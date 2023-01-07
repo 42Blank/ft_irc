@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 00:04:29 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 15:04:11 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 21:56:24 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,16 +67,16 @@ bool	Server::isChannel(std::string channelName) {
 
 	if (!ft_isValidChannelName(channelName)) return false;
 	for (iter = _channelList.begin(); iter < _channelList.end(); iter++)
-		if (!(*iter).getChannelName().compare(channelName)) return true;
+		if (!((*iter)->getChannelName().compare(channelName))) return true;
 	return false;
 }
 
-Channel		&Server::findChannel(std::string channelName) {
+Channel*	Server::findChannel(std::string channelName) {
 	channelIter	iter;
 
 	for (iter = _channelList.begin(); iter < _channelList.end(); iter++) {
-		if (!(*iter).getChannelName().compare(channelName))
-			return *iter;
+		if (!((*iter)->getChannelName().compare(channelName)))
+			return (*iter);
 	}
 	throw std::runtime_error(Error(ERR_NOSUCHCHANNEL, channelName));
 }
