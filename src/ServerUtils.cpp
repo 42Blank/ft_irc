@@ -6,11 +6,11 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 00:04:29 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 21:56:24 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 00:38:29 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Server.hpp"
+# include "../includes/Server.hpp"
 
 bool	Server::isServerUser(int clientFd) {
 	userIter	iter;

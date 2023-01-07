@@ -6,11 +6,11 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 16:23:22 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 21:53:39 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 00:38:29 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Server.hpp"
+# include "../includes/Server.hpp"
 
 void	Server::sendMessage(User* user, std::string str) {
 	int			fd = user->getSocketFd();

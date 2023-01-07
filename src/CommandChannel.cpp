@@ -6,12 +6,12 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 17:53:57 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 21:54:31 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 00:38:29 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Server.hpp"
-#include "../includes/Reply.hpp"
+# include "../includes/Server.hpp"
+# include "../includes/Reply.hpp"
 
 void	Server::commandJOIN(User* user, stringVector& parameters) {
 	if (user->getIsVerified() != ALL_VERIFIED) throw std::runtime_error(Error(ERR_NOTREGISTERED));
@@ -56,16 +56,17 @@ void	Server::commandTOPIC(User* user, stringVector& parameters) {
 void	Server::commandMSG(User* user, stringVector& parameters) {
 	if (user->getIsVerified() != ALL_VERIFIED) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 
+	std::string message = ft_getStringAfterColon(parameters);
+
 	if (isChannel(parameters[1])) {
 		Channel*	ch = findChannel(parameters[1]);
 		if (ch->isUserInChannel(user->getNickname()) || ch->isOperator(user->getNickname()))
-			sendMessageBroadcast(1, ch, user, "PRIVMSG " + ch->getChannelName() + " " + ft_getStringAfterColon(parameters));
+			sendMessageBroadcast(1, ch, user, "PRIVMSG " + ch->getChannelName() + " " + message);
 		return;
 	}
 	if (isServerUser(parameters[1])) {
 		User*	receiver = findUser(parameters[1]);
-
-		sendMessage(user, receiver, "PRIVMSG " + parameters[1] + " " + ft_getStringAfterColon(parameters));
+		sendMessage(user, receiver, "PRIVMSG " + parameters[1] + " " + message);
 		return;
 	}
 	throw std::runtime_error(Error(ERR_NOSUCHNICK));

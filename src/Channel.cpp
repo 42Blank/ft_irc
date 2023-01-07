@@ -6,11 +6,11 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 10:08:55 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 23:04:40 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 00:38:29 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Channel.hpp"
+# include "../includes/Channel.hpp"
 
 Channel::Channel(User* user, std::string channelName) {
 	_channelOperator.push_back(user);
