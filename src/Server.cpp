@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 15:40:10 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 15:46:05 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,13 +95,14 @@ void	Server::acceptClient(void) {
 }
 
 void	Server::receiveFirstClientMessage(int clientFd) {
-	User	user;
+	User*	user;
 
 	try {
-		user.setSocketFd(clientFd);
+		user = new User();
+		user->setSocketFd(clientFd);
 		std::string	fullMsg = concatMessage(clientFd);
-		parseMessageStream(&user, fullMsg);
-		_serverUser.push_back(&user);
+		parseMessageStream(user, fullMsg);
+		_serverUser.push_back(user);
 	}	catch (std::exception& e) {
 		std::cout << e.what() << "\n";
 		close(clientFd);
@@ -179,6 +180,7 @@ void	Server::disconnectClients() {
 			}
 			pollIter++;
 		}
+		delete *userIter;
 		userIter = _serverUser.erase(userIter);
 	}
 }

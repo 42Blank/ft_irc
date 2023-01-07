@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:50:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 03:44:04 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 14:49:12 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ User::User(void) {
 }
 
 User::~User(void) {
+	std::cout << *this << " user deleted\n";
 	delete _clientAddress;
 	delete _clientAddressSize;
 }
