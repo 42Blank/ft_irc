@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 10:08:55 by san               #+#    #+#             */
-/*   Updated: 2023/01/08 05:27:31 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 06:12:26 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,12 @@ std::string			Channel::getUserList() {
 	std::string	userList;
 	userIter	iter;
 
-	userList = "= " + _channelName + " :" + BOT_NAME;
+	userList = "= " + _channelName + " :";
 	for (iter = _channelUser.begin(); iter < _channelUser.end(); iter++)
 		userList += ((*iter)->getNickname() + " ");
 	for (iter = _channelOperator.begin(); iter < _channelOperator.end(); iter++)
 		userList += ("@" + (*iter)->getNickname() + " ");
-	return userList;
+	return userList + BOT_NAME;
 }
 
 userVector	Channel::getOperatorVector() {
