@@ -6,11 +6,11 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 04:09:31 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 21:57:03 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 00:38:29 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Server.hpp"
+# include "../includes/Server.hpp"
 
 void	Server::commandCAP(User* user, stringVector& parameters) {
 	if (parameters.size() != 2) throw std::runtime_error(Error(ERR_NEEDMOREPARAMS, CMD_CAP));

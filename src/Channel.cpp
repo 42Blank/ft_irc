@@ -6,11 +6,11 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 10:08:55 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 15:41:26 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 05:27:31 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Channel.hpp"
+# include "../includes/Channel.hpp"
 
 Channel::Channel(User* user, std::string channelName) {
 	_channelOperator.push_back(user);
@@ -49,7 +49,7 @@ std::string			Channel::getUserList() {
 	std::string	userList;
 	userIter	iter;
 
-	userList = "= " + _channelName + " :";
+	userList = "= " + _channelName + " :" + BOT_NAME;
 	for (iter = _channelUser.begin(); iter < _channelUser.end(); iter++)
 		userList += ((*iter)->getNickname() + " ");
 	for (iter = _channelOperator.begin(); iter < _channelOperator.end(); iter++)
@@ -90,7 +90,7 @@ void	Channel::deleteNormalUser(std::string nickname){
 	}
 }
 
-// 0 -> false, 1 -> true  || bool return 으로 바꾸기 
+// 0 -> false, 1 -> true  || bool return 으로 바꾸기
 int		Channel::deleteOperatorUser(std::string nickname) {
 	userIter	iter;
 
@@ -100,7 +100,7 @@ int		Channel::deleteOperatorUser(std::string nickname) {
 	}
 
 	if (_channelOperator.size() == 0) {
-		if (!_channelUser.empty()) { //빈 벡터가 아니라면 
+		if (!_channelUser.empty()) { //빈 벡터가 아니라면
 			User	*user = _channelUser[0];
 			_channelOperator.push_back(user);
 			_channelUser.erase(_channelUser.begin());
@@ -109,9 +109,6 @@ int		Channel::deleteOperatorUser(std::string nickname) {
 			return 0;
 		}
 	}
-
-
-
 
 	return (_channelOperator.size());
 }

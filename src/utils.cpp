@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:41:37 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/08 05:26:54 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/08 05:56:17 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ bool	ft_isValidNickname(const std::string& str) {
 		if (isValidChar || (i == 0 && isalpha(str[i])) || isalnum(str[i])) continue;
 		return false;
 	}
+	if (!str.compare(BOT_NAME)) return false;
 	return true;
 }
 

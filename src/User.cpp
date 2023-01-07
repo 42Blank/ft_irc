@@ -6,11 +6,11 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:50:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 16:06:19 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 00:38:29 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/User.hpp"
+# include "../includes/User.hpp"
 
 User::User(void) {
 	_clientAddress = new sockaddr_in();

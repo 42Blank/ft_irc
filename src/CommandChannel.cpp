@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   CommandChannel.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 17:53:57 by san               #+#    #+#             */
-/*   Updated: 2023/01/08 01:40:36 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/08 05:40:33 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Server.hpp"
-#include "../includes/Reply.hpp"
+# include "../includes/Server.hpp"
+# include "../includes/Reply.hpp"
 
 void	Server::commandJOIN(User* user, stringVector& parameters) {
 	if (user->getIsVerified() != ALL_VERIFIED) throw std::runtime_error(Error(ERR_NOTREGISTERED));
@@ -59,15 +59,22 @@ void	Server::commandTOPIC(User* user, stringVector& parameters) {
 void	Server::commandMSG(User* user, stringVector& parameters) {
 	if (user->getIsVerified() != ALL_VERIFIED) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 
+	std::string message = ft_getStringAfterColon(parameters);
+
 	if (isChannel(parameters[1])) {
 		Channel*	ch = findChannel(parameters[1]);
+		std::string	botMessage = ch->parseBotCommand(message);
+
+		if (botMessage.length() > 0)
+			sendMessageBroadcastBot(ch, "PRIVMSG "  + ch->getChannelName() + " " + botMessage);
+		else if (ch->isBadWordIncluded(message))
+			kickUserFromChannel(ch, user, "금지어 사용으로 인한 Kick");
 		if (ch->isUserInChannel(user->getNickname()) || ch->isOperator(user->getNickname()))
 			sendMessageBroadcast(1, ch, user, "PRIVMSG " + ch->getChannelName() + " :" + ft_getStringAfterColon(parameters));
 		return;
 	}
 	if (isServerUser(parameters[1])) {
 		User*	receiver = findUser(parameters[1]);
-
 		sendMessage(user, receiver, "PRIVMSG " + parameters[1] + " :" + ft_getStringAfterColon(parameters));
 		return;
 	}
@@ -145,12 +152,5 @@ void	Server::commandKICK(User* user, stringVector& parameters) {
 		throw std::runtime_error(Error(ERR_NOSUCHNICK));
 
 	User*	kickedUser = findUser(parameters[2]);
-	sendMessageBroadcast(0, ch, user, "KICK " + ch->getChannelName() + " " + parameters[2] + ":" + ft_getStringAfterColon(parameters));
-	kickedUser->deleteJoinedChannel(parameters[1]);
-	ch->deleteNormalUser(parameters[2]);
-	if (ch->deleteOperatorUser(parameters[2])) {	// 오퍼레이터가 새로 바뀌었다.
-		sendMessageBroadcast(0, ch, user, "MODE " + ch->getChannelName() + " +o :" + ch->getOperatorVector()[0]->getNickname());
-	} else {
-		// 채널 지우기
-	}
+	kickUserFromChannel(ch, kickedUser, ft_getStringAfterColon(parameters));
 }

@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 21:41:16 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 04:51:18 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ class Server {
 		void		sendMessage(User* user, std::string str);
 		void		sendMessage(User* sender, User* receiver, std::string str);
 		void		sendMessageBroadcast(int mode, Channel* ch, User* sender, std::string str);
+		void		sendMessageBroadcastBot(Channel* ch, std::string str);
 
 		void		receiveFirstClientMessage(int clientFd);
 		void		receiveClientMessage(int clientSocket);
@@ -75,6 +76,7 @@ class Server {
 		User*		findUser(std::string nickname);
 		User*		findUser(int clientFd);
 		void		checkIsVerified(User* user);
+		void		kickUserFromChannel(Channel* ch, User* user, std::string message);
 
 	public:
 		Server(char* port, char* password);
