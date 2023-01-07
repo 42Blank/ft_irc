@@ -51,6 +51,7 @@ class Server {
 		void		parseMessageStream(User* user, const std::string& fullMsg);
 		void		setUserDisconnectByFd(int client_fd);
 		void		disconnectClients();
+		void		deleteChannel();
 
 		void		commandCAP(User* user, stringVector& parameters);
 		void		commandPASS(User* user, stringVector& parameters);
@@ -75,6 +76,9 @@ class Server {
 		User*		findUser(std::string nickname);
 		User*		findUser(int clientFd);
 		void		checkIsVerified(User* user);
+
+		// void		changeUserMode(User *user, std::string &mode);
+
 
 	public:
 		Server(char* port, char* password);
