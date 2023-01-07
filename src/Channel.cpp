@@ -6,13 +6,13 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 10:08:55 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 02:41:57 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 15:41:26 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Channel.hpp"
 
-Channel::Channel(User& user, std::string channelName) {
+Channel::Channel(User* user, std::string channelName) {
 	_channelOperator.push_back(user);
 	_channelName = channelName;
 	_channelMode = "+nt";
@@ -21,7 +21,7 @@ Channel::Channel(User& user, std::string channelName) {
 Channel::~Channel() {}
 
 // 새로운 유저가 조인하면 이 메서드를 통해서 채널의 userList에 추가한다.
-void	Channel::joinNewUser(User user) {
+void	Channel::joinNewUser(User* user) {
 	_channelUser.push_back(user);
 }
 
@@ -30,7 +30,7 @@ bool	Channel::isOperator(std::string nickname) {
 	userIter	iter;
 
 	for (iter = _channelOperator.begin(); iter < _channelOperator.end(); iter++) {
-		if (!((*iter).getNickname().compare(nickname)))
+		if (!((*iter)->getNickname().compare(nickname)))
 			return true;
 	}
 	return false;
@@ -39,7 +39,7 @@ bool	Channel::isOperator(std::string nickname) {
 bool	Channel::isUserInChannel(std::string nickname) {
 	userIter	iter;
 	for (iter = _channelUser.begin(); iter < _channelUser.end(); iter++) {
-		if (!(*iter).getNickname().compare(nickname))
+		if (!(*iter)->getNickname().compare(nickname))
 			return true;
 	}
 	return false;
@@ -51,9 +51,9 @@ std::string			Channel::getUserList() {
 
 	userList = "= " + _channelName + " :";
 	for (iter = _channelUser.begin(); iter < _channelUser.end(); iter++)
-		userList += ((*iter).getNickname() + " ");
+		userList += ((*iter)->getNickname() + " ");
 	for (iter = _channelOperator.begin(); iter < _channelOperator.end(); iter++)
-		userList += ("@" + (*iter).getNickname() + " ");
+		userList += ("@" + (*iter)->getNickname() + " ");
 	return userList;
 }
 
@@ -85,7 +85,7 @@ void	Channel::deleteNormalUser(std::string nickname){
 	userIter	iter;
 
 	for (iter = _channelUser.begin(); iter < _channelUser.end(); iter++) {
-		if (!(*iter).getNickname().compare(nickname))
+		if (!(*iter)->getNickname().compare(nickname))
 			_channelUser.erase(iter);
 	}
 }
@@ -94,7 +94,7 @@ int		Channel::deleteOperatorUser(std::string nickname) {
 	userIter	iter;
 
 	for (iter = _channelOperator.begin(); iter < _channelOperator.end(); iter++) {
-		if (!(*iter).getNickname().compare(nickname))
+		if (!(*iter)->getNickname().compare(nickname))
 			_channelOperator.erase(iter);
 	}
 	return (_channelOperator.size());

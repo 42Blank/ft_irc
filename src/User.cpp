@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:50:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 03:44:04 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 16:06:19 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@ User::User(void) {
 	_clientAddressSize = new socklen_t(sizeof(_clientAddress));
 	_isVerified = 0b000;
 	_isDisconnected = false;
+	std::cout << "User created (" << this << ")\n";
 }
 
 User::~User(void) {
 	delete _clientAddress;
 	delete _clientAddressSize;
+	std::cout << *this << " User deleted (" << this << ")\n";
 }
 
 User::User(const User& instance) {
@@ -37,6 +39,7 @@ User&	User::operator=(const User& instance) {
 	_hostname = instance.getHostname();
 	_isDisconnected = instance.getIsDisconnected();
 	_isVerified = instance.getIsVerified();
+	std::cout << *this << " user copied (" << this << ")\n";
 	return *this;
 }
 

@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 02:41:55 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 15:09:47 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,40 +41,40 @@ class Server {
 
 		void		acceptClient(void);
 
-		void		sendMessage(User& user, std::string str);
-		void		sendMessage(User& sender, User& receiver, std::string str);
-		void		sendMessageBroadcast(int mode, Channel& ch, User& sender, std::string str);
+		void		sendMessage(User* user, std::string str);
+		void		sendMessage(User* sender, User* receiver, std::string str);
+		void		sendMessageBroadcast(int mode, Channel& ch, User* sender, std::string str);
 
 		void		receiveFirstClientMessage(int clientFd);
 		void		receiveClientMessage(int clientSocket);
 		std::string	concatMessage(int clientSocket);
-		void		parseMessageStream(User& user, const std::string& fullMsg);
+		void		parseMessageStream(User* user, const std::string& fullMsg);
 		void		setUserDisconnectByFd(int client_fd);
 		void		disconnectClients();
 
-		void		commandCAP(User& user, stringVector& parameters);
-		void		commandPASS(User& user, stringVector& parameters);
-		void		commandNICK(User& user, stringVector& parameters);
-		void		commandUSER(User& user, stringVector& parameters);
-		void		commandPING(User& user, stringVector& parameters);
-		void		commandPONG(User& user, stringVector& parameters);
-		void		commandJOIN(User& user, stringVector& parameters);
-		void		commandTOPIC(User& user, stringVector& parameters);
-		void		commandNAMES(User& user, stringVector& parameters);
-		void		commandMSG(User& user, stringVector& parameters);
-		void		commandMODE(User& user, stringVector& parameters);
-		void		commandPART(User& user, stringVector& parameters);
-		void		commandQUIT(User& user, stringVector& parameters);
-		void		commandKICK(User& user, stringVector& parameters);
-		void		commandWHO(User& user, stringVector& parameters);
+		void		commandCAP(User* user, stringVector& parameters);
+		void		commandPASS(User* user, stringVector& parameters);
+		void		commandNICK(User* user, stringVector& parameters);
+		void		commandUSER(User* user, stringVector& parameters);
+		void		commandPING(User* user, stringVector& parameters);
+		void		commandPONG(User* user, stringVector& parameters);
+		void		commandJOIN(User* user, stringVector& parameters);
+		void		commandTOPIC(User* user, stringVector& parameters);
+		void		commandNAMES(User* user, stringVector& parameters);
+		void		commandMSG(User* user, stringVector& parameters);
+		void		commandMODE(User* user, stringVector& parameters);
+		void		commandPART(User* user, stringVector& parameters);
+		void		commandQUIT(User* user, stringVector& parameters);
+		void		commandKICK(User* user, stringVector& parameters);
+		void		commandWHO(User* user, stringVector& parameters);
 
 		bool		isChannel(std::string channelName);
 		bool		isServerUser(std::string nickname);
 		bool		isServerUser(int clientFd);
 		Channel&	findChannel(std::string channelName);
-		User&		findUser(std::string nickname);
-		User&		findUser(int clientFd);
-		void		checkIsVerified(User& user);
+		User*		findUser(std::string nickname);
+		User*		findUser(int clientFd);
+		void		checkIsVerified(User* user);
 
 	public:
 		Server(char* port, char* password);

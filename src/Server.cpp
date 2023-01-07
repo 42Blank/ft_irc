@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 03:40:14 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 15:46:05 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,11 @@ void	Server::acceptClient(void) {
 }
 
 void	Server::receiveFirstClientMessage(int clientFd) {
-	User	user;
+	User*	user;
 
 	try {
-		user.setSocketFd(clientFd);
+		user = new User();
+		user->setSocketFd(clientFd);
 		std::string	fullMsg = concatMessage(clientFd);
 		parseMessageStream(user, fullMsg);
 		_serverUser.push_back(user);
@@ -111,7 +112,7 @@ void	Server::receiveFirstClientMessage(int clientFd) {
 void	Server::receiveClientMessage(int clientSocket) {
 	try {
 		std::string	fullMsg = concatMessage(clientSocket);
-		User&		user = findUser(clientSocket);
+		User*		user = findUser(clientSocket);
 		parseMessageStream(user, fullMsg);
 	} catch (std::exception& e) {
 		std::cout << e.what() << "\n";
@@ -133,7 +134,7 @@ std::string	Server::concatMessage(int clientSocket) {
 	return fullMsg;
 }
 
-void	Server::parseMessageStream(User& user, const std::string& fullMsg) {
+void	Server::parseMessageStream(User* user, const std::string& fullMsg) {
 	stringVector	commands = ft_split(fullMsg, '\n');
 	stringIter		cmdIter;
 
@@ -166,19 +167,20 @@ void	Server::disconnectClients() {
 	pollFdIter	pollIter;
 
 	while (userIter < _serverUser.end()) {
-		if (!userIter->getIsDisconnected()) {
+		if (!(*userIter)->getIsDisconnected()) {
 			userIter++;
 			continue;
 		}
-		close(userIter->getSocketFd());
+		close((*userIter)->getSocketFd());
 		pollIter = _poll_fds.begin() + 1;
 		while (pollIter < _poll_fds.end()) {
-			if (userIter->getSocketFd() == pollIter->fd) {
+			if ((*userIter)->getSocketFd() == pollIter->fd) {
 				_poll_fds.erase(pollIter);
 				break ;
 			}
 			pollIter++;
 		}
+		delete *userIter;
 		userIter = _serverUser.erase(userIter);
 	}
 }
