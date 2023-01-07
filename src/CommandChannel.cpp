@@ -117,7 +117,7 @@ void	Server::commandPART(User* user, stringVector& parameters) {
 		}
 		sendMessage(user, "PART :" + ch.getChannelName());
 		sendMessageBroadcast(0, ch, user, "PART :" + ch.getChannelName());
-		user.deleteJoinedChannel(ch.getChannelName());
+		user->deleteJoinedChannel(ch.getChannelName());
 	}
 }
 
