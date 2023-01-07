@@ -123,7 +123,7 @@ void	Server::commandPART(User* user, stringVector& parameters) {
 			if (ch->deleteOperatorUser(user->getNickname())) {	// 오퍼레이터가 새로 바뀌었다.
 				sendMessageBroadcast(0, ch, user, "MODE " + ch->getChannelName() + " +o :" + ch->getOperatorVector()[0]->getNickname());
 			} else {
-				// 채널 지우기
+				ch->setIsDeleted(true);
 			}
 			// return;
 		} else {
