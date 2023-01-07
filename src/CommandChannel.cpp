@@ -80,7 +80,8 @@ void	Server::commandMODE(User* user, stringVector& parameters) {
 	if (paramLen == 2) {
 		if (isChannel(parameters[1])) {
 			Channel*	ch = findChannel(parameters[1]);
-			sendMessage(user, Reply(RPL_CHANNELMODEIS, user->getNickname(), ch->getChannelName() + " :" + ch->getChannelMode()));
+			sendMessage(user, Reply(RPL_CHANNELMODEIS, user->getNickname(), ch->getChannelName() + " :" + ch->getChannelModeToStr()));
+			// sendMessage(user, Reply(RPL_CREATIONTIME, user->getNickname(), ch->getChannelName() + " :" + ch->getChannelMode()));
 			return;
 		}
 		if (!parameters[1].compare(user->getNickname()))
@@ -92,10 +93,24 @@ void	Server::commandMODE(User* user, stringVector& parameters) {
 	if (paramLen == 3) {
 		if (isChannel(parameters[1])) {
 			Channel*	ch = findChannel(parameters[1]);
-			ch->setChannelMode(parameters[2]);
-		} else
+			// ch->setChannelMode(parameters[2]);
+			ch->changeChannelMode(ch, parameters[2]);
+		} 
+		else {
 			user->setUserMode(parameters[2]);
-		sendMessage(user, "MODE " + user->getNickname() + " :" + parameters[2]);
+			sendMessage(user, "MODE " + user->getNickname() + " :" + parameters[2]);
+		}
+	}
+	if (paramLen == 4) {
+		if (isChannel(parameters[1])) {
+			Channel	*ch = findChannel(parameters[1]);
+			if (ch->isOperator(user->getNickname()) && (ch->isUserInChannel(parameters[3]) || ch->isOperator(parameters[3]))) {
+				User	*oper = findUser(parameters[3]);
+				ch->joinNewOperator(oper);
+				ch->deleteNormalUser(oper->getNickname());
+				sendMessageBroadcast(0, ch, user, "MODE " + ch->getChannelName() + " +o :" + user->getNickname());
+			}
+		}
 	}
 }
 
@@ -107,15 +122,14 @@ void	Server::commandPART(User* user, stringVector& parameters) {
 
 		if (ch->isUserInChannel(user->getNickname())) {
 			ch->deleteNormalUser(user->getNickname());
-			// return;
 		}
 		else if (ch->isOperator(user->getNickname())) {
 			if (ch->deleteOperatorUser(user->getNickname())) {	// 오퍼레이터가 새로 바뀌었다.
 				sendMessageBroadcast(0, ch, user, "MODE " + ch->getChannelName() + " +o :" + ch->getOperatorVector()[0]->getNickname());
 			} else {
-				// 채널 지우기
+				ch->setIsDeleted(true);
+				// deleteChannel(ch->getChannelName());
 			}
-			// return;
 		} else {
 			throw std::runtime_error(Error(ERR_NOTONCHANNEL));
 		}
@@ -148,6 +162,7 @@ void	Server::commandKICK(User* user, stringVector& parameters) {
 	if (ch->deleteOperatorUser(parameters[2])) {	// 오퍼레이터가 새로 바뀌었다.
 		sendMessageBroadcast(0, ch, user, "MODE " + ch->getChannelName() + " +o :" + ch->getOperatorVector()[0]->getNickname());
 	} else {
-		// 채널 지우기
+		ch->setIsDeleted(true);
+		// deleteChannel(ch->getChannelName());
 	}
 }
