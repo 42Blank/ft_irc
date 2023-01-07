@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:41:37 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 23:21:24 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 06:37:54 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ bool	ft_isValidChannelName(const std::string& str) {
 std::string ft_getStringAfterColon(stringVector parameter) {
 	stringIter	iter;
 	std::string	returnStr = "";
-	std::string	ret;
 	bool flag = false;
 
 	for (iter = parameter.begin(); iter < parameter.end(); iter++) {
@@ -70,8 +69,8 @@ std::string ft_getStringAfterColon(stringVector parameter) {
 		if (flag) returnStr += " " + *iter;
 	}
 	try {
-		ret = returnStr.substr(1, returnStr.length() - 1);
-		return (ret);
+		if (returnStr.length() >= 1) returnStr = returnStr.substr(1, returnStr.length() - 1);
+		return (returnStr);
 	}
 	catch (std::exception& e) {
 		return ("");
