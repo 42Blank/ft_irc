@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 17:53:57 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 22:55:00 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/08 01:40:36 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,13 @@ void	Server::commandMSG(User* user, stringVector& parameters) {
 	if (isChannel(parameters[1])) {
 		Channel*	ch = findChannel(parameters[1]);
 		if (ch->isUserInChannel(user->getNickname()) || ch->isOperator(user->getNickname()))
-			sendMessageBroadcast(1, ch, user, "PRIVMSG " + ch->getChannelName() + " " + ft_getStringAfterColon(parameters));
+			sendMessageBroadcast(1, ch, user, "PRIVMSG " + ch->getChannelName() + " :" + ft_getStringAfterColon(parameters));
 		return;
 	}
 	if (isServerUser(parameters[1])) {
 		User*	receiver = findUser(parameters[1]);
 
-		sendMessage(user, receiver, "PRIVMSG " + parameters[1] + " " + ft_getStringAfterColon(parameters));
+		sendMessage(user, receiver, "PRIVMSG " + parameters[1] + " :" + ft_getStringAfterColon(parameters));
 		return;
 	}
 	throw std::runtime_error(Error(ERR_NOSUCHNICK));
