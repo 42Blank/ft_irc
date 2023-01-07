@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandChannel.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 17:53:57 by san               #+#    #+#             */
-/*   Updated: 2023/01/07 15:10:58 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 21:02:47 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ void	Server::commandPART(User* user, stringVector& parameters) {
 		}
 		sendMessage(user, "PART :" + ch.getChannelName());
 		sendMessageBroadcast(0, ch, user, "PART :" + ch.getChannelName());
-		user.deleteJoinedChannel(ch.getChannelName());
+		user->deleteJoinedChannel(ch.getChannelName());
 	}
 }
 
