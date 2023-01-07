@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 17:53:57 by san               #+#    #+#             */
-/*   Updated: 2023/01/08 05:24:11 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 05:38:45 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	Server::commandMSG(User* user, stringVector& parameters) {
 		if (botMessage.length() > 0)
 			sendMessageBroadcastBot(ch, "PRIVMSG "  + ch->getChannelName() + " " + botMessage);
 		else if (ch->isBadWordIncluded(message))
-			kickUserFromChannel(ch, user, "금지어");
+			kickUserFromChannel(ch, user, "금지어 사용으로 인한 Kick");
 		else if (ch->isUserInChannel(user->getNickname()) || ch->isOperator(user->getNickname()))
 			sendMessageBroadcast(1, ch, user, "PRIVMSG " + ch->getChannelName() + " " + message);
 		return;

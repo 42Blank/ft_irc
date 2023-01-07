@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 00:04:29 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/08 04:53:33 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 05:37:39 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ Channel*	Server::findChannel(std::string channelName) {
 }
 
 void	Server::kickUserFromChannel(Channel* ch, User* user, std::string message) {
-	sendMessageBroadcast(0, ch, user, "KICK " + ch->getChannelName() + " " + user->getNickname() + ":" + message);
+	sendMessageBroadcast(0, ch, user, "KICK " + ch->getChannelName() + " " + user->getNickname() + " :" + message);
 	user->deleteJoinedChannel(ch->getChannelName());
 	ch->deleteNormalUser(user->getNickname());
 	if (ch->deleteOperatorUser(user->getNickname()))
