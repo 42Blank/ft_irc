@@ -24,10 +24,10 @@ class Channel {
 		std::string	_channelMode;
 
 	public:
-		Channel(User& user, std::string name);
+		Channel(User* user, std::string name);
 		~Channel();
 
-		void		joinNewUser(User user);
+		void		joinNewUser(User* user);
 		bool		isOperator(std::string nickname);
 		bool		isUserInChannel(std::string nickname);
 
