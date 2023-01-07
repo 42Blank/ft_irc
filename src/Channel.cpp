@@ -90,6 +90,7 @@ void	Channel::deleteNormalUser(std::string nickname){
 	}
 }
 
+// 0 -> false, 1 -> true  || bool return 으로 바꾸기 
 int		Channel::deleteOperatorUser(std::string nickname) {
 	userIter	iter;
 
@@ -97,5 +98,20 @@ int		Channel::deleteOperatorUser(std::string nickname) {
 		if (!(*iter)->getNickname().compare(nickname))
 			_channelOperator.erase(iter);
 	}
+
+	if (_channelOperator.size() == 0) {
+		if (!_channelUser.empty()) { //빈 벡터가 아니라면 
+			User	*user = _channelUser[0];
+			_channelOperator.push_back(user);
+			_channelUser.erase(_channelUser.begin());
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+
+
+
+
 	return (_channelOperator.size());
 }
