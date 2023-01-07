@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 17:53:57 by san               #+#    #+#             */
-/*   Updated: 2023/01/08 05:38:45 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 05:40:33 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,11 @@ void	Server::commandJOIN(User* user, stringVector& parameters) {
 	std::string	channelName = parameters[1];
 	bool		isChannelAvailable = isChannel(channelName);
 
-	sendMessage(user, " JOIN " + channelName);
 	if (isChannelAvailable) {
 		Channel*	ch = findChannel(channelName);
+		if (ch->isUserInChannel(user->getNickname()))
+			return ;
+		sendMessage(user, " JOIN " + channelName);
 		ch->joinNewUser(user);
 		user->addJoinedChannel(channelName);
 		sendMessage(user, Reply(RPL_NAMREPLY, user->getNickname(), ch->getUserList()));
@@ -31,6 +33,7 @@ void	Server::commandJOIN(User* user, stringVector& parameters) {
 	}
 	else {
 		Channel*	ch = new Channel(user, channelName);
+		sendMessage(user, " JOIN " + channelName);
 		_channelList.push_back(ch);
 		user->addJoinedChannel(channelName);
 		sendMessage(user, Reply(RPL_NAMREPLY, user->getNickname(), ch->getUserList()));
@@ -66,13 +69,13 @@ void	Server::commandMSG(User* user, stringVector& parameters) {
 			sendMessageBroadcastBot(ch, "PRIVMSG "  + ch->getChannelName() + " " + botMessage);
 		else if (ch->isBadWordIncluded(message))
 			kickUserFromChannel(ch, user, "금지어 사용으로 인한 Kick");
-		else if (ch->isUserInChannel(user->getNickname()) || ch->isOperator(user->getNickname()))
-			sendMessageBroadcast(1, ch, user, "PRIVMSG " + ch->getChannelName() + " " + message);
+		if (ch->isUserInChannel(user->getNickname()) || ch->isOperator(user->getNickname()))
+			sendMessageBroadcast(1, ch, user, "PRIVMSG " + ch->getChannelName() + " :" + ft_getStringAfterColon(parameters));
 		return;
 	}
 	if (isServerUser(parameters[1])) {
 		User*	receiver = findUser(parameters[1]);
-		sendMessage(user, receiver, "PRIVMSG " + parameters[1] + " " + message);
+		sendMessage(user, receiver, "PRIVMSG " + parameters[1] + " :" + ft_getStringAfterColon(parameters));
 		return;
 	}
 	throw std::runtime_error(Error(ERR_NOSUCHNICK));
