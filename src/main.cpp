@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 13:45:58 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/06 01:08:52 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/07 03:26:32 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,9 @@ int main(int argc, char* argv[]) {
 	try {
 		Server server = Server(argv[1], argv[2]);
 		server.serverOn();
-	} catch (std::exception &e) {
+	} catch (std::exception& e) {
 		std::cout << "ircserv: Error: " << e.what() << "\n";
 		return (1);
 	}
+	return (0);
 }

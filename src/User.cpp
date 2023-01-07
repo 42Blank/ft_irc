@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:50:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/06 10:01:59 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 03:44:04 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ User::User(void) {
 }
 
 User::~User(void) {
-	std::cout << "deleted user: " << _nickname << "\n";
 	delete _clientAddress;
 	delete _clientAddressSize;
 }
@@ -30,8 +29,6 @@ User::User(const User& instance) {
 }
 
 User&	User::operator=(const User& instance) {
-	std::cout << "copied user: " << instance.getNickname() << "\n";
-
 	_clientFd = instance.getSocketFd();
 	_clientAddress = new sockaddr_in(*instance.getAddressPtr());
 	_clientAddressSize = new socklen_t(*instance.getAddressSizePtr());
@@ -75,11 +72,11 @@ bool	User::getIsDisconnected() const {
 	return _isDisconnected;
 }
 
-std::string	User::getModeInServer() const {
-	return _modeInServer;
+std::string	User::getUserMode() const {
+	return _userMode;
 }
 
-std::vector<std::string>	User::getChannelList() const {
+stringVector&	User::getChannelList() {
 	return _channelList;
 }
 
@@ -104,24 +101,19 @@ void	User::setIsVerified(short what) {
 }
 
 void	User::setIsDisconnected(bool isDisconnected) {
-	std::cout << "is called\n";
 	_isDisconnected = isDisconnected;
 }
 
-void	User::setModeInServer(std::string mode) {
-	_modeInServer = mode;
+void	User::setUserMode(std::string userMode) {
+	_userMode = userMode;
 }
 
-void	User::setChannelList(std::vector<std::string> channelList) {
-	_channelList = channelList;
-}
-
-void	User::addJoinedChannelByName(std::string channelName) {
+void	User::addJoinedChannel(std::string channelName) {
 	_channelList.push_back(channelName);
 }
 
-void	User::deleteJoinedChannelByName(std::string channelName) {
-	std::vector<std::string>::iterator iter;
+void	User::deleteJoinedChannel(std::string channelName) {
+	stringIter iter;
 
 	for (iter = _channelList.begin(); iter < _channelList.end(); iter++) {
 		if (*iter == channelName)

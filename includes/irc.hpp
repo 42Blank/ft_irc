@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 13:44:22 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/06 10:05:41 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 03:38:22 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,18 @@
 # define CMD_WHO "WHO"
 
 # define NICK_AVAILABLE_CHAR "[]\\`_^{}|"
+# define CHANNEL_AVAILABLE_CHAR "&#+!"
 
-std::vector<std::string>	ft_split(std::string input, char delimiter);
-void						ft_replaceStr(std::string& str, std::string src, std::string des);
-bool						ft_isValidNickname(const std::string& str);
-std::string					ft_getStringAfterColon(std::vector<std::string> parameter);
-int							ft_checkPollReturnEvent(short revents);
-bool						ft_checkIsCommandValid(std::string command, bool isVerified);
+typedef	std::vector<std::string>				stringVector;
+typedef	std::vector<std::string>::iterator		stringIter;
+typedef	std::vector<struct pollfd>				pollFdVector;
+typedef	std::vector<struct pollfd>::iterator	pollFdIter;
+
+stringVector	ft_split(std::string input, char delimiter);
+void			ft_replaceStr(std::string& str, std::string src, std::string des);
+bool			ft_isValidNickname(const std::string& str);
+bool			ft_isValidChannelName(const std::string& str);
+std::string		ft_getStringAfterColon(stringVector parameter);
+
 
 #endif

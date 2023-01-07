@@ -6,42 +6,39 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 21:49:06 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/06 10:02:27 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 03:26:03 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Server.hpp"
 
-void	Server::commandPASS(User& user, std::vector<std::string>& parameters) {
+void	Server::commandPASS(User& user, stringVector& parameters) {
 	if (parameters.size() != 2) throw std::runtime_error(Error(ERR_NEEDMOREPARAMS, CMD_PASS));
 	if (_password != parameters[1]) throw std::runtime_error(Error(ERR_PASSWDMISMATCH));
 
 	user.setIsVerified(PASS_VERIFIED);
 }
 
-void	Server::commandNICK(User& user, std::vector<std::string>& parameters) {
-	std::vector<User>::iterator	iter;
+void	Server::commandNICK(User& user, stringVector& parameters) {
+	userIter	iter;
 
-	const std::string nickname = parameters[1];
 	if (!(user.getIsVerified() & PASS_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 	if (parameters.size() != 2) throw std::runtime_error(Error(ERR_NEEDMOREPARAMS, CMD_NICK));
-	if (nickname.length() <= 0 || nickname.length() > 9) throw std::runtime_error(Error(ERR_ERRONEUSNICKNAME, nickname));
-	if (!ft_isValidNickname(nickname)) throw std::runtime_error(Error(ERR_ERRONEUSNICKNAME, nickname));
+	if (parameters[1].length() <= 0 || parameters[1].length() > 9 || !ft_isValidNickname(parameters[1]))
+		throw std::runtime_error(Error(ERR_ERRONEUSNICKNAME, parameters[1]));
 
-	for (iter = _s_userList.begin(); iter < _s_userList.end(); iter++) {
-		if (!(*iter).getNickname().compare(nickname)) throw std::runtime_error(Error(ERR_NICKNAMEINUSE, nickname));
+	for (iter = _serverUser.begin(); iter < _serverUser.end(); iter++) {
+		if (!(*iter).getNickname().compare(parameters[1]))
+			throw std::runtime_error(Error(ERR_NICKNAMEINUSE, parameters[1]));
 	}
-	user.setNickname(nickname);
-	
+	user.setNickname(parameters[1]);
 	user.setIsVerified(NICK_VERIFIED);
-	//checkIsVerified(user);
 }
 
-void	Server::commandUSER(User& user, std::vector<std::string>& parameters) {
-	if (!(user.getIsVerified() & PASS_VERIFIED)) throw std::runtime_error(Error(ERR_NOTREGISTERED));
-	if (parameters.size() < 5)
-		throw std::runtime_error(Error(ERR_NEEDMOREPARAMS, CMD_NICK));
-	if (parameters[1].length() <= 0)
+void	Server::commandUSER(User& user, stringVector& parameters) {
+	if (!(user.getIsVerified() & PASS_VERIFIED))
+		throw std::runtime_error(Error(ERR_NOTREGISTERED));
+	if (parameters.size() < 5 || parameters[1].length() <= 0)
 		throw std::runtime_error(Error(ERR_NEEDMOREPARAMS, CMD_NICK));
 
 	user.setUsername(parameters[1]);
@@ -51,8 +48,7 @@ void	Server::commandUSER(User& user, std::vector<std::string>& parameters) {
 }
 
 void	Server::checkIsVerified(User& user) {
-	// if (user.getIsVerified() != ALL_VERIFIED) return;
-	if (!(user.getIsVerified() & ALL_VERIFIED)) return;
+	if (user.getIsVerified() != ALL_VERIFIED) return;
 
 	sendMessage(user,
 		"001 " + user.getNickname() + " :\033[1;32mWelcome to the " + SERVER_NAME + "\e[0m " + \

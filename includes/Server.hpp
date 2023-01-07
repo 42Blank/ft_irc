@@ -6,7 +6,7 @@
 /*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/06 10:05:30 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/07 02:41:55 by jiychoi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,16 @@
 
 class Server {
 	private:
-		int							_port;
-		std::string					_password;
-		int							_serverSocket;
-		struct sockaddr_in			_serverAddress;
-		char						_message[BUF_SIZE];
-		struct timeval				_timeout;
-		fd_set						_reads;
-		std::vector<struct pollfd>	_poll_fds;
-		std::vector<User>			_s_userList;
-		std::vector<Channel>		_channelList;
+		int					_port;
+		std::string			_password;
+		int					_serverSocket;
+		struct sockaddr_in	_serverAddress;
+		char				_message[BUF_SIZE];
+		struct timeval		_timeout;
+		fd_set				_reads;
+		pollFdVector		_poll_fds;
+		userVector			_serverUser;
+		channelVector		_channelList;
 
 		void		acceptClient(void);
 
@@ -52,29 +52,28 @@ class Server {
 		void		setUserDisconnectByFd(int client_fd);
 		void		disconnectClients();
 
-		void		commandCAP(User& user, std::vector<std::string>& parameters);
-		void		commandPASS(User& user, std::vector<std::string>& parameters);
-		void		commandNICK(User& user, std::vector<std::string>& parameters);
-		void		commandUSER(User& user, std::vector<std::string>& parameters);
-		void		commandPING(User& user, std::vector<std::string>& parameters);
-		void		commandPONG(User& user, std::vector<std::string>& parameters);
-		void		commandJOIN(User &user, std::vector<std::string> &parameters);
-		void		commandTOPIC(User &user, std::vector<std::string>& parameters);
-		void		commandNAMES(User &user, std::vector<std::string>& parameters);
-		void		commandMSG(User &user, std::vector<std::string>& parameters);
-		void		commandMODE(User &user, std::vector<std::string>& parameters);
-		void		commandPART(User &user, std::vector<std::string>& parameters);
-		void		commandQUIT(User& user, std::vector<std::string>& parameters);
-		void		commandKICK(User& user, std::vector<std::string>& parameters);
-		void		commandWHO(User& user, std::vector<std::string>& parameters);
+		void		commandCAP(User& user, stringVector& parameters);
+		void		commandPASS(User& user, stringVector& parameters);
+		void		commandNICK(User& user, stringVector& parameters);
+		void		commandUSER(User& user, stringVector& parameters);
+		void		commandPING(User& user, stringVector& parameters);
+		void		commandPONG(User& user, stringVector& parameters);
+		void		commandJOIN(User& user, stringVector& parameters);
+		void		commandTOPIC(User& user, stringVector& parameters);
+		void		commandNAMES(User& user, stringVector& parameters);
+		void		commandMSG(User& user, stringVector& parameters);
+		void		commandMODE(User& user, stringVector& parameters);
+		void		commandPART(User& user, stringVector& parameters);
+		void		commandQUIT(User& user, stringVector& parameters);
+		void		commandKICK(User& user, stringVector& parameters);
+		void		commandWHO(User& user, stringVector& parameters);
 
 		bool		isChannel(std::string channelName);
-		Channel		&findChannel(std::string channelName);
 		bool		isServerUser(std::string nickname);
-		bool		isServerUser(int socketFd);
-		User		&findUser(std::string nickname);
-		User		&getUserByFd(int fd);
-
+		bool		isServerUser(int clientFd);
+		Channel&	findChannel(std::string channelName);
+		User&		findUser(std::string nickname);
+		User&		findUser(int clientFd);
 		void		checkIsVerified(User& user);
 
 	public:
@@ -83,9 +82,6 @@ class Server {
 
 		void		serverOn(void);
 		void		serverOff(void);
-
-		// for debug
-		void		testUser(void);
 };
 
 #endif
