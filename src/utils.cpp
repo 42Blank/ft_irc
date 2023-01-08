@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:41:37 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/08 14:00:00 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/08 14:15:23 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,28 +53,6 @@ bool	ft_isValidChannelName(const std::string& str) {
 	for (int i = 0; i < 4; i++)
 		if (str[0] == CHANNEL_AVAILABLE_CHAR[i]) return true;
 	return false;
-}
-
-std::string ft_getStringAfterColon(stringVector parameter) {
-	stringIter	iter;
-	std::string	returnStr = "";
-	bool flag = false;
-
-	for (iter = parameter.begin(); iter < parameter.end(); iter++) {
-		if ((*iter)[0] == ':') {
-			flag = true;
-			returnStr += (*iter);
-			continue;
-		}
-		if (flag) returnStr += " " + *iter;
-	}
-	try {
-		if (returnStr.length() >= 1) returnStr = returnStr.substr(1, returnStr.length() - 1);
-		return (returnStr);
-	}
-	catch (std::exception& e) {
-		return ("");
-	}
 }
 
 std::string ft_getMsgString(stringVector parameters, int idx) {

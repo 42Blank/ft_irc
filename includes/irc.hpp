@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 13:44:22 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/08 14:03:46 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/08 14:15:39 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ stringVector	ft_split(std::string input, char delimiter);
 void			ft_replaceStr(std::string& str, std::string src, std::string des);
 bool			ft_isValidNickname(const std::string& str);
 bool			ft_isValidChannelName(const std::string& str);
-std::string		ft_getStringAfterColon(stringVector parameter);
 std::string 	ft_getMsgString(stringVector parameters, int idx);
 std::string		ft_upperCaseString(const std::string& str);
 
