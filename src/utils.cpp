@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:41:37 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/08 06:37:54 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 13:14:38 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,22 @@ std::string ft_getStringAfterColon(stringVector parameter) {
 	catch (std::exception& e) {
 		return ("");
 	}
+}
+
+std::string ft_getMsgString(stringVector parameters, int idx) {
+	std::string	retStr = "";
+
+	if ((int)parameters.size() <= idx)
+		return (retStr);
+	for (int i = idx; i < (int)parameters.size(); i++) {
+		if (i == idx) {
+			if (parameters[i][0] == ':')
+				retStr += parameters[i].substr(1, parameters[i].length());
+			else
+				retStr += parameters[i];
+			continue;
+		}
+		retStr += " " + parameters[i];
+	}
+	return (retStr);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   irc.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 13:44:22 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 23:21:54 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 13:12:17 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void			ft_replaceStr(std::string& str, std::string src, std::string des);
 bool			ft_isValidNickname(const std::string& str);
 bool			ft_isValidChannelName(const std::string& str);
 std::string		ft_getStringAfterColon(stringVector parameter);
+std::string 	ft_getMsgString(stringVector parameters, int idx);
 
 
 #endif

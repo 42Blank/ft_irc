@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandChannel.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 17:53:57 by san               #+#    #+#             */
-/*   Updated: 2023/01/08 05:40:33 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 13:14:02 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	Server::commandTOPIC(User* user, stringVector& parameters) {
 	if (!isChannel(parameters[1])) throw std::runtime_error(Error(ERR_NOSUCHCHANNEL, parameters[1]));
 
 	Channel*	ch = findChannel(parameters[1]);
-	std::string	channelTopic = ft_getStringAfterColon(parameters);
+	std::string	channelTopic = ft_getMsgString(parameters, 2);
 
 	if (!ch->isOperator(user->getNickname()))
 		throw std::runtime_error(Error(ERR_CHANOPRIVSNEEDED, parameters[1]));
@@ -59,7 +59,7 @@ void	Server::commandTOPIC(User* user, stringVector& parameters) {
 void	Server::commandMSG(User* user, stringVector& parameters) {
 	if (user->getIsVerified() != ALL_VERIFIED) throw std::runtime_error(Error(ERR_NOTREGISTERED));
 
-	std::string message = ft_getStringAfterColon(parameters);
+	std::string message = ft_getMsgString(parameters, 2);
 
 	if (isChannel(parameters[1])) {
 		Channel*	ch = findChannel(parameters[1]);
@@ -70,12 +70,12 @@ void	Server::commandMSG(User* user, stringVector& parameters) {
 		else if (ch->isBadWordIncluded(message))
 			kickUserFromChannel(ch, user, "금지어 사용으로 인한 Kick");
 		if (ch->isUserInChannel(user->getNickname()) || ch->isOperator(user->getNickname()))
-			sendMessageBroadcast(1, ch, user, "PRIVMSG " + ch->getChannelName() + " :" + ft_getStringAfterColon(parameters));
+			sendMessageBroadcast(1, ch, user, "PRIVMSG " + ch->getChannelName() + " :" + ft_getMsgString(parameters, 2));
 		return;
 	}
 	if (isServerUser(parameters[1])) {
 		User*	receiver = findUser(parameters[1]);
-		sendMessage(user, receiver, "PRIVMSG " + parameters[1] + " :" + ft_getStringAfterColon(parameters));
+		sendMessage(user, receiver, "PRIVMSG " + parameters[1] + " :" + ft_getMsgString(parameters, 2));
 		return;
 	}
 	throw std::runtime_error(Error(ERR_NOSUCHNICK));
@@ -152,5 +152,5 @@ void	Server::commandKICK(User* user, stringVector& parameters) {
 		throw std::runtime_error(Error(ERR_NOSUCHNICK));
 
 	User*	kickedUser = findUser(parameters[2]);
-	kickUserFromChannel(ch, kickedUser, ft_getStringAfterColon(parameters));
+	kickUserFromChannel(ch, kickedUser, ft_getMsgString(parameters, 2));
 }

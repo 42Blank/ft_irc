@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 04:09:31 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/08 00:38:29 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 13:12:45 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	Server::commandPONG(User* user, stringVector& parameters) {
 void	Server::commandQUIT(User* user, stringVector& parameters) {
 	std::string		quitUserHostname = user->getHostname();
 	std::string		quitUserNickname = user->getNickname();
-	std::string		quitMsg = ft_getStringAfterColon(parameters);
+	std::string		quitMsg = ft_getMsgString(parameters, 1);
 	stringVector&	channelList = user->getChannelList();
 
 	sendMessage(user, ErrorReply(":Closing Link:", quitUserHostname, "(Quit: " + quitMsg + ")"));
