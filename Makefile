@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+         #
+#    By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/28 13:47:07 by jiychoi           #+#    #+#              #
-#    Updated: 2023/01/08 00:42:57 by jiychoi          ###   ########.fr        #
+#    Updated: 2023/01/08 14:50:31 by jasong           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ SRCS		=	src/main.cpp \
 
 OBJS		=	$(SRCS:.cpp=.o)
 TARGET		=	ircserv
-SANFLAG		=	-g3 -fsanitize=address
+# SANFLAG		=	-g3 -fsanitize=address
 
 NO_COLOR	=	\e[0m
 LF			=	\e[1K\r$(NO_COLOR)

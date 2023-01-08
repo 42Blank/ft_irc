@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 04:09:31 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/08 13:42:50 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/08 14:35:18 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ void	Server::commandQUIT(User* user, stringVector& parameters) {
 	std::string		quitMsg = ft_getMsgString(parameters, 0);
 	stringVector&	channelList = user->getChannelList();
 
-	sendMessage(user, ErrorReply(":Closing Link:", quitUserHostname, "(Quit: " + quitMsg + ")"));
+	if (user->getIsVerified() && !user->getIsSigquit())
+		sendMessage(user, ErrorReply(":Closing Link:", quitUserHostname, "(Quit: " + quitMsg + ")"));
 	for (stringIter iter = channelList.begin(); iter < channelList.end(); iter++) {
 		if (!isChannel(*iter)) continue;
 		Channel* ch = findChannel(*iter);

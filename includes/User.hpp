@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 15:55:05 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/08 13:51:14 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/08 14:42:28 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ class User {
 		bool				_isDisconnected;
 		std::string			_userMode;
 		bool				_isWelcomed;
+		bool				_isSigquit;
 
 	public:
 		User();
@@ -46,6 +47,7 @@ class User {
 		std::string			getUserMode() const;
 		stringVector&		getChannelList();
 		bool				getIsWelcomed() const;
+		bool				getIsSigquit() const;
 
 		void				setNickname(std::string nickname);
 		void				setUsername(std::string username);
@@ -55,6 +57,7 @@ class User {
 		void				setIsDisconnected(bool isDisconnected);
 		void				setUserMode(std::string userMode);
 		void				setIsWelcomed(bool isWelcomed);
+		void				setIsSigquit(bool isSigquit);
 
 		void				addJoinedChannel(std::string channelName);
 		void				deleteJoinedChannel(std::string channelName);

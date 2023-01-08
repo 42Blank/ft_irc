@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 21:49:06 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/08 13:57:22 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/08 14:40:09 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,11 @@ void	Server::commandUSER(User* user, stringVector& parameters) {
 }
 
 void	Server::checkIsVerified(User* user) {
+	char	checkBuf[1024] = {0, };
+
 	if (user->getIsVerified() != ALL_VERIFIED) return;
 	if (user->getIsWelcomed()) return;
+	if (recv(user->getSocketFd(), checkBuf, 1024, 0) == 0) return;
 	sendMessage(user,
 		"001 " + user->getNickname() + " :\033[1;32mWelcome to the " + SERVER_NAME + "\e[0m " + \
 		user->getNickname() + "!" + user->getUsername() + "@" + user->getHostname()

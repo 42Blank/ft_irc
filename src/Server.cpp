@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/08 14:04:09 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/08 14:43:07 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,11 @@ void	Server::serverOn(void) {
 		for (iter = _poll_fds.begin() + 1; iter < _poll_fds.end(); iter++) {
 			if (iter->revents & POLLHUP) { // 현재 클라이언트 연결 끊김
 				stringVector	closeParams;
+				User*	quitUser = findUser(iter->fd);
 
 				closeParams.push_back(":Connection closed");
-				commandQUIT(findUser(iter->fd), closeParams);
+				quitUser->setIsSigquit(true);
+				commandQUIT(quitUser, closeParams);
 				continue ;
 			}
 			else if (iter->revents & POLLIN) {

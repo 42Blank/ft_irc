@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:50:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/08 13:51:27 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/08 14:42:32 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ User::User(void) {
 	_isDisconnected = false;
 	std::cout << "User created (" << this << ")\n";
 	_isWelcomed = false;
+	_isSigquit = false;
 }
 
 User::~User(void) {
@@ -40,6 +41,8 @@ User&	User::operator=(const User& instance) {
 	_hostname = instance.getHostname();
 	_isDisconnected = instance.getIsDisconnected();
 	_isVerified = instance.getIsVerified();
+	_isWelcomed = instance.getIsWelcomed();
+	_isSigquit = instance.getIsSigquit();
 	std::cout << *this << " user copied (" << this << ")\n";
 	return *this;
 }
@@ -88,6 +91,10 @@ bool	User::getIsWelcomed() const {
 	return _isWelcomed;
 }
 
+bool	User::getIsSigquit() const {
+	return _isSigquit;
+}
+
 void	User::setNickname(std::string nickname) {
 	_nickname = nickname;
 }
@@ -118,6 +125,10 @@ void	User::setUserMode(std::string userMode) {
 
 void	User::setIsWelcomed(bool isWelcomed) {
 	_isWelcomed = isWelcomed;
+}
+
+void	User::setIsSigquit(bool isSigquit) {
+	_isSigquit = isSigquit;
 }
 
 void	User::addJoinedChannel(std::string channelName) {
