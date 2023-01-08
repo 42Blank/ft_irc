@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:50:34 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/08 00:38:29 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 13:51:27 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ User::User(void) {
 	_isVerified = 0b000;
 	_isDisconnected = false;
 	std::cout << "User created (" << this << ")\n";
+	_isWelcomed = false;
 }
 
 User::~User(void) {
@@ -83,6 +84,10 @@ stringVector&	User::getChannelList() {
 	return _channelList;
 }
 
+bool	User::getIsWelcomed() const {
+	return _isWelcomed;
+}
+
 void	User::setNickname(std::string nickname) {
 	_nickname = nickname;
 }
@@ -109,6 +114,10 @@ void	User::setIsDisconnected(bool isDisconnected) {
 
 void	User::setUserMode(std::string userMode) {
 	_userMode = userMode;
+}
+
+void	User::setIsWelcomed(bool isWelcomed) {
+	_isWelcomed = isWelcomed;
 }
 
 void	User::addJoinedChannel(std::string channelName) {

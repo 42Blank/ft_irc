@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 15:55:05 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/08 00:35:50 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 13:51:14 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class User {
 		short				_isVerified;
 		bool				_isDisconnected;
 		std::string			_userMode;
+		bool				_isWelcomed;
 
 	public:
 		User();
@@ -44,6 +45,7 @@ class User {
 		bool				getIsDisconnected() const;
 		std::string			getUserMode() const;
 		stringVector&		getChannelList();
+		bool				getIsWelcomed() const;
 
 		void				setNickname(std::string nickname);
 		void				setUsername(std::string username);
@@ -52,6 +54,7 @@ class User {
 		void				setSocketFd(int clientFd);
 		void				setIsDisconnected(bool isDisconnected);
 		void				setUserMode(std::string userMode);
+		void				setIsWelcomed(bool isWelcomed);
 
 		void				addJoinedChannel(std::string channelName);
 		void				deleteJoinedChannel(std::string channelName);

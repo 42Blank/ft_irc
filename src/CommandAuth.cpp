@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandAuth.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 21:49:06 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/08 00:38:29 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 13:57:22 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	Server::commandNICK(User* user, stringVector& parameters) {
 	}
 	user->setNickname(parameters[1]);
 	user->setIsVerified(NICK_VERIFIED);
+	checkIsVerified(user);
 }
 
 void	Server::commandUSER(User* user, stringVector& parameters) {
@@ -49,7 +50,7 @@ void	Server::commandUSER(User* user, stringVector& parameters) {
 
 void	Server::checkIsVerified(User* user) {
 	if (user->getIsVerified() != ALL_VERIFIED) return;
-
+	if (user->getIsWelcomed()) return;
 	sendMessage(user,
 		"001 " + user->getNickname() + " :\033[1;32mWelcome to the " + SERVER_NAME + "\e[0m " + \
 		user->getNickname() + "!" + user->getUsername() + "@" + user->getHostname()
@@ -63,4 +64,5 @@ void	Server::checkIsVerified(User* user) {
 	sendMessage(user,
 		"004 " + user->getNickname() + " :\033[1;32m" + SERVER_NAME + " 0.1\e[0m"
 	);
+	user->setIsWelcomed(true);
 }
