@@ -3,18 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 13:45:58 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/07 03:26:32 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 13:34:15 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../includes/Server.hpp"
+# include <csignal>
+
+// void	handleSigpipe(int sig) {
+// 	(void) sig;
+// 	std::cout << "sig pipe\n";
+// 	return ;
+// } 
 
 int main(int argc, char* argv[]) {
-	if (argc != 3)
-	{
+
+	signal(SIGPIPE, SIG_IGN);
+
+	if (argc != 3) {
 		printf("Usage : %s <port> <password>\n", argv[0]);
 		return (1);
 	}

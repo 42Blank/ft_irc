@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 04:09:31 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/08 13:12:45 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/08 13:42:50 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,17 @@ void	Server::commandPONG(User* user, stringVector& parameters) {
 void	Server::commandQUIT(User* user, stringVector& parameters) {
 	std::string		quitUserHostname = user->getHostname();
 	std::string		quitUserNickname = user->getNickname();
-	std::string		quitMsg = ft_getMsgString(parameters, 1);
+	std::string		quitMsg = ft_getMsgString(parameters, 0);
 	stringVector&	channelList = user->getChannelList();
 
 	sendMessage(user, ErrorReply(":Closing Link:", quitUserHostname, "(Quit: " + quitMsg + ")"));
 	for (stringIter iter = channelList.begin(); iter < channelList.end(); iter++) {
 		if (!isChannel(*iter)) continue;
 		Channel* ch = findChannel(*iter);
-		sendMessageBroadcast(0, ch, user, "QUIT :" + quitMsg);
+		sendMessageBroadcast(1, ch, user, "QUIT :" + quitMsg);
 		if (ch->isOperator(quitUserNickname)) {
 			if (ch->deleteOperatorUser(user->getNickname())) {	// 오퍼레이터가 새로 바뀌었다.
-				sendMessageBroadcast(0, ch, user, "MODE " + ch->getChannelName() + " +o :" + (*ch->getOperatorVector().begin())->getNickname());
+				sendMessageBroadcast(1, ch, user, "MODE " + ch->getChannelName() + " +o :" + (*ch->getOperatorVector().begin())->getNickname());
 			} else {
 				ch->setIsDeleted(true);
 			}
