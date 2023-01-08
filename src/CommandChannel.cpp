@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 17:53:57 by san               #+#    #+#             */
-/*   Updated: 2023/01/08 13:14:02 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/08 13:20:56 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,5 +152,5 @@ void	Server::commandKICK(User* user, stringVector& parameters) {
 		throw std::runtime_error(Error(ERR_NOSUCHNICK));
 
 	User*	kickedUser = findUser(parameters[2]);
-	kickUserFromChannel(ch, kickedUser, ft_getMsgString(parameters, 2));
+	kickUserFromChannel(ch, kickedUser, ft_getMsgString(parameters, 3));
 }
