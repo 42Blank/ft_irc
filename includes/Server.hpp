@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiychoi <jiychoi@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 16:35:50 by san               #+#    #+#             */
-/*   Updated: 2023/01/08 04:51:18 by jiychoi          ###   ########.fr       */
+/*   Updated: 2023/01/08 14:01:08 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ class Server {
 		void		commandTOPIC(User* user, stringVector& parameters);
 		void		commandNAMES(User* user, stringVector& parameters);
 		void		commandMSG(User* user, stringVector& parameters);
+		void		commandNOTICE(User* user, stringVector& parameters);
 		void		commandMODE(User* user, stringVector& parameters);
 		void		commandPART(User* user, stringVector& parameters);
 		void		commandQUIT(User* user, stringVector& parameters);

@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 03:41:37 by jiychoi           #+#    #+#             */
-/*   Updated: 2023/01/08 13:14:38 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/08 14:00:00 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,4 +93,12 @@ std::string ft_getMsgString(stringVector parameters, int idx) {
 		retStr += " " + parameters[i];
 	}
 	return (retStr);
+}
+
+std::string	ft_upperCaseString(const std::string& str) {
+	std::string	returnStr = "";
+
+	for (int i = 0; i < (int)str.length(); i++)
+		returnStr += toupper(str[i]);
+	return (returnStr);
 }

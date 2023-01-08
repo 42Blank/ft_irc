@@ -6,7 +6,7 @@
 /*   By: jasong <jasong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 17:53:57 by san               #+#    #+#             */
-/*   Updated: 2023/01/08 13:20:56 by jasong           ###   ########.fr       */
+/*   Updated: 2023/01/08 14:10:16 by jasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,17 +65,34 @@ void	Server::commandMSG(User* user, stringVector& parameters) {
 		Channel*	ch = findChannel(parameters[1]);
 		std::string	botMessage = ch->parseBotCommand(message);
 
+		if (ch->isUserInChannel(user->getNickname()) || ch->isOperator(user->getNickname()))
+			sendMessageBroadcast(1, ch, user, "PRIVMSG " + ch->getChannelName() + " :" + ft_getMsgString(parameters, 2));
 		if (botMessage.length() > 0)
 			sendMessageBroadcastBot(ch, "PRIVMSG "  + ch->getChannelName() + " " + botMessage);
 		else if (ch->isBadWordIncluded(message))
 			kickUserFromChannel(ch, user, "금지어 사용으로 인한 Kick");
-		if (ch->isUserInChannel(user->getNickname()) || ch->isOperator(user->getNickname()))
-			sendMessageBroadcast(1, ch, user, "PRIVMSG " + ch->getChannelName() + " :" + ft_getMsgString(parameters, 2));
 		return;
 	}
 	if (isServerUser(parameters[1])) {
 		User*	receiver = findUser(parameters[1]);
 		sendMessage(user, receiver, "PRIVMSG " + parameters[1] + " :" + ft_getMsgString(parameters, 2));
+		return;
+	}
+	throw std::runtime_error(Error(ERR_NOSUCHNICK));
+}
+
+void	Server::commandNOTICE(User* user, stringVector& parameters) {
+	if (user->getIsVerified() != ALL_VERIFIED) throw std::runtime_error(Error(ERR_NOTREGISTERED));
+
+	if (isChannel(parameters[1])) {
+		Channel*	ch = findChannel(parameters[1]);
+		if (ch->isUserInChannel(user->getNickname()) || ch->isOperator(user->getNickname()))
+			sendMessageBroadcast(1, ch, user, "NOTICE " + ch->getChannelName() + " :" + ft_getMsgString(parameters, 2));
+		return;
+	}
+	if (isServerUser(parameters[1])) {
+		User*	receiver = findUser(parameters[1]);
+		sendMessage(user, receiver, "NOTICE " + parameters[1] + " :" + ft_getMsgString(parameters, 2));
 		return;
 	}
 	throw std::runtime_error(Error(ERR_NOSUCHNICK));
